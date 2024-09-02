@@ -1,0 +1,54 @@
+/* src/components/TopicList.css */
+
+.topic-list-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .title {
+    font-size: 2.5rem;
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: 600;
+  }
+  
+  .topic-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .topic-item {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    padding: 15px;
+    transition: transform 0.3s ease;
+  }
+  
+  .topic-item:hover {
+    transform: translateY(-5px);
+  }
+  
+  .topic-header h2 {
+    font-size: 1.8rem;
+    color: #007BFF;
+    margin: 0;
+  }
+  
+  .topic-details p {
+    font-size: 1rem;
+    color: #555;
+    margin: 10px 0 0;
+  }
+  
+  .topic-details strong {
+    font-weight: 600;
+  }
+  
