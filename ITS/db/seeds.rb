@@ -1,20 +1,24 @@
-# db/seeds.rb
-
+Answer.destroy_all
+Question.destroy_all
+Task.destroy_all
 Topic.destroy_all
 
-# Creación de tópicos de ejemplo
-topics = [
-  { name: 'Variables Aleatorias', prerequisites: '' },
-  { name: 'Distribuciones Discretas', prerequisites: 'Variables Aleatorias' },
-  { name: 'Distribuciones Continuas', prerequisites: 'Variables Aleatorias' },
-  { name: 'Estadísticos', prerequisites: 'Distribuciones Discretas, Distribuciones Continuas' },
-  { name: 'Inferencia Estadística', prerequisites: 'Estadísticos' },
-  { name: 'Modelos Binomiales', prerequisites: 'Distribuciones Discretas' },
-  { name: 'Modelos Normales', prerequisites: 'Distribuciones Continuas' },
-]
+topic = Topic.create(name: "Estática de sólidos rígidos")
 
-topics.each do |topic|
-  Topic.create!(topic)
-end
+task = Task.create(name: "Tipos de Fuerzas", topic_id: topic.id, task_type: "Option", difficulty: 1)
 
-puts "Created #{Topic.count} topics"
+question1 = Question.create(task_id: task.id, question_text: "¿Cuál de las siguientes fuerzas es una fuerza de contacto?")
+
+Answer.create(question_id: question1.id, answer_text: "Fuerza de gravedad", correct: false)
+Answer.create(question_id: question1.id, answer_text: "Fuerza normal", correct: true)
+Answer.create(question_id: question1.id, answer_text: "Fuerza electroestática", correct: false)
+Answer.create(question_id: question1.id, answer_text: "Fuerza de tensión", correct: false)
+
+question2 = Question.create(task_id: task.id, question_text: "¿Cuál de las siguientes fuerzas es una fuerza de campo?")
+
+Answer.create(question_id: question2.id, answer_text: "Fuerza de gravedad", correct: true)
+Answer.create(question_id: question2.id, answer_text: "Fuerza normal", correct: false)
+Answer.create(question_id: question2.id, answer_text: "Fuerza de roce", correct: false)
+Answer.create(question_id: question2.id, answer_text: "Fuerza de tensión", correct: false)
+
+puts "Seed finished"

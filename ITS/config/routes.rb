@@ -14,6 +14,8 @@ Rails.application.routes.draw do
 
   namespace :api do
     resources :topics, only: [:index, :show]
+    resources :questions, only: [:index, :show]
+    resources :answers, only: [:index, :show]
+    resources :tasks, only: [:index, :show]
   end
-
 end
