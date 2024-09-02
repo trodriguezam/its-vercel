@@ -7,7 +7,6 @@ function TopicList() {
   const [topics, setTopics] = useState([]);
 
   useEffect(() => {
-    // Solicitud a la API para obtener los tópicos
     axiosInstance.get('/topics')
       .then(response => {
         setTopics(response.data);
@@ -18,15 +17,15 @@ function TopicList() {
   }, []);
 
   return (
-    <div className="topic-list-container">
-      <h1 className="title">Topics</h1>
-      <ul className="topic-list">
+    <div>
+      <h1>Topics</h1>
+      <ul>
         {topics.map(topic => (
-          <li key={topic.id} className="topic-item">
-            <div className="topic-header">
+          <li key={topic.id}>
+            <div>
               <h2>{topic.name}</h2>
             </div>
-            <div className="topic-details">
+            <div>
               <p><strong>Prerequisites:</strong> {topic.prerequisites || 'None'}</p>
             </div>
           </li>

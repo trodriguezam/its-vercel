@@ -2,8 +2,8 @@
 
 one:
   name: MyString
-  prerequisites: MyText
+  score: 1
 
 two:
   name: MyString
-  prerequisites: MyText
+  score: 1

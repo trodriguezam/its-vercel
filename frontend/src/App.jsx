@@ -1,5 +1,6 @@
 // src/App.js
 import TopicList from './components/TopicList';
+import './App.css';
 
 function App() {
   return (
