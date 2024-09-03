@@ -1,9 +1,11 @@
 // src/components/TopicList.js
-import { useEffect, useState } from 'react';
+import { Component, useEffect, useState } from 'react';
 import axiosInstance from '../api/axiosInstance';
 import { Formik, Form, Field, ErrorMessage, useFormikContext } from 'formik';
 import { TextField, Button, CssBaseline, ThemeProvider, createTheme } from '@mui/material';
 import * as yup from 'yup';
+import { Routes, Route, Link } from 'react-router-dom';
+import Login from './Login';
 
 const theme = createTheme();
 
@@ -18,7 +20,10 @@ const validationSchema = yup.object({
   });
 
 function SignupForm() {
-    return (<ThemeProvider theme={theme}>
+  
+    return (
+    <>
+    <ThemeProvider theme={theme}>
         <CssBaseline />
         <Formik
           initialValues={{
@@ -75,9 +80,12 @@ function SignupForm() {
             <Button type="submit" color="primary" variant="contained">
               Enviar
             </Button>
+            <Link to="/login"/>
+            <Button component={Link} to='/login'></Button>
           </Form>
         </Formik>
       </ThemeProvider>
+      </>
     ); 
 }
 export default SignupForm;

@@ -11,11 +11,14 @@
   },
   "dependencies": {
     "@emotion/styled": "^11.13.0",
+    "@mui/icons-material": "^6.0.1",
     "@mui/material": "^6.0.1",
     "axios": "^1.7.7",
+    "cors": "^2.8.5",
     "formik": "^2.4.6",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.1",
     "yap": "^0.0.2",
     "yup": "^1.4.0"
   },

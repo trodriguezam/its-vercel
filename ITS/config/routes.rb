@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  get 'current_user', to: 'current_user#index'
   devise_for :users, path: '', path_names: {
     sign_in: 'api/login',
     sign_out: 'api/logout',
@@ -24,7 +23,9 @@ Rails.application.routes.draw do
   # root "posts#index"
 
   namespace :api do
-    resources :topics, only: [:index, :show]
+    resources :topics, only: [:index, :show] do
+      resources :tasks, only: [:index, :show], action: 'indexTopics'
+    end
     resources :questions, only: [:index, :show]
     resources :answers, only: [:index, :show]
     resources :tasks, only: [:index, :show]

@@ -1,6 +1,5 @@
 # app/controllers/api/topics_controller.rb
-module Api
-  class TopicsController < ApplicationController
+  class API::TopicsController < ApplicationController
     def index
       topics = Topic.all
       render json: topics
@@ -11,4 +10,3 @@ module Api
       render json: topic
     end
   end
-end
