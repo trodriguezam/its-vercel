@@ -5,22 +5,22 @@ import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
 
 function QuestionsList() {
-    const { taskId } = useParams(); // Get the taskId from the URL
+    const { taskId } = useParams();
     const location = useLocation();
     const task = location.state?.task;
 
     const [questions, setQuestions] = useState([]);
     const [answers, setAnswers] = useState([]);
-    const [userAnswer, setuserAnswer] = useState([]);
+    const [userQuestions, setUserQuestions] = useState([]);
+    const [refresh, setRefresh] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [selectedAnswer, setSelectedAnswer] = useState(null);
-    const [score, setScore] = useState(0);
     const [isCompleted, setIsCompleted] = useState(false);
     const storedUser = localStorage.getItem('currentUser');
     const currentUser = storedUser ? JSON.parse(storedUser) : null;
 
     useEffect(() => {
-        axiosInstance.get(`/tasks/${taskId}/questions`) // Use the taskId in the API call
+        axiosInstance.get(`/tasks/${taskId}/questions`)
             .then((res) => {
                 setQuestions(res.data);
             })
@@ -30,26 +30,83 @@ function QuestionsList() {
     }, [taskId]);
 
     useEffect(() => {
-        if (questions.length > 0 && questions[currentIndex]) {
-            axiosInstance.get(`/questions/${questions[currentIndex].id}/answers`)
+        axiosInstance.get('/user_questions')
             .then((res) => {
-                setAnswers(res.data);
+                setUserQuestions(res.data);
             })
             .catch((error) => {
                 console.error(error);
             });
-        }
-    }, [currentIndex, questions]);
+    }, [refresh]);
 
     useEffect(() => {
-        axiosInstance.get('/user_answers')
-            .then((res) => {
-                setuserAnswer(res.data);
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-    }, []);
+        // Calculate the score based on the userQuestions data
+        const calculateScore = () => {
+            const correctAnswersCount = userQuestions.filter(
+                userQuestion => userQuestion.user_id === currentUser?.id &&
+                    userQuestion.correct &&
+                    questions.some(question => question.id === userQuestion.question_id)
+            ).length;
+            return correctAnswersCount;
+        };
+
+        // Update the score when userQuestions or questions are updated
+        const score = calculateScore();
+        const remainingQuestions = questions.filter(question => {
+            const userQuestion = userQuestions.find(
+                uq => uq.question_id === question.id && uq.user_id === currentUser?.id
+            );
+            return !userQuestion || !userQuestion.correct;
+        });
+
+        if (remainingQuestions.length === 0) {
+            setIsCompleted(true); // All questions have been answered correctly
+        }
+
+    }, [userQuestions, questions, currentUser]);
+
+    useEffect(() => {
+        setIsCompleted(false);
+        const findNextUnansweredQuestion = () => {
+            let nextIndex = currentIndex;
+    
+            while (nextIndex < questions.length) {
+                const currentUserQuestion = userQuestions.find(
+                    userQuestion =>
+                        userQuestion.question_id === questions[nextIndex]?.id &&
+                        userQuestion.user_id === currentUser?.id
+                );
+    
+                if (!currentUserQuestion || !currentUserQuestion.correct) {
+                    break;
+                }
+    
+                nextIndex += 1;
+            }
+            if (nextIndex >= questions.length) {
+                setIsCompleted(true); 
+            } else {
+                setCurrentIndex(nextIndex);
+            }
+        };
+    
+        if (questions.length > 0) {
+            findNextUnansweredQuestion();
+        }
+    }, [questions, userQuestions, currentUser]);
+    
+
+    useEffect(() => {
+        if (questions.length > 0 && questions[currentIndex]) {
+            axiosInstance.get(`/questions/${questions[currentIndex].id}/answers`)
+                .then((res) => {
+                    setAnswers(res.data);
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
+    }, [currentIndex, questions]);
 
     const handleAnswerChange = (event) => {
         setSelectedAnswer(Number(event.target.value));
@@ -57,20 +114,51 @@ function QuestionsList() {
 
     const handleSubmit = () => {
         if (selectedAnswer !== null) {
-            console.log(`Selected answer ID: ${selectedAnswer}`);
-            if (answers.find(answer => answer.id === selectedAnswer).correct) {
-                setScore(score + 1);
+            const selectedAnswerObj = answers.find(answer => answer.id === selectedAnswer);
+
+            const existingUserQuestion = userQuestions.find(
+                userQuestion =>
+                    userQuestion.question_id === questions[currentIndex].id &&
+                    userQuestion.user_id === currentUser?.id
+            );
+
+            if (existingUserQuestion) {
+                axiosInstance.put(`/user_questions/${existingUserQuestion.id}`, {
+                    correct: selectedAnswerObj.correct
+                })
+                .then(() => {
+                    setRefresh(!refresh);
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+            } else {
+                axiosInstance.post('/user_questions', {
+                    user_id: currentUser.id,
+                    question_id: questions[currentIndex].id,
+                    correct: selectedAnswerObj.correct
+                })
+                .then(() => {
+                    setRefresh(!refresh);
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
             }
+
             if (currentIndex < questions.length - 1) {
                 setCurrentIndex(currentIndex + 1);
             } else {
                 setIsCompleted(true);
             }
-            // You can also send the selected answer ID to the server here
         } else {
             console.log('No answer selected');
         }
     };
+
+    const score = userQuestions.filter(
+        userQuestion => userQuestion.user_id === currentUser?.id && userQuestion.correct
+    ).length;
 
     const scorePercentage = (score / questions.length) * 100;
 
@@ -113,12 +201,12 @@ function QuestionsList() {
                     <p>Your score: {score} out of {questions.length}</p>
                     <p>Score Percentage: {scorePercentage.toFixed(2)}%</p>
                     <Link to={`/topics/${task.topic_id}/tasks`}>
-                            <Button variant="contained">Return to Tasks</Button>
+                        <Button variant="contained">Return to Tasks</Button>
                     </Link>
                 </div>
             ) : (
                 <>
-                    {questions.length > 0 && (
+                    {questions.length > 0 && currentIndex < questions.length && (
                         <div>
                             <li key={questions[currentIndex].id} style={{ color: 'white' }}>
                                 <p>{questions[currentIndex].question_text}</p>

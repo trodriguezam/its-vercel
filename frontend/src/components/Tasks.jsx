@@ -22,13 +22,16 @@ function TasksList() {
     return (
         <div>
             {tasks.map((task) => (
-                    <li key={task.id} style={{ color: 'white' }}>
-                        {task.name}
-                        <Link to={`/tasks/${task.id}/questions`} state={{task}}>
-                            <Button variant="contained">View Questions</Button>
-                        </Link>
-                    </li>
-                ))}
+                <li key={task.id} style={{ color: 'white' }}>
+                    {task.name}
+                    <Link to={`/tasks/${task.id}/questions`} state={{task}}>
+                        <Button variant="contained">View Questions</Button>
+                    </Link>
+                </li>
+            ))}
+            <Link to={`/topics`}>
+                <Button variant="contained">Return to Topics</Button>
+            </Link>
         </div>
     );
 }
