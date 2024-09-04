@@ -3,12 +3,13 @@ import TopicList from './components/TopicList';
 import LoginForm from './components/Login';
 import SignupForm from './components/Signup';
 import './App.css';
+import Dcl from './utils/svg-editor'
 
 function App() {
   return (
     <div className="App">
-      <h1>Welcome to the ITS</h1>
-      <SignupForm />
+      {/* <SignupForm /> */}
+      <Dcl />
     </div>
   );
 }
