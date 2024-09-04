@@ -1,24 +1,25 @@
-// src/components/TopicList.js
-import { useEffect, useState } from 'react';
+// src/components/LoginForm.js
+import { useState } from 'react';
 import axiosInstance from '../api/axiosInstance';
-import { Formik, Form, Field, ErrorMessage, useFormikContext } from 'formik';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { TextField, Button, CssBaseline, ThemeProvider, createTheme } from '@mui/material';
 import * as yup from 'yup';
+import { useNavigate } from 'react-router-dom';
 
 const theme = createTheme();
 
 const validationSchema = yup.object({
     email: yup.string().email('Correo electrónico inválido').required('Correo electrónico es obligatorio'),
     password: yup.string()
-      .matches(/^.{6,}$/, 'La contraseña debe tener 6 dígitos')
+      .matches(/^.{6,}$/, 'La contraseña debe tener al menos 6 caracteres')
       .required('Contraseña es obligatoria'),
-    password_confirmation: yup.string()
-      .oneOf([yup.ref('password'), null], 'Las contraseñas no coinciden')
-      .required('Confirme su contraseña'),
-  });
+});
 
-function LoginForm() {
-    return (<ThemeProvider theme={theme}>
+function LoginForm({ setCurrentUser }) { 
+    const navigate = useNavigate(); 
+  
+    return (
+      <ThemeProvider theme={theme}>
         <CssBaseline />
         <Formik
           initialValues={{
@@ -26,21 +27,30 @@ function LoginForm() {
             password: '',
           }}
           validationSchema={validationSchema}
-          onSubmit={(values, { setSubmitting, isValid, validateForm }) => {
+          onSubmit={(values, { setSubmitting, validateForm }) => {
             validateForm().then(errors => {
               if (Object.keys(errors).length) {
                 alert('Por favor, corrija los errores antes de enviar.');
               } else {
-                alert(JSON.stringify(values, null, 2));
-                const user = {"user": values}
-                axiosInstance.post('/signup', user)
+                const user = { "user": values };
+  
+                axiosInstance.post('/login', user)
+                  .then((response) => {
+                      const user = response.data.status.data.user;
+                      localStorage.setItem('currentUser', JSON.stringify(user));
+                      setCurrentUser(user); // Update currentUser state in App component
+                      navigate('/topics'); // Redirect to topics after login
+                  })
+                  .catch(error => {
+                      console.error("There was an error logging in!", error);
+                    // Handle login error here, e.g., show a message to the user
+                  });
               }
               setSubmitting(false);
             });
           }}
         >
           <Form>
-    
             <Field
               as={TextField}
               name="email"
@@ -50,7 +60,7 @@ function LoginForm() {
               margin="normal"
             />
             <ErrorMessage name="email" component="div" />
-
+  
             <Field
               as={TextField}
               name="password"
@@ -60,13 +70,14 @@ function LoginForm() {
               margin="normal"
             />
             <ErrorMessage name="password" component="div" />
-    
+  
             <Button type="submit" color="primary" variant="contained">
               Enviar
             </Button>
           </Form>
         </Formik>
       </ThemeProvider>
-    ); 
+    );
 }
+
 export default LoginForm;
