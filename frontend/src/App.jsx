@@ -10,6 +10,7 @@ import './App.css';
 import { AppBar, IconButton } from '@mui/material';
 import { Toolbar } from '@mui/material';
 import { Menu, Search } from '@mui/icons-material';
+import QuestionsList from './components/Questions';
 
 function App() {
   return (
@@ -29,12 +30,12 @@ function App() {
 
         </Toolbar>
       </AppBar>
-        <h1>Welcome to the ITS</h1>
       </div>
 
       <Routes>
         <Route path="/topics" element={<TopicList />}/>
         <Route path="/topics/:topicId/tasks" element={<TasksList />}/>
+        <Route path="/tasks/:taskId/questions" element={<QuestionsList />}/>
         <Route path="/login" element={<Login />}/>
         <Route path="/signup" element={<Signup />}/>
       </Routes>

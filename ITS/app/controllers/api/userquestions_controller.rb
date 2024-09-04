@@ -1,5 +1,4 @@
-module Api
-  class UsersquestionsController < ApplicationController
 
-  end
+class API::UsersquestionsController < ApplicationController
+
 end
