@@ -29,10 +29,11 @@ Rails.application.routes.draw do
     resources :questions, only: [:index, :show] do
       resources :answers, only: [:index, :show], action: 'indexAnswers'
     end
-    resources :answers, only: [:index, :show]
     resources :tasks, only: [:index, :show] do 
       resources :questions, only: [:index, :show], action: 'indexQuestions' 
     end
+    resources :user_questions, only: [:index, :show, :create, :update]
+    resources :answers, only: [:index, :show]
     resources :users, only: [:index, :show]
   end
 end

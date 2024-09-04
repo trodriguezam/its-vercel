@@ -6,6 +6,7 @@ import { TextField, Button, CssBaseline, ThemeProvider, createTheme } from '@mui
 import * as yup from 'yup';
 import { Routes, Route, Link } from 'react-router-dom';
 import Login from './Login';
+import { useNavigate } from 'react-router-dom';
 
 const theme = createTheme();
 
@@ -20,7 +21,8 @@ const validationSchema = yup.object({
   });
 
 function SignupForm() {
-  
+    const navigate = useNavigate();
+
     return (
     <>
     <ThemeProvider theme={theme}>
@@ -40,6 +42,10 @@ function SignupForm() {
                 alert(JSON.stringify(values, null, 2));
                 const user = {"user": values}
                 axiosInstance.post('/signup', user)
+                .then(() => {
+                  navigate('/login');
+                }
+                )
               }
               setSubmitting(false);
             });

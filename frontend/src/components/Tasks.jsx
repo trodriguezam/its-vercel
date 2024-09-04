@@ -6,6 +6,8 @@ import Button from '@mui/material/Button';
 function TasksList() {
     const { topicId } = useParams(); // Get the topicId from the URL
     const [tasks, setTasks] = useState([]);
+    const storedUser = localStorage.getItem('currentUser');
+    const currentUser = storedUser ? JSON.parse(storedUser) : null;
 
     useEffect(() => {
         axiosInstance.get(`/topics/${topicId}/tasks`) // Use the topicId in the API call

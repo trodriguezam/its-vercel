@@ -5,6 +5,8 @@ import Button from '@mui/material/Button';
 
 function TopicList() {
     const [topics, setTopics] = useState([]);
+    const storedUser = localStorage.getItem('currentUser');
+    const currentUser = storedUser ? JSON.parse(storedUser) : null;
 
     useEffect(() => {
         axiosInstance.get('/topics')
