@@ -8,16 +8,31 @@ import { Routes, Route, Link } from 'react-router-dom';
 import Login from './Login';
 import { useNavigate } from 'react-router-dom';
 
-const theme = createTheme();
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#666666',  // Example for primary color (green)
+    },
+    secondary: {
+      main: '#FF5722',  // Example for secondary color (orange)
+    },
+    background: {
+      default: '#F2FFF2',  // Light background color
+    },
+    text: {
+      primary: '#111111',  // Custom text color
+    }
+  },
+});
 
 const validationSchema = yup.object({
     email: yup.string().email('Correo electrónico inválido').required('Correo electrónico es obligatorio'),
     password: yup.string()
       .matches(/^.{6,}$/, 'La contraseña debe tener 6 dígitos')
-      .required('Contraseña es obligatoria'),
+      .required('Password is required'),  
     password_confirmation: yup.string()
       .oneOf([yup.ref('password'), null], 'Las contraseñas no coinciden')
-      .required('Confirme su contraseña'),
+      .required('Please confirm your password'),
   });
 
 function SignupForm() {
@@ -37,9 +52,9 @@ function SignupForm() {
           onSubmit={(values, { setSubmitting, isValid, validateForm }) => {
             validateForm().then(errors => {
               if (Object.keys(errors).length) {
-                alert('Por favor, corrija los errores antes de enviar.');
+                alert('Please correct the errors before submitting.');
               } else {
-                alert(JSON.stringify(values, null, 2));
+                alert('User created successfully'); 
                 const user = {"user": values}
                 axiosInstance.post('/signup', user)
                 .then(() => {
@@ -57,7 +72,7 @@ function SignupForm() {
               as={TextField}
               name="email"
               type="text"
-              label="Correo Electrónico"
+              label="Enter your email"
               fullWidth
               margin="normal"
             />
@@ -67,7 +82,7 @@ function SignupForm() {
               as={TextField}
               name="password"
               type="password"
-              label="Contraseña"
+              label="Enter Password"
               fullWidth
               margin="normal"
             />
@@ -77,14 +92,14 @@ function SignupForm() {
               as={TextField}
               name="password_confirmation"
               type="password"
-              label="Confirma Contraseña"
+              label="Confirm Password"
               fullWidth
               margin="normal"
             />
             <ErrorMessage name="password_confirmation" component="div" />
     
-            <Button type="submit" color="primary" variant="contained">
-              Enviar
+            <Button type="submit" sx={{ backgroundColor: '#8AB573', '&:hover': { backgroundColor: '#79a362' } }} variant="contained">
+              Send
             </Button>
             <Link to="/login"/>
             <Button component={Link} to='/login'></Button>

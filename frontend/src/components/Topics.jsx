@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axiosInstance from '../api/axiosInstance';
-import Button from '@mui/material/Button';
+import { Card, CardContent, CardActions, Button, Typography } from '@mui/material';
 
 function TopicList() {
     const [topics, setTopics] = useState([]);
@@ -20,19 +20,25 @@ function TopicList() {
 
     return (
         <div>
-            <h1>Topics</h1>
-            <ul>
-                {topics.map((topic) => (
-                    <li key={topic.id}>
-                        {topic.name}
-                        <Link to={`/topics/${topic.id}/tasks`}>
-                            <Button variant="contained">View Tasks</Button>
-                        </Link>
-                    </li>
-                ))}
-            </ul>
+          <Typography variant="h2" color="#111111">Topics</Typography>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
+            {topics.map((topic) => (
+              <Card key={topic.id} sx={{ width: 500, height: 130, backgroundColor: '#E4FFC2', color: '#111111' }}>
+                <CardContent>
+                  <Typography variant="h6" component="div">
+                    {topic.name}
+                  </Typography>
+                </CardContent>
+                <CardActions sx={{ display: 'flex', justifyContent: 'center' }}>
+                  <Link to={`/topics/${topic.id}/tasks`} style={{ textDecoration: 'none' }}>
+                    <Button variant="contained" sx={{ backgroundColor: '#8AB573', '&:hover': { backgroundColor: '#79a362' } }}>View Tasks</Button>
+                  </Link>
+                </CardActions>
+              </Card>
+            ))}
+          </div>
         </div>
-    );
+      );
 }
 
 export default TopicList;
