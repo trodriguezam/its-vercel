@@ -20,7 +20,6 @@ function QuestionsList() {
     const [quizStarted, setQuizStarted] = useState(false);
     const storedUser = localStorage.getItem('currentUser');
     const currentUser = storedUser ? JSON.parse(storedUser) : null;
-    const Qlenght = questions.length;
 
     useEffect(() => {
         axiosInstance.get(`/tasks/${taskId}/questions`)
@@ -42,28 +41,28 @@ function QuestionsList() {
             });
     }, [refresh]);
 
+    // useEffect(() => {
+    //     const correctQuestions = userQuestions.filter(
+    //         userQuestion => userQuestion.user_id === currentUser?.id && userQuestion.correct
+    //     );
+    //     const remainingQuestions = Allquestions.filter(question => 
+    //         !correctQuestions.some(
+    //             userQuestion => userQuestion.question_id === question.id
+    //         )
+    //     );
+
+    //     setQ(remainingQuestions);
+
+    //     if (remainingQuestions.length === 0 && Allquestions.length > 0) {
+    //         setIsCompleted(true);
+    //     }
+
+    // }, [userQuestions, Allquestions]);
+
+
     useEffect(() => {
-        const correctQuestions = userQuestions.filter(
-            userQuestion => userQuestion.user_id === currentUser?.id && userQuestion.correct
-        );
-        const remainingQuestions = Allquestions.filter(question => 
-            !correctQuestions.some(
-                userQuestion => userQuestion.question_id === question.id
-            )
-        );
-
-        setQ(remainingQuestions);
-
-        if (remainingQuestions.length === 0 && Allquestions.length > 0) {
-            setIsCompleted(true);
-        }
-
-    }, [userQuestions, Allquestions]);
-
-
-    useEffect(() => {
-        if (questions.length > 0 && questions[currentIndex]) {
-            axiosInstance.get(`/questions/${questions[currentIndex].id}/answers`)
+        if (Allquestions.length > 0 && Allquestions[currentIndex]) {
+            axiosInstance.get(`/questions/${Allquestions[currentIndex].id}/answers`)
                 .then((res) => {
                     setAnswers(res.data);
                 })
@@ -71,7 +70,7 @@ function QuestionsList() {
                     console.error(error);
                 });
         }
-    }, [currentIndex, questions]);
+    }, [currentIndex, Allquestions]);
 
     const handleAnswerChange = (event) => {
         setSelectedAnswer(Number(event.target.value));
@@ -83,7 +82,7 @@ function QuestionsList() {
 
             const existingUserQuestion = userQuestions.find(
                 userQuestion =>
-                    userQuestion.question_id === questions[currentIndex].id &&
+                    userQuestion.question_id === Allquestions[currentIndex].id &&
                     userQuestion.user_id === currentUser?.id
             );
 
@@ -91,12 +90,8 @@ function QuestionsList() {
                 setRefresh(!refresh);
                 
 
-                if (currentIndex < questions.length - 1) {
+                if (currentIndex < Allquestions.length - 1) {
                     setCurrentIndex(currentIndex + 1);
-                }
-                else if (Qlenght > questions.length) {
-                    setCurrentIndex(currentIndex);
-                    Qlenght = questions.length;
                 }
                 else {
                     finalizeQuiz(); 
@@ -114,7 +109,7 @@ function QuestionsList() {
             } else {
                 axiosInstance.post('/user_questions', {
                     user_id: currentUser.id,
-                    question_id: questions[currentIndex].id,
+                    question_id: Allquestions[currentIndex].id,
                     correct: selectedAnswerObj.correct
                 })
                 .then(handleUpdate)
@@ -191,13 +186,13 @@ function QuestionsList() {
                         </div>
                     ) : (
                         <>
-                            {questions.length > 0 && currentIndex < questions.length && (
+                            {Allquestions.length > 0 && currentIndex < Allquestions.length && (
                                 <div>
-                                    <h2>id:{currentIndex}, {questions.length}</h2>
-                                    <li key={questions[currentIndex].id} style={{ color: 'white' }}>
-                                        <p>{questions[currentIndex].question_text}</p>
+                                    <h2>id:{currentIndex}, {Allquestions.length}</h2>
+                                    <li key={Allquestions[currentIndex].id} style={{ color: 'white' }}>
+                                        <p>{Allquestions[currentIndex].question_text}</p>
                                     </li>
-                                    <QuestionType question={questions[currentIndex]} task={task} />
+                                    <QuestionType question={Allquestions[currentIndex]} task={task} />
                                     <div>
                                         <button onClick={handleSubmit}>Submit</button>
                                     </div>

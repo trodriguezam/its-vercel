@@ -58,14 +58,14 @@ function App() {
           </Toolbar>
         </AppBar>
       </div>
-      <Dcl />
-      {/* <Routes>
+
+      <Routes>
         <Route path="/topics" element={<TopicList />} />
         <Route path="/topics/:topicId/tasks" element={<TasksList />} />
         <Route path="/tasks/:taskId/questions" element={<QuestionsList />} />
         <Route path="/login" element={<Login setCurrentUser={setCurrentUser} />} />
         <Route path="/signup" element={<Signup />} />
-      </Routes> */}
+      </Routes>
     </>
   );
 }
