@@ -1,0 +1,11 @@
+<svg class='vector' id='blue'>
+		<g id='blue-name' transform="matrix(1 0 0 1 194.44 365.75)" style="">
+			<text xml:space="preserve" font-family="'Open Sans', sans-serif" font-size="18" font-style="normal" font-weight="bold" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,24,191); fill-rule: nonzero; opacity: 1; white-space: pre;"><tspan x="-10.32" y="5.65" style="font-style: italic; ">D</tspan></text>
+		</g>		
+		<g id='blue-1' transform="matrix(-0.09 -0.05 0.05 -0.09 191.9 393.78)">
+			<polygon style="stroke: rgb(0,24,191); stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,24,191); fill-rule: nonzero; opacity: 1;" points="0,-42.5 50,42.5 -50,42.5 "/>
+		</g>
+		<g id='blue-0' transform="matrix(0.73 0 0 0.73 231.46 324.24)">
+			<line style="stroke: rgb(0,24,191); stroke-width: 3; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1;" x1="54.999999999999986" y1="-93.33333333333331" x2="-54.999999999999986" y2="93.33333333333331"/>
+		</g>
+	</svg>

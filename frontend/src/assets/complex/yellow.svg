@@ -1,0 +1,11 @@
+<svg class='vector' id='yellow'>
+		<g id='yellow-0' transform="matrix(0.73 0 0 0.73 314.72 184.04)">
+			<line style="stroke: rgb(223,205,27); stroke-width: 3; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1;" x1="54.999999999999986" y1="-93.33333333333331" x2="-54.999999999999986" y2="93.33333333333331"/>
+		</g>
+		<g id='yellow-1' transform="matrix(-0.09 -0.05 -0.05 0.09 357.77 113.09)">
+			<polygon style="stroke: rgb(223,205,27); stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(223,205,27); fill-rule: nonzero; opacity: 1;" points="0,-42.5 50,42.5 -50,42.5 "/>
+		</g>
+		<g id='yellow-name' transform="matrix(1 0 0 1 338.82 121.31)" style="">
+			<text xml:space="preserve" font-family="'Open Sans', sans-serif" font-size="18" font-style="normal" font-weight="bold" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(223,205,27); fill-rule: nonzero; opacity: 1; white-space: pre;"><tspan x="-10.32" y="5.65" style="font-style: italic; ">B</tspan></text>
+		</g>
+	</svg>

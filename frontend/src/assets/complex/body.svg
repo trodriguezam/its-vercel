@@ -1,0 +1,5 @@
+<svg class='body' id='body' width="800" height="600" viewBox="0 0 800 600" xml:space="preserve">
+  <g transform="matrix(2.04 1.15 -0.52 0.92 274.77 255.64)">
+    <polygon style="stroke: rgb(0,0,0); stroke-width: 0.2; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(214,214,214); fill-rule: nonzero; opacity: 1;" points="-50,-50 -50,50 50,50 50,-50 "/>
+  </g>
+</svg>

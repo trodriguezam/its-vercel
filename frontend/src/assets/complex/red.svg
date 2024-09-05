@@ -1,0 +1,11 @@
+<svg class='vector' id='red'>
+		<g id='red-0' transform="matrix(1 0.02 -0.02 1 317.33 279.18)">
+			<line style="stroke: rgb(235,0,0); stroke-width: 3; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1;" x1="-41.66666666666666" y1="-23.333333333333343" x2="41.66666666666666" y2="23.333333333333343"/>
+		</g>
+		<g id='red-1' transform="matrix(-0.05 0.09 -0.09 -0.05 356.89 301.44)">
+			<polygon style="stroke: rgb(235,0,0); stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(235,0,0); fill-rule: nonzero; opacity: 1;" points="0,-42.5 50,42.5 -50,42.5 "/>
+		</g>
+		<g id='red-name' transform="matrix(1 0 0 1 349.04 280.47)" style="">
+			<text xml:space="preserve" font-family="'Open Sans', sans-serif" font-size="18" font-style="normal" font-weight="bold" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(235,0,0); fill-rule: nonzero; opacity: 1; white-space: pre;"><tspan x="-10.32" y="5.65" style="font-style: italic; ">C</tspan></text>
+		</g>
+	</svg>

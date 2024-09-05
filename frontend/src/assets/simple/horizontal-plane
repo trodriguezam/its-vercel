@@ -1,0 +1,5 @@
+<svg class='plane' id='horizontal-plane' width="800" height="600" viewBox="0 0 800 600" xml:space="preserve">
+  <g transform="matrix(5.73 0 0 4.91 319.99 327.5)">
+    <line style="stroke: rgb(0,0,0); stroke-width: 0.3; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1;" x1="-55.833333333333314" y1="0" x2="55.833333333333314" y2="0"></line>
+  </g>
+</svg>

@@ -12,6 +12,9 @@ import QuestionsList from './components/Questions';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
+import Dcl from './utils/SvgEditor'
+// import Dcl from './assets/dcl.svg'
+
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
   const navigate = useNavigate();
@@ -55,14 +58,14 @@ function App() {
           </Toolbar>
         </AppBar>
       </div>
-
-      <Routes>
+      <Dcl />
+      {/* <Routes>
         <Route path="/topics" element={<TopicList />} />
         <Route path="/topics/:topicId/tasks" element={<TasksList />} />
         <Route path="/tasks/:taskId/questions" element={<QuestionsList />} />
         <Route path="/login" element={<Login setCurrentUser={setCurrentUser} />} />
         <Route path="/signup" element={<Signup />} />
-      </Routes>
+      </Routes> */}
     </>
   );
 }
