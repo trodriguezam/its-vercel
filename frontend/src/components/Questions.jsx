@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation, Link } from 'react-router-dom';
 import axiosInstance from '../api/axiosInstance';
-import { Button } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Button, Typography, FormControl } from '@mui/material';
+import { Box } from '@mui/system';
 
 function QuestionsList() {
     const { taskId } = useParams();
@@ -10,7 +10,6 @@ function QuestionsList() {
     const task = location.state?.task;
 
     const [Allquestions, setQuestions] = useState([]);
-    const [questions, setQ] = useState([]);
     const [answers, setAnswers] = useState([]);
     const [userQuestions, setUserQuestions] = useState([]);
     const [refresh, setRefresh] = useState(false);
@@ -23,57 +22,26 @@ function QuestionsList() {
 
     useEffect(() => {
         axiosInstance.get(`/tasks/${taskId}/questions`)
-            .then((res) => {
-                setQuestions(res.data);
-            })
-            .catch((error) => {
-                console.error(error);
-            });
+            .then((res) => setQuestions(res.data))
+            .catch((error) => console.error(error));
     }, [taskId]);
 
     useEffect(() => {
         axiosInstance.get('/user_questions')
-            .then((res) => {
-                setUserQuestions(res.data);
-            })
-            .catch((error) => {
-                console.error(error);
-            });
+            .then((res) => setUserQuestions(res.data))
+            .catch((error) => console.error(error));
     }, [refresh]);
-
-    // useEffect(() => {
-    //     const correctQuestions = userQuestions.filter(
-    //         userQuestion => userQuestion.user_id === currentUser?.id && userQuestion.correct
-    //     );
-    //     const remainingQuestions = Allquestions.filter(question => 
-    //         !correctQuestions.some(
-    //             userQuestion => userQuestion.question_id === question.id
-    //         )
-    //     );
-
-    //     setQ(remainingQuestions);
-
-    //     if (remainingQuestions.length === 0 && Allquestions.length > 0) {
-    //         setIsCompleted(true);
-    //     }
-
-    // }, [userQuestions, Allquestions]);
-
 
     useEffect(() => {
         if (Allquestions.length > 0 && Allquestions[currentIndex]) {
             axiosInstance.get(`/questions/${Allquestions[currentIndex].id}/answers`)
-                .then((res) => {
-                    setAnswers(res.data);
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
+                .then((res) => setAnswers(res.data))
+                .catch((error) => console.error(error));
         }
     }, [currentIndex, Allquestions]);
 
-    const handleAnswerChange = (event) => {
-        setSelectedAnswer(Number(event.target.value));
+    const handleAnswerChange = (answerId) => {
+        setSelectedAnswer(answerId);
     };
 
     const handleSubmit = () => {
@@ -88,13 +56,11 @@ function QuestionsList() {
 
             const handleUpdate = () => {
                 setRefresh(!refresh);
-                
 
                 if (currentIndex < Allquestions.length - 1) {
                     setCurrentIndex(currentIndex + 1);
-                }
-                else {
-                    finalizeQuiz(); 
+                } else {
+                    finalizeQuiz();
                 }
             };
 
@@ -103,9 +69,7 @@ function QuestionsList() {
                     correct: selectedAnswerObj.correct
                 })
                 .then(handleUpdate)
-                .catch((error) => {
-                    console.error(error);
-                });
+                .catch((error) => console.error(error));
             } else {
                 axiosInstance.post('/user_questions', {
                     user_id: currentUser.id,
@@ -113,9 +77,7 @@ function QuestionsList() {
                     correct: selectedAnswerObj.correct
                 })
                 .then(handleUpdate)
-                .catch((error) => {
-                    console.error(error);
-                });
+                .catch((error) => console.error(error));
             }
         } else {
             console.log('No answer selected');
@@ -141,21 +103,30 @@ function QuestionsList() {
     function QuestionType({ question, task }) {
         if (task.task_type === 'Option') {
             return (
-                <ul>
+                <FormControl component="fieldset">
                     {answers.map((answer) => (
-                        <li key={answer.id} style={{ color: 'white' }}>
-                            <label>
-                                <input
-                                    type="radio"
-                                    value={answer.id}
-                                    checked={selectedAnswer === answer.id}
-                                    onChange={handleAnswerChange}
-                                />
+                        <Button
+                            key={answer.id}
+                            variant={selectedAnswer === answer.id ? 'contained' : 'outlined'}
+                            onClick={() => handleAnswerChange(answer.id)}
+                            style={{
+                                margin: '10px 0',
+                                width: '100%',
+                                textTransform: 'none',
+                                borderRadius: '10px',
+                                fontSize: '16px',
+                            }}
+                            sx={{
+                                backgroundColor: selectedAnswer === answer.id ? '#659948' : '#fff',
+                                color: selectedAnswer === answer.id ? '#fff' : '#111111'
+                            }}
+                        >
+                            <Typography variant='h6'>
                                 {answer.answer_text}
-                            </label>
-                        </li>
+                            </Typography>
+                        </Button>
                     ))}
-                </ul>
+                </FormControl>
             );
         } else {
             return (
@@ -163,39 +134,61 @@ function QuestionsList() {
                     type="text"
                     value={selectedAnswer}
                     onChange={handleAnswerChange}
+                    style={{ width: '100%', padding: '10px', fontSize: '16px' }}
                 />
             );
         }
     }
 
     return (
-        <div>
-            <h2>Task: {task?.name}</h2>
+        <div style={{ padding: '20px', textAlign: 'center' }}>
             {!quizStarted && !isCompleted ? (
-                <Button variant="contained" onClick={handleStartQuiz}>Start Quiz</Button>
+                <>
+                    <Typography variant="h6" gutterBottom color='#111111'>
+                        {task.name}
+                    </Typography>
+                    <Button variant="contained" sx={{ marginTop: '20px', backgroundColor: '#8AB573', '&:hover': { backgroundColor: '#79a362' } }} onClick={handleStartQuiz}>
+                        Start Quiz
+                    </Button>
+                </>
             ) : (
                 <>
                     {isCompleted ? (
                         <div>
-                            <h3>Quiz Completed!</h3>
-                            <p>Your score: {score} out of {Allquestions.length}</p>
-                            <p>Score Percentage: {scorePercentage.toFixed(2)}%</p>
+                            <Typography variant="h5" color='#111111'>Quiz Completed!</Typography>
+                            <Typography variant="h6" color='#111111'>Your score: {score} out of {Allquestions.length}</Typography>
+                            <Typography variant="h6" color='#111111'>Score Percentage: {scorePercentage.toFixed(2)}%</Typography>
                             <Link to={`/topics/${task.topic_id}/tasks`}>
-                                <Button variant="contained">Return to Tasks</Button>
+                                <Button variant="contained" color="secondary" sx={{ marginTop: '20px', backgroundColor: '#8AB573', '&:hover': { backgroundColor: '#79a362' } }}>
+                                    Return to Tasks
+                                </Button>
                             </Link>
                         </div>
                     ) : (
                         <>
                             {Allquestions.length > 0 && currentIndex < Allquestions.length && (
                                 <div>
-                                    <h2>id:{currentIndex}, {Allquestions.length}</h2>
-                                    <li key={Allquestions[currentIndex].id} style={{ color: 'white' }}>
-                                        <p>{Allquestions[currentIndex].question_text}</p>
-                                    </li>
-                                    <QuestionType question={Allquestions[currentIndex]} task={task} />
-                                    <div>
-                                        <button onClick={handleSubmit}>Submit</button>
-                                    </div>
+                                    <Typography variant="h6" gutterBottom color='#111111'>
+                                        {Allquestions[currentIndex].question_text}
+                                    </Typography>
+                                    <QuestionType
+                                        question={Allquestions[currentIndex]}
+                                        task={task}
+                                    />
+                                    <Box mt={3}>
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            onClick={handleSubmit}
+                                            style={{ width: '100%', borderRadius: '10px' }}
+                                            sx={{
+                                                backgroundColor:'#8AB573' ,
+                                                '&:hover': { backgroundColor: '#79a362' }
+                                            }}
+                                        >
+                                            Check
+                                        </Button>
+                                    </Box>
                                 </div>
                             )}
                         </>

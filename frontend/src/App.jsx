@@ -5,12 +5,13 @@ import { Routes, Route, Link } from 'react-router-dom';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import './App.css';
-import { AppBar, IconButton, Button } from '@mui/material'; // Imported Button
+import { AppBar, IconButton, Button, Typography } from '@mui/material'; // Imported Button
 import { Toolbar } from '@mui/material';
 import { Menu, Search } from '@mui/icons-material';
 import QuestionsList from './components/Questions';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import Box from '@mui/material/Box';
 
 import Dcl from './utils/SvgEditor'
 // import Dcl from './assets/dcl.svg'
@@ -35,26 +36,29 @@ function App() {
   return (
     <>
       <div className="App">
-        <AppBar id='top-app-bar' position='fixed' color='primary'>
+        <AppBar id='top-app-bar' position='fixed' sx={{backgroundColor:"#D9FFD9"}}>
           <Toolbar>
-            <IconButton color='inherit' aria-label="drawer">
-              <Menu /* style={{ fill: 'rgba(255, 255, 255, 0.75' }}  *//>
-            </IconButton>
-            <IconButton color='inherit' aria-label="search">
-              <Search /* style={{ fill: 'rgba(255, 255, 255, 0.75' }} */ />
-            </IconButton>
+            <Typography variant="h5" component="div" sx={{ color: '#111111'}}>
+            BasicFisics
+            </Typography>
+            <Box sx={{ marginLeft: 'auto' }}>
             {currentUser ? (
-              <Button color='inherit' onClick={handleLogout}>Logout</Button>
+              <Button color='#111111' onClick={handleLogout}>
+              <Typography variant="h7" component="div" sx={{ color: '#111111'}}>
+                Logout
+              </Typography>
+              </Button>
             ) : (
               <>
-                <Link to='/login' style={{ marginRight: '10px', color: 'white', textDecoration: 'none' }}>
-                  <Button color='inherit'>Log in</Button>
+                <Link to='/login' style={{ marginRight: '10px', color: '#111111', textDecoration: 'none' }}>
+                  <Button color='#111111'>Log in</Button>
                 </Link>
-                <Link to='/signup' style={{ color: 'white', textDecoration: 'none' }}>
-                  <Button color='inherit'>Signup</Button>
+                <Link to='/signup' style={{ color: '#111111', textDecoration: 'none' }}>
+                  <Button color='#111111'>Signup</Button>
                 </Link>
               </>
             )}
+            </Box>
           </Toolbar>
         </AppBar>
       </div>

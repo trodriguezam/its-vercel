@@ -8,7 +8,22 @@ import { Routes, Route, Link } from 'react-router-dom';
 import Login from './Login';
 import { useNavigate } from 'react-router-dom';
 
-const theme = createTheme();
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#666666',  // Example for primary color (green)
+    },
+    secondary: {
+      main: '#FF5722',  // Example for secondary color (orange)
+    },
+    background: {
+      default: '#F2FFF2',  // Light background color
+    },
+    text: {
+      primary: '#111111',  // Custom text color
+    }
+  },
+});
 
 const validationSchema = yup.object({
     email: yup.string().email('Correo electrónico inválido').required('Correo electrónico es obligatorio'),
@@ -39,7 +54,7 @@ function SignupForm() {
               if (Object.keys(errors).length) {
                 alert('Por favor, corrija los errores antes de enviar.');
               } else {
-                alert(JSON.stringify(values, null, 2));
+                alert('User created successfully'); 
                 const user = {"user": values}
                 axiosInstance.post('/signup', user)
                 .then(() => {

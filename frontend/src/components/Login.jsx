@@ -6,7 +6,22 @@ import { TextField, Button, CssBaseline, ThemeProvider, createTheme } from '@mui
 import * as yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 
-const theme = createTheme();
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#666666',  // Example for primary color (green)
+    },
+    secondary: {
+      main: '#FF5722',  // Example for secondary color (orange)
+    },
+    background: {
+      default: '#F2FFF2',  // Light background color
+    },
+    text: {
+      primary: '#111111',  // Custom text color
+    }
+  },
+});
 
 const validationSchema = yup.object({
     email: yup.string().email('Correo electrónico inválido').required('Correo electrónico es obligatorio'),
@@ -50,7 +65,7 @@ function LoginForm({ setCurrentUser }) {
             });
           }}
         >
-          <Form>
+          <Form >
             <Field
               as={TextField}
               name="email"
