@@ -22,7 +22,7 @@ function TasksList() {
     return (
         <div>
             {tasks.map((task) => (
-                <li key={task.id} style={{ color: 'white' }}>
+                <li key={task.id}>
                     {task.name}
                     <Link to={`/tasks/${task.id}/questions`} state={{task}}>
                         <Button variant="contained">View Questions</Button>

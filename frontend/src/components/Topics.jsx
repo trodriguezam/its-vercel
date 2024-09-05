@@ -23,7 +23,7 @@ function TopicList() {
             <h1>Topics</h1>
             <ul>
                 {topics.map((topic) => (
-                    <li key={topic.id} style={{ color: 'white' }}>
+                    <li key={topic.id}>
                         {topic.name}
                         <Link to={`/topics/${topic.id}/tasks`}>
                             <Button variant="contained">View Tasks</Button>

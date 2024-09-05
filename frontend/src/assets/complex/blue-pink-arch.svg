@@ -3,6 +3,6 @@
 			<path style="stroke: rgb(0,0,0); stroke-width: 0.4; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" transform=" translate(-469.12, -455.08)" d="M 466.49998982747394 478.8333320617675 Q 458.99998982747394 453.8333320617675 476.49998982747394 431.3333320617675" stroke-linecap="round"/>
 		</g>
 		<g id='blue-pink-name' transform="matrix(1 0 0 1 245.06 359.25)" style="">
-			<text xml:space="preserve" font-family="'Open Sans', sans-serif" font-size="23" font-style="normal" font-weight="bold" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,221,25); fill-rule: nonzero; opacity: 1; white-space: pre;"><tspan x="-10.32" y="7.23" style="fill: rgb(0,0,0); ">𝛼</tspan></text>
+			<text xml:space="preserve" font-family="'Open Sans', sans-serif" font-size="23" font-style="normal" font-weight="bold" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,221,25); fill-rule: nonzero; opacity: 1; white-space: pre;"><tspan id='blue-pink-arch-value' x="-10.32" y="7.23" style="fill: rgb(0,0,0); ">𝛼</tspan></text>
 		</g>
 	</svg>

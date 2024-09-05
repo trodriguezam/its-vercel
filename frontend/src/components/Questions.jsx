@@ -3,6 +3,7 @@ import { useParams, useLocation } from 'react-router-dom';
 import axiosInstance from '../api/axiosInstance';
 import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
+import  Dcl from '../utils/SvgEditor'
 
 function QuestionsList() {
     const { taskId } = useParams();
@@ -138,32 +139,61 @@ function QuestionsList() {
         setCurrentIndex(0);
     };
 
+    const getRandomValues = (samples) => {
+        return samples.map(range => Math.floor(Math.random() * range + 1));
+    }
+
     function QuestionType({ question, task }) {
         if (task.task_type === 'Option') {
             return (
-                <ul>
-                    {answers.map((answer) => (
-                        <li key={answer.id} style={{ color: 'white' }}>
-                            <label>
-                                <input
-                                    type="radio"
-                                    value={answer.id}
-                                    checked={selectedAnswer === answer.id}
-                                    onChange={handleAnswerChange}
-                                />
-                                {answer.answer_text}
-                            </label>
-                        </li>
-                    ))}
-                </ul>
+                <>
+                    <ul>
+                        {answers.map((answer) => (
+                            <li key={answer.id}>
+                                <label>
+                                    <input
+                                        type="radio"
+                                        value={answer.id}
+                                        checked={selectedAnswer === answer.id}
+                                        onChange={handleAnswerChange}
+                                    />
+                                    {answer.answer_text}
+                                </label>
+                            </li>
+                        ))}
+                    </ul>
+                </>
             );
         } else {
+            const directions = ['left', 'right'];
+            const randomDir = directions[getRandomValues([2])]
+            const [r1, r2, r3] = getRandomValues([10, 10, 10])
             return (
-                <input
-                    type="text"
-                    value={selectedAnswer}
-                    onChange={handleAnswerChange}
-                />
+                <>  
+                    <Dcl 
+                        type={'Simple'}
+                        keys={['horizontal-plane', 'body', 'body-center', `${randomDir}`]} 
+                        modifications={[
+                            {id: 'value', newText: `${r1*10}N`},
+                            {id: 'sub', newText: ''},
+                            {id: 'name-vector', newText: ''},
+                        ]}
+                    />
+                    {/* <Dcl 
+                        type={'Complex'}
+                        keys={['inclined-plane', 'body', 'body-center', 'blue', 'pink', 'blue-pink-arch']} 
+                        modifications={[
+                            {id: 'blue-value', newText: '10N'},
+                            {id: 'pink-value', newText: '10N'},
+                            {id: 'blue-pink-arch-value', newText: '10N'},
+                        ]}
+                    /> */}
+                    <input
+                        type="text"
+                        value={selectedAnswer}
+                        onChange={handleAnswerChange}
+                    />
+                </>
             );
         }
     }
@@ -189,8 +219,10 @@ function QuestionsList() {
                             {Allquestions.length > 0 && currentIndex < Allquestions.length && (
                                 <div>
                                     <h2>id:{currentIndex}, {Allquestions.length}</h2>
-                                    <li key={Allquestions[currentIndex].id} style={{ color: 'white' }}>
-                                        <p>{Allquestions[currentIndex].question_text}</p>
+                                    <li key={Allquestions[currentIndex].id}>
+                                        <p key={Allquestions[currentIndex].id}>
+                                            {Allquestions[currentIndex].question_text}
+                                        </p>
                                     </li>
                                     <QuestionType question={Allquestions[currentIndex]} task={task} />
                                     <div>
