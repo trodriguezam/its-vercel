@@ -1,0 +1,34 @@
+# Specify Ruby version
+ARG RUBY_VERSION=3.2.2
+FROM ruby:$RUBY_VERSION
+
+# Set up environment variables
+ENV RAILS_ENV=development \
+    BUNDLE_PATH=/usr/local/bundle \
+    GEM_HOME=/usr/local/bundle \
+    BUNDLE_BIN=/usr/local/bundle/bin \
+    PATH=/app/bin:$BUNDLE_BIN:$PATH
+
+# Create a directory for the app code
+WORKDIR /app
+
+# Install dependencies
+RUN apt-get update -qq && \
+    apt-get install -y build-essential libsqlite3-dev libvips-dev nodejs
+
+# Copy Gemfile and Gemfile.lock
+COPY ITS/Gemfile ITS/Gemfile.lock ./
+
+# Install gems
+RUN bundle install
+
+# Copy the main application
+COPY ITS .
+
+# Expose port 3000 to be accessible from the host
+EXPOSE 3000
+
+COPY /ITS/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+CMD ["rails", "server", "-b", "0.0.0.0", "-p", "3000"]
