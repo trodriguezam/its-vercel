@@ -9,15 +9,18 @@ function QuestionsList() {
     const location = useLocation();
     const task = location.state?.task;
 
-    const [questions, setQuestions] = useState([]);
+    const [Allquestions, setQuestions] = useState([]);
+    const [questions, setQ] = useState([]);
     const [answers, setAnswers] = useState([]);
     const [userQuestions, setUserQuestions] = useState([]);
     const [refresh, setRefresh] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [selectedAnswer, setSelectedAnswer] = useState(null);
     const [isCompleted, setIsCompleted] = useState(false);
+    const [quizStarted, setQuizStarted] = useState(false);
     const storedUser = localStorage.getItem('currentUser');
     const currentUser = storedUser ? JSON.parse(storedUser) : null;
+    const Qlenght = questions.length;
 
     useEffect(() => {
         axiosInstance.get(`/tasks/${taskId}/questions`)
@@ -40,61 +43,23 @@ function QuestionsList() {
     }, [refresh]);
 
     useEffect(() => {
-        // Calculate the score based on the userQuestions data
-        const calculateScore = () => {
-            const correctAnswersCount = userQuestions.filter(
-                userQuestion => userQuestion.user_id === currentUser?.id &&
-                    userQuestion.correct &&
-                    questions.some(question => question.id === userQuestion.question_id)
-            ).length;
-            return correctAnswersCount;
-        };
+        const correctQuestions = userQuestions.filter(
+            userQuestion => userQuestion.user_id === currentUser?.id && userQuestion.correct
+        );
+        const remainingQuestions = Allquestions.filter(question => 
+            !correctQuestions.some(
+                userQuestion => userQuestion.question_id === question.id
+            )
+        );
 
-        // Update the score when userQuestions or questions are updated
-        const score = calculateScore();
-        const remainingQuestions = questions.filter(question => {
-            const userQuestion = userQuestions.find(
-                uq => uq.question_id === question.id && uq.user_id === currentUser?.id
-            );
-            return !userQuestion || !userQuestion.correct;
-        });
+        setQ(remainingQuestions);
 
-        if (remainingQuestions.length === 0) {
-            setIsCompleted(true); // All questions have been answered correctly
+        if (remainingQuestions.length === 0 && Allquestions.length > 0) {
+            setIsCompleted(true);
         }
 
-    }, [userQuestions, questions, currentUser]);
+    }, [userQuestions, Allquestions]);
 
-    useEffect(() => {
-        setIsCompleted(false);
-        const findNextUnansweredQuestion = () => {
-            let nextIndex = currentIndex;
-    
-            while (nextIndex < questions.length) {
-                const currentUserQuestion = userQuestions.find(
-                    userQuestion =>
-                        userQuestion.question_id === questions[nextIndex]?.id &&
-                        userQuestion.user_id === currentUser?.id
-                );
-    
-                if (!currentUserQuestion || !currentUserQuestion.correct) {
-                    break;
-                }
-    
-                nextIndex += 1;
-            }
-            if (nextIndex >= questions.length) {
-                setIsCompleted(true); 
-            } else {
-                setCurrentIndex(nextIndex);
-            }
-        };
-    
-        if (questions.length > 0) {
-            findNextUnansweredQuestion();
-        }
-    }, [questions, userQuestions, currentUser]);
-    
 
     useEffect(() => {
         if (questions.length > 0 && questions[currentIndex]) {
@@ -122,13 +87,27 @@ function QuestionsList() {
                     userQuestion.user_id === currentUser?.id
             );
 
+            const handleUpdate = () => {
+                setRefresh(!refresh);
+                
+
+                if (currentIndex < questions.length - 1) {
+                    setCurrentIndex(currentIndex + 1);
+                }
+                else if (Qlenght > questions.length) {
+                    setCurrentIndex(currentIndex);
+                    Qlenght = questions.length;
+                }
+                else {
+                    finalizeQuiz(); 
+                }
+            };
+
             if (existingUserQuestion) {
                 axiosInstance.put(`/user_questions/${existingUserQuestion.id}`, {
                     correct: selectedAnswerObj.correct
                 })
-                .then(() => {
-                    setRefresh(!refresh);
-                })
+                .then(handleUpdate)
                 .catch((error) => {
                     console.error(error);
                 });
@@ -138,29 +117,31 @@ function QuestionsList() {
                     question_id: questions[currentIndex].id,
                     correct: selectedAnswerObj.correct
                 })
-                .then(() => {
-                    setRefresh(!refresh);
-                })
+                .then(handleUpdate)
                 .catch((error) => {
                     console.error(error);
                 });
-            }
-
-            if (currentIndex < questions.length - 1) {
-                setCurrentIndex(currentIndex + 1);
-            } else {
-                setIsCompleted(true);
             }
         } else {
             console.log('No answer selected');
         }
     };
 
+    const finalizeQuiz = () => {
+        setIsCompleted(true);
+    };
+
     const score = userQuestions.filter(
         userQuestion => userQuestion.user_id === currentUser?.id && userQuestion.correct
     ).length;
 
-    const scorePercentage = (score / questions.length) * 100;
+    const scorePercentage = (score / Allquestions.length) * 100;
+
+    const handleStartQuiz = () => {
+        setIsCompleted(false);
+        setQuizStarted(true);
+        setCurrentIndex(0);
+    };
 
     function QuestionType({ question, task }) {
         if (task.task_type === 'Option') {
@@ -195,27 +176,34 @@ function QuestionsList() {
     return (
         <div>
             <h2>Task: {task?.name}</h2>
-            {isCompleted ? (
-                <div>
-                    <h3>Quiz Completed!</h3>
-                    <p>Your score: {score} out of {questions.length}</p>
-                    <p>Score Percentage: {scorePercentage.toFixed(2)}%</p>
-                    <Link to={`/topics/${task.topic_id}/tasks`}>
-                        <Button variant="contained">Return to Tasks</Button>
-                    </Link>
-                </div>
+            {!quizStarted && !isCompleted ? (
+                <Button variant="contained" onClick={handleStartQuiz}>Start Quiz</Button>
             ) : (
                 <>
-                    {questions.length > 0 && currentIndex < questions.length && (
+                    {isCompleted ? (
                         <div>
-                            <li key={questions[currentIndex].id} style={{ color: 'white' }}>
-                                <p>{questions[currentIndex].question_text}</p>
-                            </li>
-                            <QuestionType question={questions[currentIndex]} task={task} />
-                            <div>
-                                <button onClick={handleSubmit}>Submit</button>
-                            </div>
+                            <h3>Quiz Completed!</h3>
+                            <p>Your score: {score} out of {Allquestions.length}</p>
+                            <p>Score Percentage: {scorePercentage.toFixed(2)}%</p>
+                            <Link to={`/topics/${task.topic_id}/tasks`}>
+                                <Button variant="contained">Return to Tasks</Button>
+                            </Link>
                         </div>
+                    ) : (
+                        <>
+                            {questions.length > 0 && currentIndex < questions.length && (
+                                <div>
+                                    <h2>id:{currentIndex}, {questions.length}</h2>
+                                    <li key={questions[currentIndex].id} style={{ color: 'white' }}>
+                                        <p>{questions[currentIndex].question_text}</p>
+                                    </li>
+                                    <QuestionType question={questions[currentIndex]} task={task} />
+                                    <div>
+                                        <button onClick={handleSubmit}>Submit</button>
+                                    </div>
+                                </div>
+                            )}
+                        </>
                     )}
                 </>
             )}
