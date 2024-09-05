@@ -7,6 +7,7 @@ import * as yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 
 const theme = createTheme({
+
   palette: {
     primary: {
       main: '#666666',  // Example for primary color (green)
@@ -24,10 +25,10 @@ const theme = createTheme({
 });
 
 const validationSchema = yup.object({
-    email: yup.string().email('Correo electrónico inválido').required('Correo electrónico es obligatorio'),
+    email: yup.string().email('invalid Email').required('Email is required'),
     password: yup.string()
-      .matches(/^.{6,}$/, 'La contraseña debe tener al menos 6 caracteres')
-      .required('Contraseña es obligatoria'),
+      .matches(/^.{6,}$/, 'The password must be at least 6 characters')
+      .required('Password is required'),
 });
 
 function LoginForm({ setCurrentUser }) { 
@@ -45,7 +46,7 @@ function LoginForm({ setCurrentUser }) {
           onSubmit={(values, { setSubmitting, validateForm }) => {
             validateForm().then(errors => {
               if (Object.keys(errors).length) {
-                alert('Por favor, corrija los errores antes de enviar.');
+                alert('Please correct the errors before submitting.');
               } else {
                 const user = { "user": values };
   
@@ -70,7 +71,7 @@ function LoginForm({ setCurrentUser }) {
               as={TextField}
               name="email"
               type="text"
-              label="Correo Electrónico"
+              label="Enter your email"
               fullWidth
               margin="normal"
             />
@@ -80,14 +81,14 @@ function LoginForm({ setCurrentUser }) {
               as={TextField}
               name="password"
               type="password"
-              label="Contraseña"
+              label="Enter Password"
               fullWidth
               margin="normal"
             />
             <ErrorMessage name="password" component="div" />
   
-            <Button type="submit" color="primary" variant="contained">
-              Enviar
+            <Button type="submit" sx={{ backgroundColor: '#8AB573', '&:hover': { backgroundColor: '#79a362' } }} variant="contained">
+              Send
             </Button>
           </Form>
         </Formik>
