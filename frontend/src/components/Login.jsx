@@ -1,13 +1,12 @@
 // src/components/LoginForm.js
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axiosInstance from '../api/axiosInstance';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { TextField, Button, CssBaseline, ThemeProvider, createTheme } from '@mui/material';
+import { TextField, Button, CssBaseline, ThemeProvider, createTheme, Grid, Typography, Box, Divider } from '@mui/material';
 import * as yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 
 const theme = createTheme({
-
   palette: {
     primary: {
       main: '#666666',  // Example for primary color (green)
@@ -20,80 +19,192 @@ const theme = createTheme({
     },
     text: {
       primary: '#111111',  // Custom text color
-    }
+    },
   },
 });
 
 const validationSchema = yup.object({
-    email: yup.string().email('invalid Email').required('Email is required'),
-    password: yup.string()
-      .matches(/^.{6,}$/, 'The password must be at least 6 characters')
-      .required('Password is required'),
+  email: yup.string().email('Invalid Email').required('Email is required'),
+  password: yup.string()
+    .matches(/^.{6,}$/, 'The password must be at least 6 characters')
+    .required('Password is required'),
 });
 
-function LoginForm({ setCurrentUser }) { 
-    const navigate = useNavigate(); 
-  
-    return (
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Formik
-          initialValues={{
-            email: '',
-            password: '',
-          }}
-          validationSchema={validationSchema}
-          onSubmit={(values, { setSubmitting, validateForm }) => {
-            validateForm().then(errors => {
-              if (Object.keys(errors).length) {
-                alert('Please correct the errors before submitting.');
-              } else {
-                const user = { "user": values };
-  
-                axiosInstance.post('/login', user)
-                  .then((response) => {
-                      const user = response.data.status.data.user;
-                      localStorage.setItem('currentUser', JSON.stringify(user));
-                      setCurrentUser(user); // Update currentUser state in App component
-                      navigate('/topics'); // Redirect to topics after login
-                  })
-                  .catch(error => {
-                      console.error("There was an error logging in!", error);
-                    // Handle login error here, e.g., show a message to the user
-                  });
-              }
-              setSubmitting(false);
-            });
-          }}
-        >
-          <Form >
-            <Field
-              as={TextField}
-              name="email"
-              type="text"
-              label="Enter your email"
-              fullWidth
-              margin="normal"
+function LoginForm({ setCurrentUser }) {
+  const navigate = useNavigate();
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    axiosInstance.get('/users')
+      .then((res) => {
+        setUsers(res.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+        <Grid container spacing={2} justifyContent="center" alignItems="center" maxWidth="lg">
+          {/* Student Login Form */}
+          <Grid item xs={12} sm={5}>
+            <Typography variant="h5" gutterBottom>
+              Student Login
+            </Typography>
+            <Formik
+              initialValues={{ email: '', password: '' }}
+              validationSchema={validationSchema}
+              onSubmit={(values, { setSubmitting, validateForm }) => {
+                validateForm().then(errors => {
+                  if (Object.keys(errors).length) {
+                    alert('Please correct the errors before submitting.');
+                  } else {
+
+                    if (users.find((user) => user.email === values.email && user.role === "user")) {
+                    const userdata = { "user": values };
+      
+                    axiosInstance.post('/login', userdata)
+                      .then((response) => {
+                          const user = response.data.status.data.user;
+                          localStorage.setItem('currentUser', JSON.stringify(user));
+                          setCurrentUser(user); // Update currentUser state in App component
+                          navigate('/topics'); // Redirect to topics after login
+                      })
+                      .catch(error => {
+                          console.error("There was an error logging in!", error);
+                        // Handle login error here, e.g., show a message to the user
+                      });
+                  }
+                  else {
+                    alert('User not found');
+                  }
+                }
+                  setSubmitting(false);
+                });
+              }}
+            >
+              <Form>
+                <Field
+                  as={TextField}
+                  name="email"
+                  type="text"
+                  label="Enter your email"
+                  fullWidth
+                  margin="normal"
+                />
+                <ErrorMessage name="email" component="div" />
+
+                <Field
+                  as={TextField}
+                  name="password"
+                  type="password"
+                  label="Enter Password"
+                  fullWidth
+                  margin="normal"
+                />
+                <ErrorMessage name="password" component="div" />
+
+                <Button
+                  type="submit"
+                  sx={{ backgroundColor: '#8AB573', '&:hover': { backgroundColor: '#79a362' } }}
+                  variant="contained"
+                  fullWidth
+                >
+                  Login as Student
+                </Button>
+              </Form>
+            </Formik>
+          </Grid>
+
+          {/* Vertical Line Separator */}
+          <Grid item xs="auto">
+            <Divider
+              orientation="vertical"
+              flexItem
+              sx={{
+                borderRightWidth: 2,
+                borderColor: '#666666', // Set a visible color for the separator
+                height: '100%',
+              }}
             />
-            <ErrorMessage name="email" component="div" />
-  
-            <Field
-              as={TextField}
-              name="password"
-              type="password"
-              label="Enter Password"
-              fullWidth
-              margin="normal"
-            />
-            <ErrorMessage name="password" component="div" />
-  
-            <Button type="submit" sx={{ backgroundColor: '#8AB573', '&:hover': { backgroundColor: '#79a362' } }} variant="contained">
-              Send
-            </Button>
-          </Form>
-        </Formik>
-      </ThemeProvider>
-    );
+          </Grid>
+
+          {/* Professor Login Form */}
+          <Grid item xs={12} sm={5}>
+            <Typography variant="h5" gutterBottom>
+              Professor Login
+            </Typography>
+            <Formik
+              initialValues={{ email: '', password: '' }}
+              validationSchema={validationSchema}
+              onSubmit={(values, { setSubmitting, validateForm }) => {
+                validateForm().then(errors => {
+                  if (Object.keys(errors).length) {
+                    alert('Please correct the errors before submitting.');
+                  } else {
+
+                    if (users.find((user) => user.email === values.email && user.role === "professor")) {
+                    const userdata = { "user": values };
+      
+                    axiosInstance.post('/login', userdata)
+                      .then((response) => {
+                          const user = response.data.status.data.user;
+                          localStorage.setItem('currentUser', JSON.stringify(user));
+                          setCurrentUser(user); // Update currentUser state in App component
+                          navigate('/dashboard'); 
+                      })
+                      .catch(error => {
+                          console.error("There was an error logging in!", error);
+                        // Handle login error here, e.g., show a message to the user
+                      });
+                  }
+                  else {
+                    alert('User not found');
+                  }
+                }
+                  setSubmitting(false);
+                });
+              }}
+            >
+              <Form>
+                <Field
+                  as={TextField}
+                  name="email"
+                  type="text"
+                  label="Enter your email"
+                  fullWidth
+                  margin="normal"
+                />
+                <ErrorMessage name="email" component="div" />
+
+                <Field
+                  as={TextField}
+                  name="password"
+                  type="password"
+                  label="Enter Password"
+                  fullWidth
+                  margin="normal"
+                />
+                <ErrorMessage name="password" component="div" />
+
+                <Button
+                  type="submit"
+                  sx={{ backgroundColor: '#FF5722', '&:hover': { backgroundColor: '#E64A19' } }}
+                  variant="contained"
+                  fullWidth
+                >
+                  Login as Professor
+                </Button>
+              </Form>
+            </Formik>
+          </Grid>
+        </Grid>
+      </Box>
+    </ThemeProvider>
+  );
 }
 
 export default LoginForm;

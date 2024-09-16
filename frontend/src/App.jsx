@@ -1,6 +1,7 @@
 // src/App.js
 import TopicList from './components/Topics';
 import TasksList from './components/Tasks';
+import HomePage from './components/Home';
 import { Routes, Route, Link } from 'react-router-dom';
 import Login from './components/Login';
 import Signup from './components/Signup';
@@ -60,6 +61,7 @@ function App() {
         </AppBar>
       </div>
       <Routes>
+        <Route path="/" element={<HomePage />} />
         <Route path="/topics" element={<TopicList />} />
         <Route path="/topics/:topicId/tasks" element={<TasksList />} />
         <Route path="/tasks/:taskId/questions" element={<QuestionsList />} />
