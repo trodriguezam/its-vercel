@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useLocation, Link } from 'react-router-dom';
+import { useParams, useLocation, Link, useNavigate } from 'react-router-dom';
 import axiosInstance from '../api/axiosInstance';
 import { Button, Typography, FormControl } from '@mui/material';
 import { Box } from '@mui/system';
@@ -9,10 +9,12 @@ function QuestionsList() {
     const { taskId } = useParams();
     const location = useLocation();
     const task = location.state?.task;
+    const questions = location.state?.questions;
+    const navigate = useNavigate();
 
-    const [Allquestions, setQuestions] = useState([]);
     const [answers, setAnswers] = useState([]);
     const [userQuestions, setUserQuestions] = useState([]);
+    const [Allquestions, setAllquestions] = useState([]);
     const [refresh, setRefresh] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [selectedAnswer, setSelectedAnswer] = useState(null);
@@ -23,7 +25,9 @@ function QuestionsList() {
 
     useEffect(() => {
         axiosInstance.get(`/tasks/${taskId}/questions`)
-            .then((res) => setQuestions(res.data))
+            .then((res) => {
+                setAllquestions(res.data);
+            })
             .catch((error) => console.error(error));
     }, [taskId]);
 
@@ -34,12 +38,12 @@ function QuestionsList() {
     }, [refresh]);
 
     useEffect(() => {
-        if (Allquestions.length > 0 && Allquestions[currentIndex]) {
-            axiosInstance.get(`/questions/${Allquestions[currentIndex].id}/answers`)
+        if (questions.length > 0 && questions[currentIndex]) {
+            axiosInstance.get(`/questions/${questions[currentIndex].id}/answers`)
                 .then((res) => setAnswers(res.data))
                 .catch((error) => console.error(error));
         }
-    }, [currentIndex, Allquestions]);
+    }, [currentIndex, questions]);
 
     const handleAnswerChange = (answerId) => {
         setSelectedAnswer(answerId);
@@ -51,14 +55,14 @@ function QuestionsList() {
 
             const existingUserQuestion = userQuestions.find(
                 userQuestion =>
-                    userQuestion.question_id === Allquestions[currentIndex].id &&
+                    userQuestion.question_id === questions[currentIndex].id &&
                     userQuestion.user_id === currentUser?.id
             );
 
             const handleUpdate = () => {
                 setRefresh(!refresh);
 
-                if (currentIndex < Allquestions.length - 1) {
+                if (currentIndex < questions.length - 1) {
                     setCurrentIndex(currentIndex + 1);
                 } else {
                     finalizeQuiz();
@@ -74,7 +78,7 @@ function QuestionsList() {
             } else {
                 axiosInstance.post('/user_questions', {
                     user_id: currentUser.id,
-                    question_id: Allquestions[currentIndex].id,
+                    question_id: questions[currentIndex].id,
                     correct: selectedAnswerObj.correct
                 })
                 .then(handleUpdate)
@@ -88,6 +92,47 @@ function QuestionsList() {
     const finalizeQuiz = () => {
         setIsCompleted(true);
     };
+
+    const handleReturn = (scorePercentage) => {
+    axiosInstance.get(`/user_tasks`)
+        .then((res) => {
+            const userTasks = res.data;
+            const existingTask = userTasks.find(userTask => {
+                return userTask.task_id === task.id && userTask.user_id === currentUser.id;
+            });
+
+            if (existingTask) {
+                axiosInstance.put(`/user_tasks/${existingTask.id}`, {
+                    task_id: taskId,
+                    user_id: currentUser.id,
+                    completion: scorePercentage
+                })
+                .then((response) => {
+                    console.log('Task updated:', response.data);
+                    navigate(`/topics/${task.topic_id}/tasks`);
+                })
+                .catch((error) => {
+                    console.error('Error updating task:', error);
+                });
+            } else {
+                axiosInstance.post(`/user_tasks`, {
+                    task_id: taskId,
+                    user_id: currentUser.id,
+                    completion: scorePercentage
+                })
+                .then((response) => {
+                    console.log('Task created:', response.data);
+                    navigate(`/topics/${task.topic_id}/tasks`);
+                })
+                .catch((error) => {
+                    console.error('Error creating task:', error);
+                });
+            }
+        })
+        .catch((error) => {
+            console.error('Error fetching user tasks:', error);
+        });
+};
 
     const score = userQuestions.filter(
         userQuestion => userQuestion.user_id === currentUser?.id && userQuestion.correct
@@ -181,26 +226,24 @@ function QuestionsList() {
                 </>
             ) : (
                 <>
-                    {isCompleted ? (
+                    {isCompleted || score / Allquestions.length === 1 ? (
                         <div>
                             <Typography variant="h5" color='#111111'>Quiz Completed!</Typography>
                             <Typography variant="h6" color='#111111'>Your score: {score} out of {Allquestions.length}</Typography>
                             <Typography variant="h6" color='#111111'>Score Percentage: {scorePercentage.toFixed(2)}%</Typography>
-                            <Link to={`/topics/${task.topic_id}/tasks`}>
-                                <Button variant="contained" color="secondary" sx={{ marginTop: '20px', backgroundColor: '#8AB573', '&:hover': { backgroundColor: '#79a362' } }}>
-                                    Return to Tasks
-                                </Button>
-                            </Link>
+                            <Button variant="contained" onClick={() => handleReturn(scorePercentage)} color="secondary" sx={{ marginTop: '20px', backgroundColor: '#8AB573', '&:hover': { backgroundColor: '#79a362' } }}>
+                                Return to Tasks
+                            </Button>
                         </div>
                     ) : (
                         <>
-                            {Allquestions.length > 0 && currentIndex < Allquestions.length && (
+                            {questions.length > 0 && currentIndex < questions.length && (
                                 <div>
                                     <Typography variant="h6" gutterBottom color='#111111'>
-                                        {Allquestions[currentIndex].question_text}
+                                        {questions[currentIndex].question_text}
                                     </Typography>
                                     <QuestionType
-                                        question={Allquestions[currentIndex]}
+                                        question={questions[currentIndex]}
                                         task={task}
                                     />
                                     <Box mt={3}>

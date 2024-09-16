@@ -33,6 +33,7 @@ Rails.application.routes.draw do
       resources :questions, only: [:index, :show], action: 'indexQuestions' 
     end
     resources :user_questions, only: [:index, :show, :create, :update]
+    resources :user_tasks, only: [:index, :show, :create, :update]
     resources :answers, only: [:index, :show]
     resources :users, only: [:index, :show]
   end
