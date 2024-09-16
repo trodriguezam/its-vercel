@@ -70,8 +70,8 @@ function LoginForm({ setCurrentUser }) {
                       .then((response) => {
                           const user = response.data.status.data.user;
                           localStorage.setItem('currentUser', JSON.stringify(user));
-                          setCurrentUser(user); // Update currentUser state in App component
-                          navigate('/topics'); // Redirect to topics after login
+                          setCurrentUser(user); 
+                          navigate('/topics');
                       })
                       .catch(error => {
                           console.error("There was an error logging in!", error);
@@ -154,7 +154,7 @@ function LoginForm({ setCurrentUser }) {
                           const user = response.data.status.data.user;
                           localStorage.setItem('currentUser', JSON.stringify(user));
                           setCurrentUser(user); // Update currentUser state in App component
-                          navigate('/dashboard'); 
+                          navigate('/dashboards'); 
                       })
                       .catch(error => {
                           console.error("There was an error logging in!", error);

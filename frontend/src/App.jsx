@@ -8,8 +8,9 @@ import Signup from './components/Signup';
 import './App.css';
 import { AppBar, IconButton, Button, Typography } from '@mui/material'; // Imported Button
 import { Toolbar } from '@mui/material';
-import { Menu, Search } from '@mui/icons-material';
+import {  Menu, Search } from '@mui/icons-material';
 import QuestionsList from './components/Questions';
+import DashboardList from './components/Dashboards';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
@@ -34,18 +35,45 @@ function App() {
   return (
     <>
       <div className="App">
-        <AppBar id='top-app-bar' position='fixed' sx={{backgroundColor:"#D9FFD9"}}>
-          <Toolbar>
-            <Typography variant="h5" component="div" sx={{ color: '#111111'}}>
-            BasicFisics
+      <AppBar id='top-app-bar' position='fixed' sx={{ backgroundColor: "#D9FFD9" }}>
+        <Toolbar>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Typography variant="h5" component="div" sx={{ color: '#111111', marginRight: '20px' }}>
+              BasicFisics
             </Typography>
-            <Box sx={{ marginLeft: 'auto' }}>
+
+            {currentUser && (
+              <>
+                {currentUser.role === "user" ? (
+                  <Link to='/topics' style={{ marginRight: '10px', color: '#111111' }}>
+                    <Button color='#111111'>
+                      <Typography variant="body1" component="div" sx={{ color: '#111111' }}>
+                        Topics
+                      </Typography>
+                    </Button>
+                  </Link>
+                ) : currentUser.role === "professor" ? (
+                  <Link to='/dashboards' style={{ marginRight: '10px', color: '#111111' }}>
+                    <Button color='#111111'>
+                      <Typography variant="body1" component="div" sx={{ color: '#111111' }}>
+                        Dashboard
+                      </Typography>
+                    </Button>
+                  </Link>
+                ) : null}
+              </>
+            )}
+          </Box>
+          
+          <Box sx={{ marginLeft: 'auto' }}>
             {currentUser ? (
-              <Button color='#111111' onClick={handleLogout}>
-              <Typography variant="h7" component="div" sx={{ color: '#111111'}}>
-                Logout
-              </Typography>
-              </Button>
+              <>
+                <Button color='#111111' onClick={handleLogout}>
+                  <Typography variant="body1" component="div" sx={{ color: '#111111' }}>
+                    Logout
+                  </Typography>
+                </Button>
+              </>
             ) : (
               <>
                 <Link to='/login' style={{ marginRight: '10px', color: '#111111', textDecoration: 'none' }}>
@@ -56,15 +84,16 @@ function App() {
                 </Link>
               </>
             )}
-            </Box>
-          </Toolbar>
-        </AppBar>
-      </div>
+          </Box>
+        </Toolbar>
+      </AppBar>
+    </div>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/topics" element={<TopicList />} />
         <Route path="/topics/:topicId/tasks" element={<TasksList />} />
         <Route path="/tasks/:taskId/questions" element={<QuestionsList />} />
+        <Route path="/dashboards" element={<DashboardList />} />
         <Route path="/login" element={<Login setCurrentUser={setCurrentUser} />} />
         <Route path="/signup" element={<Signup />} />
       </Routes>
