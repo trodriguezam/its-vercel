@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useLocation, Link, useNavigate } from 'react-router-dom';
 import axiosInstance from '../api/axiosInstance';
 import { Button, Typography, FormControl } from '@mui/material';
 import { Box } from '@mui/system';
 import  Dcl from '../utils/SvgEditor'
+import { setIn } from 'formik';
+import axios from 'axios';
 
 function QuestionsList() {
     const { taskId } = useParams();
@@ -22,6 +24,7 @@ function QuestionsList() {
     const [quizStarted, setQuizStarted] = useState(false);
     const storedUser = localStorage.getItem('currentUser');
     const currentUser = storedUser ? JSON.parse(storedUser) : null;
+    const [inputValue, setInputValue] = useState('');
 
     useEffect(() => {
         axiosInstance.get(`/tasks/${taskId}/questions`)
@@ -48,6 +51,9 @@ function QuestionsList() {
     const handleAnswerChange = (answerId) => {
         setSelectedAnswer(answerId);
     };
+
+    const handleInputSubmit = () => {
+    }
 
     const handleSubmit = () => {
         if (selectedAnswer !== null) {
@@ -153,38 +159,54 @@ function QuestionsList() {
     function QuestionType({ question, task }) {
         if (task.task_type === 'Option') {
             return (
-                <FormControl component="fieldset">
-                    {answers.map((answer) => (
+                <>
+                    <FormControl component="fieldset">
+                        {answers.map((answer) => (
+                            <Button
+                                key={answer.id}
+                                variant={selectedAnswer === answer.id ? 'contained' : 'outlined'}
+                                onClick={() => handleAnswerChange(answer.id)}
+                                style={{
+                                    margin: '10px 0',
+                                    width: '100%',
+                                    textTransform: 'none',
+                                    borderRadius: '10px',
+                                    fontSize: '16px',
+                                }}
+                                sx={{
+                                    backgroundColor: selectedAnswer === answer.id ? '#659948' : '#fff',
+                                    color: selectedAnswer === answer.id ? '#fff' : '#111111'
+                                }}
+                            >
+                                <Typography variant='h6'>
+                                    {answer.answer_text}
+                                </Typography>
+                            </Button>
+                        ))}
+                    </FormControl>
+                    <Box mt={3}>
                         <Button
-                            key={answer.id}
-                            variant={selectedAnswer === answer.id ? 'contained' : 'outlined'}
-                            onClick={() => handleAnswerChange(answer.id)}
-                            style={{
-                                margin: '10px 0',
-                                width: '100%',
-                                textTransform: 'none',
-                                borderRadius: '10px',
-                                fontSize: '16px',
-                            }}
+                            variant="contained"
+                            color="primary"
+                            onClick={handleSubmit}
+                            style={{ width: '100%', borderRadius: '10px' }}
                             sx={{
-                                backgroundColor: selectedAnswer === answer.id ? '#659948' : '#fff',
-                                color: selectedAnswer === answer.id ? '#fff' : '#111111'
+                                backgroundColor:'#8AB573' ,
+                                '&:hover': { backgroundColor: '#79a362' }
                             }}
                         >
-                            <Typography variant='h6'>
-                                {answer.answer_text}
-                            </Typography>
+                            Check
                         </Button>
-                    ))}
-                </FormControl>
+                    </Box>
+                </>
             );
         } else {
             const directions = ['left', 'right'];
             const randomDir = directions[getRandomValues([2])]
             const [r1, r2, r3] = getRandomValues([10, 10, 10])
             return (
-                <>  
-                    <Dcl 
+                <>
+                    {/* <Dcl 
                         type={'Simple'}
                         keys={['horizontal-plane', 'body', 'body-center', `${randomDir}`]} 
                         modifications={[
@@ -192,7 +214,7 @@ function QuestionsList() {
                             {id: 'sub', newText: ''},
                             {id: 'name-vector', newText: ''},
                         ]}
-                    />
+                    /> */}
                     {/* <Dcl 
                         type={'Complex'}
                         keys={['inclined-plane', 'body', 'body-center', 'blue', 'pink', 'blue-pink-arch']} 
@@ -202,12 +224,6 @@ function QuestionsList() {
                             {id: 'blue-pink-arch-value', newText: '10N'},
                         ]}
                     /> */}
-                    <input
-                        type="text"
-                        value={selectedAnswer}
-                        onChange={handleAnswerChange}
-                    style={{ width: '100%', padding: '10px', fontSize: '16px' }}
-                    />
                 </>
             );
         }
@@ -246,24 +262,33 @@ function QuestionsList() {
                                         question={questions[currentIndex]}
                                         task={task}
                                     />
-                                    <Box mt={3}>
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
-                                            onClick={handleSubmit}
-                                            style={{ width: '100%', borderRadius: '10px' }}
-                                            sx={{
-                                                backgroundColor:'#8AB573' ,
-                                                '&:hover': { backgroundColor: '#79a362' }
-                                            }}
-                                        >
-                                            Check
-                                        </Button>
-                                    </Box>
                                 </div>
                             )}
                         </>
                     )}
+                    {task.task_type === 'Development' ? (<>
+                    <input
+                        type="text"
+                        value={inputValue}
+                        onChange={(e) => setInputValue(e.target.value)}
+                        placeholder='Enter your answer here'
+                        style={{ width: '100%', padding: '10px', fontSize: '16px' }}
+                    />
+                    <Box mt={3}>
+                        <Button
+                            variant="contained"
+                            onClick={handleInputSubmit}
+                            color="primary"
+                            style={{ width: '100%', borderRadius: '10px' }}
+                            sx={{
+                                backgroundColor:'#8AB573' ,
+                                '&:hover': { backgroundColor: '#79a362' }
+                            }}
+                        >
+                            Check
+                        </Button>
+                    </Box>
+                    </>) : (<></>)}
                 </>
             )}
         </div>
