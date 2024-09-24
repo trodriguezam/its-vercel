@@ -32,6 +32,7 @@ function QuestionsList() {
     const [r1, setR1] = useState(0);
     const [r2, setR2] = useState(0);
     const [r3, setR3] = useState(0);
+    const [taskDifficulty, setTaskDifficulty] = useState(0);
     const [randomDir, setRandomDir] = useState('');
 
     useEffect(() => {
@@ -95,9 +96,9 @@ function QuestionsList() {
                         type={'Complex'}
                         keys={['inclined-plane', 'body', 'body-center', 'blue', 'pink', 'blue-pink-arch']} 
                         modifications={[
-                            {id: 'blue-value', newText: '10N'},
-                            {id: 'pink-value', newText: '10N'},
-                            {id: 'blue-pink-arch-value', newText: '10N'},
+                            {id: 'blue-value', newText: r1*10},
+                            {id: 'pink-value', newText: r2*10},
+                            {id: 'blue-pink-arch-value', newText: r3*10},
                         ]}
                     />
                 </>
@@ -119,38 +120,6 @@ function QuestionsList() {
             finalizeQuiz();
         }
     };
-
-    const handleSkip = () => {
-        setRefresh(!refresh);
-        setHint(0);
-
-        const existingUserQuestion = userQuestions.find(
-            userQuestion =>
-                userQuestion.question_id === questions[currentIndex].id &&
-                userQuestion.user_id === currentUser?.id
-        );
-
-        if (existingUserQuestion) {
-            axiosInstance.put(`/user_questions/${existingUserQuestion.id}`, {
-                correct: false,
-            })
-            .catch((error) => console.error(error));
-        } else {
-            axiosInstance.post('/user_questions', {
-                user_id: currentUser.id,
-                question_id: questions[currentIndex].id,
-                correct: false,
-                try: 0
-            })
-            .catch((error) => console.error(error));
-        }
-
-        if (currentIndex < questions.length - 1) {
-            setCurrentIndex(currentIndex + 1);
-        } else {
-            finalizeQuiz();
-        }
-    }
 
 
     const handleSubmit = () => {
@@ -174,7 +143,7 @@ function QuestionsList() {
             if (existingUserQuestion) {
                 axiosInstance.put(`/user_questions/${existingUserQuestion.id}`, {
                     correct: selectedAnswerObj.correct,
-                    try: typeof existingUserQuestion.try === 'undefined' ? 1 : existingUserQuestion.try + 1
+                    try: existingUserQuestion.try + 1
                 })
                 .then(handleHint)
                 .catch((error) => console.error(error));
@@ -250,25 +219,9 @@ function QuestionsList() {
     const getRandomValues = (samples) => {
         return samples.map(range => Math.floor(Math.random() * range + 1));
     }
-    
-    const getTries = (question) => {
-        return userQuestions.find(
-            userQuestion =>
-                userQuestion.question_id === question.id &&
-                userQuestion.user_id === currentUser?.id
-        )?.try;
-    }
-
-    const getCorrectAnswer = (question) => {
-        return answers.find(
-            answer =>
-                answer.question_id === question.id &&
-                answer.correct === true
-        )?.answer_text
-    }
 
     const handleInputSumbit = () => {
-        if (Number(inputValue) === (r1*10)) {
+        if (((Number(inputValue) === (r1*10)) && task.difficulty === 1) || (task.difficulty > 1 && (Number(inputValue) === (r2*10)))) {
             axiosInstance.get(`/user_tasks`)
             .then((res) => {
                 const userTasks = res.data;
@@ -293,7 +246,7 @@ function QuestionsList() {
                     axiosInstance.post(`/user_tasks`, {
                         task_id: taskId,
                         user_id: currentUser.id,
-                        completion: scorePercentage
+                        completion: 100
                     })
                     .then((response) => {
                         console.log('Task created:', response.data);
@@ -322,7 +275,7 @@ function QuestionsList() {
                             <Button
                                 key={answer.id}
                                 variant={selectedAnswer === answer.id ? 'contained' : 'outlined'}
-                                onClick={hint === 0 ? () => handleAnswerChange(answer.id) : null}
+                                onClick={() => handleAnswerChange(answer.id)}
                                 style={{
                                     margin: '10px 0',
                                     width: '100%',
@@ -367,96 +320,80 @@ function QuestionsList() {
                 <>
                 {task.task_type === 'Option' ? (
                     <>
-                    {isCompleted || score / Allquestions.length === 1 ? (
-                        <div>
-                            <Typography variant="h5" color='#111111'>Quiz Terminado!</Typography>
-                            <Typography variant="h6" color='#111111'>Tu puntuaciÃ³n: {score} de {Allquestions.length}</Typography>
-                            <Typography variant="h6" color='#111111'>Porcentaje de acierto: {scorePercentage.toFixed(2)}%</Typography>
-                            <Button variant="contained" onClick={() => handleReturn(scorePercentage)} color="secondary" sx={{ marginTop: '20px', backgroundColor: '#8AB573', '&:hover': { backgroundColor: '#79a362' } }}>
-                                Return to Tasks
-                            </Button>
-                        </div>
-                    ) : (
-                        <>
-                            <Typography variant="h5" gutterBottom color='#111111'>Pregunta {currentIndex+1}/{questions.length}</Typography>
-                            {questions.length > 0 && currentIndex < questions.length && (
-                                <div>
-                                    <Typography variant="h6" gutterBottom color='#111111'>
-                                        {questions[currentIndex].question_text}
-                                    </Typography>
-                                    <QuestionType
-                                        question={questions[currentIndex]}
-                                        task={task}
-                                    />
-                                </div>
-                            )}
-                            {hint === 0 ? (
-                            <Box mt={3} sx={{ display: 'flex', gap: '10px' }}>
-                            <Button
-                                variant="contained"
-                                onClick={handleSubmit}
-                                color="primary"
-                                style={{ flex: 1, borderRadius: '10px' }}
-                                sx={{
-                                    backgroundColor: '#8AB573',
-                                    '&:hover': { backgroundColor: '#79a362' }
-                                }}
-                            >
-                                Confirmar
-                            </Button>
-                            <Button
-                                variant="contained"
-                                onClick={handleSkip}
-                                color="primary"
-                                style={{ flex: 1, borderRadius: '10px' }}
-                                sx={{
-                                    backgroundColor: '#8AB573',
-                                    '&:hover': { backgroundColor: '#79a362' }
-                                }}
-                            >
-                                Saltar Pregunta
-                            </Button>
-                        </Box>
+                        {isCompleted || score / Allquestions.length === 1 ? (
+                            <div>
+                                <Typography variant="h5" color='#111111'>Quiz Completed!</Typography>
+                                <Typography variant="h6" color='#111111'>Your score: {score} out of {Allquestions.length}</Typography>
+                                <Typography variant="h6" color='#111111'>Score Percentage: {scorePercentage.toFixed(2)}%</Typography>
+                                <Button variant="contained" onClick={() => handleReturn(scorePercentage)} color="secondary" sx={{ marginTop: '20px', backgroundColor: '#8AB573', '&:hover': { backgroundColor: '#79a362' } }}>
+                                    Return to Tasks
+                                </Button>
+                            </div>
                         ) : (
-                            <Card variant="outlined" sx={{ mt: 3, backgroundColor: hint === 1 ? '#d9ffd6' : '#ffe3de', padding: '10px' }}>
-                            <CardContent>
-                                {hint === 1 ? (
-                                <Box display="flex" alignItems="center" justifyContent="center">
-                                    <CheckCircleIcon color="success" sx={{ fontSize: '40px', marginRight: '10px' }} />
-                                    <Typography variant="h6" color='green'>Correcto!</Typography>
-                                </Box>
-                                ) : (
-                                <Box display="flex" alignItems="center" justifyContent="center">
-                                    <CancelIcon color="error" sx={{ fontSize: '40px', marginRight: '10px' }} />
-                                    <Typography variant="h6" color='red'>Incorrecto!</Typography>
-                                </Box>
+                            <>
+                                {questions.length > 0 && currentIndex < questions.length && (
+                                    <div>
+                                        <Typography variant="h6" gutterBottom color='#111111'>
+                                            {questions[currentIndex].question_text}
+                                        </Typography>
+                                        <QuestionType
+                                            question={questions[currentIndex]}
+                                            task={task}
+                                        />
+                                    </div>
                                 )}
-                                <Typography variant="body1" mt={2} color='#333'>
-                                {hint === 1 ? "Buen Trabajo!" : 
-                                hint === 2 && getTries(questions[currentIndex]) < 2 ? <Typography>Hint: {questions[currentIndex].hint}</Typography> : 
-                                hint === 2 && getTries(questions[currentIndex]) >= 2 ? <Typography>La respuesta correcta es: {getCorrectAnswer(questions[currentIndex])}</Typography> : null
-                                }
-                                </Typography>
+                                {hint === 0 ? (
                                 <Box mt={3}>
                                 <Button
                                     variant="contained"
+                                    onClick={handleSubmit}
                                     color="primary"
-                                    onClick={handleUpdate}
                                     style={{ width: '100%', borderRadius: '10px' }}
                                     sx={{
-                                    backgroundColor: hint === 1 ? '#8AB573' : '#FF6B6B',
-                                    '&:hover': { backgroundColor: hint === 1 ? '#79a362' : '#ff5a5a' }
+                                    backgroundColor: '#8AB573',
+                                    '&:hover': { backgroundColor: '#79a362' }
                                     }}
                                 >
-                                    Siguiente
+                                    Check
                                 </Button>
                                 </Box>
-                            </CardContent>
-                            </Card>
+                            ) : (
+                                <Card variant="outlined" sx={{ mt: 3, backgroundColor: hint === 1 ? '#d9ffd6' : '#ffe3de', padding: '10px' }}>
+                                <CardContent>
+                                    {hint === 1 ? (
+                                    <Box display="flex" alignItems="center" justifyContent="center">
+                                        <CheckCircleIcon color="success" sx={{ fontSize: '40px', marginRight: '10px' }} />
+                                        <Typography variant="h6" color='green'>Correcto!</Typography>
+                                    </Box>
+                                    ) : (
+                                    <Box display="flex" alignItems="center" justifyContent="center">
+                                        <CancelIcon color="error" sx={{ fontSize: '40px', marginRight: '10px' }} />
+                                        <Typography variant="h6" color='red'>Incorrecto!</Typography>
+                                    </Box>
+                                    )}
+                                    <Typography variant="body1" mt={2} color='#333'>
+                                    {hint === 1 ? "Buen Trabajo!" : <Typography>Hint: {questions[currentIndex].hint}</Typography>}
+                                    </Typography>
+                                    <Box mt={3}>
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={handleUpdate}
+                                        style={{ width: '100%', borderRadius: '10px' }}
+                                        sx={{
+                                        backgroundColor: hint === 1 ? '#8AB573' : '#FF6B6B',
+                                        '&:hover': { backgroundColor: hint === 1 ? '#79a362' : '#ff5a5a' }
+                                        }}
+                                    >
+                                        Next
+                                    </Button>
+                                    </Box>
+                                </CardContent>
+                                </Card>
+                            )}
+                            </>
                         )}
-                        </>
-                    )}
-                </>) : 
+                    </>) : 
                     (
                         <>
                             {task.difficulty == 1 ? (
