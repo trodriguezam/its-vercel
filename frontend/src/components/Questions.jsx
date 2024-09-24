@@ -1,11 +1,9 @@
 import { useState, useEffect } from 'react';
-import { useParams, useLocation, Link, useNavigate } from 'react-router-dom';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import axiosInstance from '../api/axiosInstance';
 import { Button, Typography, FormControl } from '@mui/material';
 import { Box } from '@mui/system';
 import  Dcl from '../utils/SvgEditor'
-import { setIn } from 'formik';
-import axios from 'axios';
 
 function QuestionsList() {
     const { taskId } = useParams();
@@ -25,6 +23,10 @@ function QuestionsList() {
     const storedUser = localStorage.getItem('currentUser');
     const currentUser = storedUser ? JSON.parse(storedUser) : null;
     const [inputValue, setInputValue] = useState('');
+    const [r1, setR1] = useState(0);
+    const [r2, setR2] = useState(0);
+    const [r3, setR3] = useState(0);
+    const [randomDir, setRandomDir] = useState('');
 
     useEffect(() => {
         axiosInstance.get(`/tasks/${taskId}/questions`)
@@ -48,12 +50,58 @@ function QuestionsList() {
         }
     }, [currentIndex, questions]);
 
+    useEffect(() => {
+        const directions = ['right', 'left'];
+        const randomDir = directions[getRandomValues([2])[0] - 1];
+        const [r1, r2, r3] = getRandomValues([10, 10, 10])
+
+        setRandomDir(randomDir);
+        setR1(r1);
+        setR2(r2);
+        setR3(r3);
+
+    }, []);
+
+    function DLCComponent( {DLCType} ) {
+
+        console.log(r1)
+        console.log(randomDir)
+
+        if (DLCType === 'Simple') { 
+            return (
+                <>
+                    <Dcl 
+                        type={'Simple'}
+                        keys={['horizontal-plane', 'body', 'body-center', randomDir]} 
+                        modifications={[
+                            {id: 'value', newText: r1*10},
+                            {id: 'sub', newText: ''},
+                            {id: 'name-vector', newText: ''},
+                        ]}
+                    />
+                </>
+            )
+        } else 
+        if (DLCType === 'Complex') {
+            return (
+                <>
+                    <Dcl 
+                        type={'Complex'}
+                        keys={['inclined-plane', 'body', 'body-center', 'blue', 'pink', 'blue-pink-arch']} 
+                        modifications={[
+                            {id: 'blue-value', newText: '10N'},
+                            {id: 'pink-value', newText: '10N'},
+                            {id: 'blue-pink-arch-value', newText: '10N'},
+                        ]}
+                    />
+                </>
+            )
+        }
+    }
+
     const handleAnswerChange = (answerId) => {
         setSelectedAnswer(answerId);
     };
-
-    const handleInputSubmit = () => {
-    }
 
     const handleSubmit = () => {
         if (selectedAnswer !== null) {
@@ -138,7 +186,7 @@ function QuestionsList() {
         .catch((error) => {
             console.error('Error fetching user tasks:', error);
         });
-};
+    };
 
     const score = userQuestions.filter(
         userQuestion => userQuestion.user_id === currentUser?.id && userQuestion.correct
@@ -154,6 +202,52 @@ function QuestionsList() {
 
     const getRandomValues = (samples) => {
         return samples.map(range => Math.floor(Math.random() * range + 1));
+    }
+
+    const handleInputSumbit = () => {
+        if (Number(inputValue) === (r1*10)) {
+            axiosInstance.get(`/user_tasks`)
+            .then((res) => {
+                const userTasks = res.data;
+                const existingTask = userTasks.find(userTask => {
+                    return userTask.task_id === task.id && userTask.user_id === currentUser.id;
+                });
+
+                if (existingTask) {
+                    axiosInstance.put(`/user_tasks/${existingTask.id}`, {
+                        task_id: taskId,
+                        user_id: currentUser.id,
+                        completion: 100
+                    })
+                    .then((response) => {
+                        console.log('Task updated:', response.data);
+                        navigate(`/topics/${task.topic_id}/tasks`);
+                    })
+                    .catch((error) => {
+                        console.error('Error updating task:', error);
+                    });
+                } else {
+                    axiosInstance.post(`/user_tasks`, {
+                        task_id: taskId,
+                        user_id: currentUser.id,
+                        completion: scorePercentage
+                    })
+                    .then((response) => {
+                        console.log('Task created:', response.data);
+                        navigate(`/topics/${task.topic_id}/tasks`);
+                    })
+                    .catch((error) => {
+                        console.error('Error creating task:', error);
+                    });
+                }
+            })
+            .catch((error) => {
+                console.error('Error fetching user tasks:', error);
+            });
+            
+        } else {
+            console.log('Incorrect Answer');
+        }
     }
 
     function QuestionType({ question, task }) {
@@ -201,29 +295,9 @@ function QuestionsList() {
                 </>
             );
         } else {
-            const directions = ['left', 'right'];
-            const randomDir = directions[getRandomValues([2])]
-            const [r1, r2, r3] = getRandomValues([10, 10, 10])
             return (
                 <>
-                    {/* <Dcl 
-                        type={'Simple'}
-                        keys={['horizontal-plane', 'body', 'body-center', `${randomDir}`]} 
-                        modifications={[
-                            {id: 'value', newText: `${r1*10}N`},
-                            {id: 'sub', newText: ''},
-                            {id: 'name-vector', newText: ''},
-                        ]}
-                    /> */}
-                    {/* <Dcl 
-                        type={'Complex'}
-                        keys={['inclined-plane', 'body', 'body-center', 'blue', 'pink', 'blue-pink-arch']} 
-                        modifications={[
-                            {id: 'blue-value', newText: '10N'},
-                            {id: 'pink-value', newText: '10N'},
-                            {id: 'blue-pink-arch-value', newText: '10N'},
-                        ]}
-                    /> */}
+                    <DLCComponent DLCType={'Simple'}/>
                 </>
             );
         }
@@ -266,7 +340,8 @@ function QuestionsList() {
                             )}
                         </>
                     )}
-                    {task.task_type === 'Development' ? (<>
+                    {task.task_type === 'Development' ? (
+                    <>
                     <input
                         type="text"
                         value={inputValue}
@@ -277,7 +352,7 @@ function QuestionsList() {
                     <Box mt={3}>
                         <Button
                             variant="contained"
-                            onClick={handleInputSubmit}
+                            onClick={handleInputSumbit}
                             color="primary"
                             style={{ width: '100%', borderRadius: '10px' }}
                             sx={{
