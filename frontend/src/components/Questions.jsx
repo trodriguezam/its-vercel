@@ -1,9 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import axiosInstance from '../api/axiosInstance';
-import { Button, Typography, FormControl } from '@mui/material';
+import { Button, Typography, FormControl, Card, CardContent } from '@mui/material';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CancelIcon from '@mui/icons-material/Cancel';
 import { Box } from '@mui/system';
 import  Dcl from '../utils/SvgEditor'
+import { set } from 'date-fns';
+import { setIn } from 'formik';
+import axios from 'axios';
 
 function QuestionsList() {
     const { taskId } = useParams();
@@ -20,6 +25,7 @@ function QuestionsList() {
     const [selectedAnswer, setSelectedAnswer] = useState(null);
     const [isCompleted, setIsCompleted] = useState(false);
     const [quizStarted, setQuizStarted] = useState(false);
+    const [hint, setHint] = useState(0);
     const storedUser = localStorage.getItem('currentUser');
     const currentUser = storedUser ? JSON.parse(storedUser) : null;
     const [inputValue, setInputValue] = useState('');
@@ -103,6 +109,18 @@ function QuestionsList() {
         setSelectedAnswer(answerId);
     };
 
+    const handleUpdate = () => {
+        setRefresh(!refresh);
+        setHint(0);
+
+        if (currentIndex < questions.length - 1) {
+            setCurrentIndex(currentIndex + 1);
+        } else {
+            finalizeQuiz();
+        }
+    };
+
+
     const handleSubmit = () => {
         if (selectedAnswer !== null) {
             const selectedAnswerObj = answers.find(answer => answer.id === selectedAnswer);
@@ -112,35 +130,33 @@ function QuestionsList() {
                     userQuestion.question_id === questions[currentIndex].id &&
                     userQuestion.user_id === currentUser?.id
             );
-
-            const handleUpdate = () => {
-                setRefresh(!refresh);
-
-                if (currentIndex < questions.length - 1) {
-                    setCurrentIndex(currentIndex + 1);
+            
+            const handleHint = () => {
+                if (selectedAnswerObj.correct) {
+                    setHint(1);
                 } else {
-                    finalizeQuiz();
+                    setHint(2);
                 }
             };
 
             if (existingUserQuestion) {
                 axiosInstance.put(`/user_questions/${existingUserQuestion.id}`, {
-                    correct: selectedAnswerObj.correct
+                    correct: selectedAnswerObj.correct,
+                    try: existingUserQuestion.try + 1
                 })
-                .then(handleUpdate)
+                .then(handleHint)
                 .catch((error) => console.error(error));
             } else {
                 axiosInstance.post('/user_questions', {
                     user_id: currentUser.id,
                     question_id: questions[currentIndex].id,
-                    correct: selectedAnswerObj.correct
+                    correct: selectedAnswerObj.correct,
+                    try: 1
                 })
-                .then(handleUpdate)
+                .then(handleHint)
                 .catch((error) => console.error(error));
             }
-        } else {
-            console.log('No answer selected');
-        }
+        } 
     };
 
     const finalizeQuiz = () => {
@@ -162,7 +178,6 @@ function QuestionsList() {
                     completion: scorePercentage
                 })
                 .then((response) => {
-                    console.log('Task updated:', response.data);
                     navigate(`/topics/${task.topic_id}/tasks`);
                 })
                 .catch((error) => {
@@ -278,20 +293,6 @@ function QuestionsList() {
                             </Button>
                         ))}
                     </FormControl>
-                    <Box mt={3}>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={handleSubmit}
-                            style={{ width: '100%', borderRadius: '10px' }}
-                            sx={{
-                                backgroundColor:'#8AB573' ,
-                                '&:hover': { backgroundColor: '#79a362' }
-                            }}
-                        >
-                            Check
-                        </Button>
-                    </Box>
                 </>
             );
         } else {
@@ -338,32 +339,57 @@ function QuestionsList() {
                                     />
                                 </div>
                             )}
+                            {hint === 0 ? (
+                            <Box mt={3}>
+                            <Button
+                                variant="contained"
+                                onClick={handleSubmit}
+                                color="primary"
+                                style={{ width: '100%', borderRadius: '10px' }}
+                                sx={{
+                                backgroundColor: '#8AB573',
+                                '&:hover': { backgroundColor: '#79a362' }
+                                }}
+                            >
+                                Check
+                            </Button>
+                            </Box>
+                        ) : (
+                            <Card variant="outlined" sx={{ mt: 3, backgroundColor: hint === 1 ? '#d9ffd6' : '#ffe3de', padding: '10px' }}>
+                            <CardContent>
+                                {hint === 1 ? (
+                                <Box display="flex" alignItems="center" justifyContent="center">
+                                    <CheckCircleIcon color="success" sx={{ fontSize: '40px', marginRight: '10px' }} />
+                                    <Typography variant="h6" color='green'>Correcto!</Typography>
+                                </Box>
+                                ) : (
+                                <Box display="flex" alignItems="center" justifyContent="center">
+                                    <CancelIcon color="error" sx={{ fontSize: '40px', marginRight: '10px' }} />
+                                    <Typography variant="h6" color='red'>Incorrecto!</Typography>
+                                </Box>
+                                )}
+                                <Typography variant="body1" mt={2} color='#333'>
+                                {hint === 1 ? "Buen Trabajo!" : <Typography>Hint: {questions[currentIndex].hint}</Typography>}
+                                </Typography>
+                                <Box mt={3}>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={handleUpdate}
+                                    style={{ width: '100%', borderRadius: '10px' }}
+                                    sx={{
+                                    backgroundColor: hint === 1 ? '#8AB573' : '#FF6B6B',
+                                    '&:hover': { backgroundColor: hint === 1 ? '#79a362' : '#ff5a5a' }
+                                    }}
+                                >
+                                    Next
+                                </Button>
+                                </Box>
+                            </CardContent>
+                            </Card>
+                        )}
                         </>
                     )}
-                    {task.task_type === 'Development' ? (
-                    <>
-                    <input
-                        type="text"
-                        value={inputValue}
-                        onChange={(e) => setInputValue(e.target.value)}
-                        placeholder='Enter your answer here'
-                        style={{ width: '100%', padding: '10px', fontSize: '16px' }}
-                    />
-                    <Box mt={3}>
-                        <Button
-                            variant="contained"
-                            onClick={handleInputSumbit}
-                            color="primary"
-                            style={{ width: '100%', borderRadius: '10px' }}
-                            sx={{
-                                backgroundColor:'#8AB573' ,
-                                '&:hover': { backgroundColor: '#79a362' }
-                            }}
-                        >
-                            Check
-                        </Button>
-                    </Box>
-                    </>) : (<></>)}
                 </>
             )}
         </div>
