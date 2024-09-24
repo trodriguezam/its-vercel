@@ -53,7 +53,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_16_150837) do
 
   create_table "questions", force: :cascade do |t|
     t.string "question_text"
-    t.string "hint"
     t.boolean "is_correct"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -84,7 +83,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_16_150837) do
     t.bigint "user_id", null: false
     t.bigint "question_id", null: false
     t.boolean "correct"
-    t.integer "try", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["question_id"], name: "index_user_questions_on_question_id"
