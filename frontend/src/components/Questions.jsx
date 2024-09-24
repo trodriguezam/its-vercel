@@ -365,10 +365,12 @@ function QuestionsList() {
                 </>
             ) : (
                 <>
+                {task.task_type === 'Option' ? (
+                    <>
                     {isCompleted || score / Allquestions.length === 1 ? (
                         <div>
                             <Typography variant="h5" color='#111111'>Quiz Terminado!</Typography>
-                            <Typography variant="h6" color='#111111'>Tu puntuación: {score} de {Allquestions.length}</Typography>
+                            <Typography variant="h6" color='#111111'>Tu puntuaciÃ³n: {score} de {Allquestions.length}</Typography>
                             <Typography variant="h6" color='#111111'>Porcentaje de acierto: {scorePercentage.toFixed(2)}%</Typography>
                             <Button variant="contained" onClick={() => handleReturn(scorePercentage)} color="secondary" sx={{ marginTop: '20px', backgroundColor: '#8AB573', '&:hover': { backgroundColor: '#79a362' } }}>
                                 Return to Tasks
@@ -434,7 +436,6 @@ function QuestionsList() {
                                 hint === 2 && getTries(questions[currentIndex]) < 2 ? <Typography>Hint: {questions[currentIndex].hint}</Typography> : 
                                 hint === 2 && getTries(questions[currentIndex]) >= 2 ? <Typography>La respuesta correcta es: {getCorrectAnswer(questions[currentIndex])}</Typography> : null
                                 }
-                                
                                 </Typography>
                                 <Box mt={3}>
                                 <Button
@@ -454,6 +455,50 @@ function QuestionsList() {
                             </Card>
                         )}
                         </>
+                    )}
+                </>) : 
+                    (
+                        <>
+                            {task.difficulty == 1 ? (
+                                <>
+                                    <Typography variant="h3" gutterBottom color='#111111'>
+                                        Cual debe ser el valor de F1 para compensar los {r1*10}N
+                                    </Typography>
+                                    <DLCComponent DLCType={'Simple'}/>
+                                </>
+                            ) : (
+                                <>
+                                    <Typography variant="h3" gutterBottom color='#111111'>
+                                        Cual debe ser el valor de F1 para compensar los {r2*10}N
+                                    </Typography>
+                                    <DLCComponent DLCType={'Complex'}/>
+                                </>
+                            )}
+                            <Box mt={3}>
+                                <FormControl>
+                                    <input
+                                        type="text"
+                                        value={inputValue}
+                                        onChange={(e) => setInputValue(e.target.value)}
+                                        style={{ padding: '10px', width: '100%', borderRadius: '10px', border: '1px solid #ccc' }}
+                                    />
+                                </FormControl>
+                            </Box>
+                            <Box mt={3}>
+                                <Button
+                                    variant="contained"
+                                    onClick={handleInputSumbit}
+                                    color="primary"
+                                    style={{ width: '100%', borderRadius: '10px' }}
+                                    sx={{
+                                    backgroundColor: '#8AB573',
+                                    '&:hover': { backgroundColor: '#79a362' }
+                                    }}
+                                >
+                                    Check
+                                </Button>
+                            </Box>
+                        </>    
                     )}
                 </>
             )}
