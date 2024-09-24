@@ -434,6 +434,7 @@ function QuestionsList() {
                                 hint === 2 && getTries(questions[currentIndex]) < 2 ? <Typography>Hint: {questions[currentIndex].hint}</Typography> : 
                                 hint === 2 && getTries(questions[currentIndex]) >= 2 ? <Typography>La respuesta correcta es: {getCorrectAnswer(questions[currentIndex])}</Typography> : null
                                 }
+                                
                                 </Typography>
                                 <Box mt={3}>
                                 <Button
