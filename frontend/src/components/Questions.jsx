@@ -4,6 +4,7 @@ import axiosInstance from '../api/axiosInstance';
 import { Button, Typography, FormControl } from '@mui/material';
 import { Box } from '@mui/system';
 import  Dcl from '../utils/SvgEditor'
+import { set } from 'date-fns';
 
 function QuestionsList() {
     const { taskId } = useParams();
@@ -20,6 +21,7 @@ function QuestionsList() {
     const [selectedAnswer, setSelectedAnswer] = useState(null);
     const [isCompleted, setIsCompleted] = useState(false);
     const [quizStarted, setQuizStarted] = useState(false);
+    const [hint, setHint] = useState(0);
     const storedUser = localStorage.getItem('currentUser');
     const currentUser = storedUser ? JSON.parse(storedUser) : null;
 
@@ -49,6 +51,17 @@ function QuestionsList() {
         setSelectedAnswer(answerId);
     };
 
+    const handleUpdate = () => {
+        setRefresh(!refresh);
+        setHint(0);
+
+        if (currentIndex < questions.length - 1) {
+            setCurrentIndex(currentIndex + 1);
+        } else {
+            finalizeQuiz();
+        }
+    };
+
     const handleSubmit = () => {
         if (selectedAnswer !== null) {
             const selectedAnswerObj = answers.find(answer => answer.id === selectedAnswer);
@@ -58,30 +71,31 @@ function QuestionsList() {
                     userQuestion.question_id === questions[currentIndex].id &&
                     userQuestion.user_id === currentUser?.id
             );
+            
+            const handleHint = () => {
 
-            const handleUpdate = () => {
-                setRefresh(!refresh);
-
-                if (currentIndex < questions.length - 1) {
-                    setCurrentIndex(currentIndex + 1);
+                if (selectedAnswerObj.correct) {
+                    setHint(1);
                 } else {
-                    finalizeQuiz();
+                    setHint(2);
                 }
             };
 
             if (existingUserQuestion) {
                 axiosInstance.put(`/user_questions/${existingUserQuestion.id}`, {
-                    correct: selectedAnswerObj.correct
+                    correct: selectedAnswerObj.correct,
+                    try: existingUserQuestion.try + 1
                 })
-                .then(handleUpdate)
+                .then(handleHint)
                 .catch((error) => console.error(error));
             } else {
                 axiosInstance.post('/user_questions', {
                     user_id: currentUser.id,
                     question_id: questions[currentIndex].id,
-                    correct: selectedAnswerObj.correct
+                    correct: selectedAnswerObj.correct,
+                    try: 1
                 })
-                .then(handleUpdate)
+                .then(handleHint)
                 .catch((error) => console.error(error));
             }
         } else {
@@ -246,20 +260,58 @@ function QuestionsList() {
                                         question={questions[currentIndex]}
                                         task={task}
                                     />
-                                    <Box mt={3}>
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
-                                            onClick={handleSubmit}
-                                            style={{ width: '100%', borderRadius: '10px' }}
-                                            sx={{
-                                                backgroundColor:'#8AB573' ,
-                                                '&:hover': { backgroundColor: '#79a362' }
-                                            }}
-                                        >
-                                            Check
-                                        </Button>
-                                    </Box>
+                                    {hint === 0 ? (
+                                        <Box mt={3}>
+                                            <Button
+                                                variant="contained"
+                                                color="primary"
+                                                onClick={handleSubmit}
+                                                style={{ width: '100%', borderRadius: '10px' }}
+                                                sx={{
+                                                    backgroundColor: '#8AB573',
+                                                    '&:hover': { backgroundColor: '#79a362' }
+                                                }}
+                                            >
+                                                Check
+                                            </Button>
+                                        </Box>
+                                    ) : hint === 1 ? (
+                                        <>
+                                            <Typography variant="h6" color='#111111'>Correct!</Typography>
+                                            <Box mt={3}>
+                                                <Button
+                                                    variant="contained"
+                                                    color="primary"
+                                                    onClick={handleUpdate}
+                                                    style={{ width: '100%', borderRadius: '10px' }}
+                                                    sx={{
+                                                        backgroundColor: '#8AB573',
+                                                        '&:hover': { backgroundColor: '#79a362' }
+                                                    }}
+                                                >
+                                                    Next
+                                                </Button>
+                                            </Box>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Typography variant="h6" color='#111111'>Incorrect!</Typography>
+                                            <Box mt={3}>
+                                                <Button
+                                                    variant="contained"
+                                                    color="primary"
+                                                    onClick={handleUpdate}
+                                                    style={{ width: '100%', borderRadius: '10px' }}
+                                                    sx={{
+                                                        backgroundColor: '#8AB573',
+                                                        '&:hover': { backgroundColor: '#79a362' }
+                                                    }}
+                                                >
+                                                    Next
+                                                </Button>
+                                            </Box>
+                                        </>
+                                    )}
                                 </div>
                             )}
                         </>
