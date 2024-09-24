@@ -32,6 +32,6 @@ class API::UserQuestionsController < ApplicationController
   private
 
   def user_question_params
-    params.require(:user_question).permit(:user_id, :question_id, :correct)
+    params.require(:user_question).permit(:user_id, :question_id, :correct, :try)
   end
 end
