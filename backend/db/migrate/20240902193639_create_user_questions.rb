@@ -4,6 +4,7 @@ class CreateUserQuestions < ActiveRecord::Migration[7.2]
       t.references :user, null: false, foreign_key: true
       t.references :question, null: false, foreign_key: true
       t.boolean :correct
+      t.integer :try, default: 0
 
       t.timestamps
     end
