@@ -1,5 +1,6 @@
 Answer.destroy_all
 UserQuestion.destroy_all
+UserQuestion.destroy_all
 Question.destroy_all
 Task.destroy_all
 Topic.destroy_all

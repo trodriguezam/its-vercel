@@ -85,4 +85,4 @@ production:
   database: its_production
   username: its
   password: its
-  # url: <%= ENV['DATABASE_URL'] %>
+  url: <%= ENV['DATABASE_URL'] %>

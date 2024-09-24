@@ -32,6 +32,7 @@ function QuestionsList() {
     const [r1, setR1] = useState(0);
     const [r2, setR2] = useState(0);
     const [r3, setR3] = useState(0);
+    const [taskDifficulty, setTaskDifficulty] = useState(0);
     const [randomDir, setRandomDir] = useState('');
 
     useEffect(() => {
@@ -95,9 +96,9 @@ function QuestionsList() {
                         type={'Complex'}
                         keys={['inclined-plane', 'body', 'body-center', 'blue', 'pink', 'blue-pink-arch']} 
                         modifications={[
-                            {id: 'blue-value', newText: '10N'},
-                            {id: 'pink-value', newText: '10N'},
-                            {id: 'blue-pink-arch-value', newText: '10N'},
+                            {id: 'blue-value', newText: r1*10},
+                            {id: 'pink-value', newText: r2*10},
+                            {id: 'blue-pink-arch-value', newText: r3*10},
                         ]}
                     />
                 </>
