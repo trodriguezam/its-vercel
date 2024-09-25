@@ -1,4 +1,16 @@
 import React, { useEffect, useRef } from 'react';
+
+import SimpleHorizontalPlane from '../assets/simple/horizontal-plane.svg?react';
+import SimpleBody from '../assets/simple/body.svg?react';
+import SimpleBodyCenter from '../assets/simple/body-center.svg?react';
+import SimpleLeft from '../assets/simple/left.svg?react';
+import SimpleRight from '../assets/simple/right.svg?react';
+
+import MidHorizontalPlane from '../assets/mid/horizontal-plane.svg?react';
+import MidBody from '../assets/mid/body.svg?react';
+import MidBodyCenter from '../assets/mid/body-center.svg?react';
+import MidLeft from '../assets/mid/left.svg?react';
+
 import ComplexInclinedPlane from '../assets/complex/inclined-plane.svg?react';
 import ComplexBody from '../assets/complex/body.svg?react';
 import ComplexBodyCenter from '../assets/complex/body-center.svg?react';
@@ -11,13 +23,20 @@ import ComplexPink from '../assets/complex/pink.svg?react';
 import ComplexRed from '../assets/complex/red.svg?react';
 import ComplexYellow from '../assets/complex/yellow.svg?react';
 
-import SimpleHorizontalPlane from '../assets/simple/horizontal-plane.svg?react';
-import SimpleBody from '../assets/simple/body.svg?react';
-import SimpleBodyCenter from '../assets/simple/body-center.svg?react';
-import SimpleLeft from '../assets/simple/left.svg?react';
-import SimpleRight from '../assets/simple/right.svg?react';
-
 const Op = {
+  'Simple': {
+    'horizontal-plane': SimpleHorizontalPlane,
+    'body': SimpleBody,
+    'body-center': SimpleBodyCenter,
+    'left': SimpleLeft,
+    'right': SimpleRight
+  },
+  'Mid': {
+    'horizontal-plane': MidHorizontalPlane,
+    'body': MidBody,
+    'body-center': MidBodyCenter,
+    'left': MidLeft
+  },
   'Complex': {
     'inclined-plane': ComplexInclinedPlane,
     'body': ComplexBody,
@@ -31,13 +50,6 @@ const Op = {
     'red': ComplexRed,
     'yellow': ComplexYellow,
   },
-  'Simple': {
-    'horizontal-plane': SimpleHorizontalPlane,
-    'body': SimpleBody,
-    'body-center': SimpleBodyCenter,
-    'left': SimpleLeft,
-    'right': SimpleRight
-  }
 }
 
 const ToggleSvg = ({ svg, components }) => {
@@ -68,7 +80,7 @@ function Dcl({ type, keys, modifications }) {
   return (
     <svg
       width="800"
-      height="600"
+      height="500"
       viewBox="0 0 800 600"
       xmlSpace="preserve"
       ref={svgRef}
