@@ -40,6 +40,7 @@ function TasksList() {
     const sendQuestions = (task) => {
         axiosInstance.get(`/tasks/${task.id}/questions`)
             .then((res) => {
+                console.log(task.id);
                 const taskQuestions = res.data;  
                 return axiosInstance.get('/user_questions').then((res) => {
                     const filteredQuestions = taskQuestions.filter(question => {
