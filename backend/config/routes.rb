@@ -36,5 +36,7 @@ Rails.application.routes.draw do
     resources :user_tasks, only: [:index, :show, :create, :update]
     resources :answers, only: [:index, :show, :create]
     resources :users, only: [:index, :show, :update]
+    # enable post method for skip_task
+    resources :user_task_skips
   end
 end

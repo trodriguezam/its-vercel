@@ -88,10 +88,6 @@ function QuestionsList() {
     }, []);
 
     function DLCComponent( {DLCType} ) {
-
-        console.log(r1*10);
-        console.log(r2*10);
-
         if (DLCType === 'Simple') { 
             return (
                 <>
@@ -106,8 +102,16 @@ function QuestionsList() {
                     />
                 </>
             )
-        } else 
-        if (DLCType === 'Complex') {
+        } else if (DLCType === 'Mid' ){
+            return (
+                <>
+                    <Dcl 
+                        type={'Mid'}
+                        keys={['horizontal-plane', 'body', 'body-center', 'left']}
+                    />
+                </>
+            )
+        } else if (DLCType === 'Complex') {
             return (
                 <>
                     <Dcl 
@@ -558,6 +562,8 @@ function QuestionsList() {
                 </>) : 
                     (
                         <>
+                            <br />
+                            <br />
                             {task.difficulty == 1 ? (
                                 <>
                                     <Typography variant="h3" gutterBottom color='#111111'>
@@ -599,67 +605,116 @@ function QuestionsList() {
                                 </>
                             ) : (
                                 <>
-                                    <Typography variant="h3" gutterBottom color='#111111'>
-                                        {Allquestions[0].question_text}
-                                    </Typography>
-                                    <Typography>
-                                        {(result1 === 0) ? (
-                                            hintsArray[0][(hint1 < hintsArray.length) ? hint1 : hintsArray[0].length - 1]
-                                        ) : null}
-                                        {(result2 === 0) ? (
-                                            hintsArray[1][(hint2 < hintsArray.length) ? hint2 : hintsArray[1].length - 1]
-                                        ) : null}
-                                    </Typography>
-                                    <DLCComponent DLCType={'Complex'}/>
-                                    <Box mt={3}>
-                                        <FormControl>
-                                            <input
-                                                type="text"
-                                                value={inputValue1}
-                                                onChange={(e) => setInputValue1(e.target.value)}
-                                                style={{ padding: '10px', width: '100%', borderRadius: '10px', border: '1px solid #ccc' }}
-                                            />
-                                        </FormControl>
-                                        <br />
-                                        {result1 === 0 ? (
-                                            <Typography variant="h6" color='red'>Incorrect Answer</Typography>
-                                            ) : (
-                                                result1 === 2 ? (
-                                                    <Typography variant="h6" color='green'>Correct Answer!</Typography>
-                                                ) : null
-                                            )}
-                                        <br />
-                                        <FormControl>
-                                            <input
-                                                type="text"
-                                                value={inputValue2}
-                                                onChange={(e) => setInputValue2(e.target.value)}
-                                                style={{ padding: '10px', width: '100%', borderRadius: '10px', border: '1px solid #ccc' }}
-                                            />
-                                        </FormControl>
-                                        <br />
-                                        {result2 === 0 ? (
-                                            <Typography variant="h6" color='red'>Incorrect Answer</Typography>
-                                            ) : (
-                                                result2 === 2 ? (
-                                                    <Typography variant="h6" color='green'>Correct Answer!</Typography>
-                                                ) : null
-                                            )}
-                                    </Box>
-                                    <Box mt={3}>
-                                        <Button
-                                            variant="contained"
-                                            onClick={handleInputSumbit2}
-                                            color="primary"
-                                            style={{ width: '100%', borderRadius: '10px' }}
-                                            sx={{
-                                            backgroundColor: '#8AB573',
-                                            '&:hover': { backgroundColor: '#79a362' }
-                                            }}
-                                        >
-                                            Check
-                                        </Button>
-                                    </Box>
+                                    {task.difficulty == 2 ? (
+                                        <>
+                                            <Typography variant="h3" gutterBottom color='#111111'>
+                                                {Allquestions[0].question_text}
+                                            </Typography>
+                                            <br />
+                                            <DLCComponent DLCType={'Mid'}/>
+                                            <Box mt={3}>
+                                                <FormControl>
+                                                    <input
+                                                        type="text"
+                                                        value={inputValue}
+                                                        onChange={(e) => setInputValue(e.target.value)}
+                                                        style={{ padding: '10px', width: '100%', borderRadius: '10px', border: '1px solid #ccc' }}
+                                                    />
+                                                </FormControl>
+                                                <br />
+                                                {result0 === 0 ? (
+                                                    <Typography variant="h6" color='red'>Incorrect Answer</Typography>
+                                                    ) : (
+                                                        result0 === 2 ? (
+                                                            <Typography variant="h6" color='green'>Correct Answer!</Typography>
+                                                        ) : null
+                                                    )}
+                                            </Box>
+                                            <Box mt={3}>
+                                                <Button
+                                                    variant="contained"
+                                                    onClick={handleInputSumbit}
+                                                    color="primary"
+                                                    style={{ width: '100%', borderRadius: '10px' }}
+                                                    sx={{
+                                                    backgroundColor: '#8AB573',
+                                                    '&:hover': { backgroundColor: '#79a362' }
+                                                    }}
+                                                >
+                                                    Check
+                                                </Button>
+                                            </Box>
+                                        </>
+                                    ):(
+                                        <>
+                                            {task.difficulty == 3 ? (
+                                                <>
+                                                    <Typography variant="h3" gutterBottom color='#111111'>
+                                                        {Allquestions[0].question_text}
+                                                    </Typography>
+                                                    <Typography>
+                                                        {(result1 === 0) ? (
+                                                            hintsArray[0][(hint1 < hintsArray.length) ? hint1 : hintsArray[0].length - 1]
+                                                        ) : null}
+                                                        {(result2 === 0) ? (
+                                                            hintsArray[1][(hint2 < hintsArray.length) ? hint2 : hintsArray[1].length - 1]
+                                                        ) : null}
+                                                    </Typography>
+                                                    <DLCComponent DLCType={'Complex'}/>
+                                                    <Box mt={3}>
+                                                        <FormControl>
+                                                            <input
+                                                                type="text"
+                                                                value={inputValue1}
+                                                                onChange={(e) => setInputValue1(e.target.value)}
+                                                                style={{ padding: '10px', width: '100%', borderRadius: '10px', border: '1px solid #ccc' }}
+                                                            />
+                                                        </FormControl>
+                                                        <br />
+                                                        {result1 === 0 ? (
+                                                            <Typography variant="h6" color='red'>Incorrect Answer</Typography>
+                                                            ) : (
+                                                                result1 === 2 ? (
+                                                                    <Typography variant="h6" color='green'>Correct Answer!</Typography>
+                                                                ) : null
+                                                            )}
+                                                        <br />
+                                                        <FormControl>
+                                                            <input
+                                                                type="text"
+                                                                value={inputValue2}
+                                                                onChange={(e) => setInputValue2(e.target.value)}
+                                                                style={{ padding: '10px', width: '100%', borderRadius: '10px', border: '1px solid #ccc' }}
+                                                            />
+                                                        </FormControl>
+                                                        <br />
+                                                        {result2 === 0 ? (
+                                                            <Typography variant="h6" color='red'>Incorrect Answer</Typography>
+                                                            ) : (
+                                                                result2 === 2 ? (
+                                                                    <Typography variant="h6" color='green'>Correct Answer!</Typography>
+                                                                ) : null
+                                                            )}
+                                                    </Box>
+                                                    <Box mt={3}>
+                                                        <Button
+                                                            variant="contained"
+                                                            onClick={handleInputSumbit2}
+                                                            color="primary"
+                                                            style={{ width: '100%', borderRadius: '10px' }}
+                                                            sx={{
+                                                            backgroundColor: '#8AB573',
+                                                            '&:hover': { backgroundColor: '#79a362' }
+                                                            }}
+                                                        >
+                                                            Check
+                                                        </Button>
+                                                    </Box>
+                                                </>
+                                            ) : (null)}
+                                        </>
+                                    )}
+                                    
                                 </>
                             )}
                             
