@@ -475,7 +475,7 @@ function QuestionsList() {
                             <Typography variant="h5" color='#111111'>Quiz Terminado!</Typography>
                             <Typography variant="h6" color='#111111'>Tu puntuación: {score} de {Allquestions.length}</Typography>
                             <Typography variant="h6" color='#111111'>Porcentaje de acierto: {scorePercentage.toFixed(2)}%</Typography>
-                            <Button variant="contained" onClick={() => handleReturn(scorePercentage)} color="secondary" sx={{ marginTop: '20px', backgroundColor: '#8AB573', '&:hover': { backgroundColor: '#79a362' } }}>
+                            <Button variant="contained" onClick={() => handleReturn(scorePercentage.toFixed(2))} color="secondary" sx={{ marginTop: '20px', backgroundColor: '#8AB573', '&:hover': { backgroundColor: '#79a362' } }}>
                                 Return to Tasks
                             </Button>
                         </div>
