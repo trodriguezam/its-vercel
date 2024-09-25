@@ -70,6 +70,10 @@ function LoginForm({ setCurrentUser }) {
                       .then((response) => {
                           const user = response.data.status.data.user;
                           localStorage.setItem('currentUser', JSON.stringify(user));
+                          
+                          const time = new Date();
+                          localStorage.setItem('LoginTime', time.toISOString());
+
                           setCurrentUser(user); 
                           navigate('/topics');
                       })
@@ -153,7 +157,11 @@ function LoginForm({ setCurrentUser }) {
                       .then((response) => {
                           const user = response.data.status.data.user;
                           localStorage.setItem('currentUser', JSON.stringify(user));
-                          setCurrentUser(user); // Update currentUser state in App component
+
+                          const time = new Date();
+                          localStorage.setItem('LoginTime', time.toISOString());
+
+                          setCurrentUser(user);
                           navigate('/dashboards'); 
                       })
                       .catch(error => {

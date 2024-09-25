@@ -47,26 +47,52 @@ function DashboardList() {
         return completionPercentage;
     }
 
+    const formatTimeSpent = (seconds) => {
+        const hrs = Math.floor(seconds / 3600);
+        const mins = Math.floor((seconds % 3600) / 60);
+        const secs = seconds % 60;
+        return `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    };
+
     return (
-        <Box sx={{maxWidth: '900px', margin: '0 auto', padding: '70px' }}>
-            <Typography variant="h3" sx={{ mb: 2, textAlign: 'center',justifyContent:"center", color: '#111111' }}>
+        <Box sx={{ maxWidth: '1200px', margin: '0 auto', padding: '40px' }}>
+            <Typography 
+                variant="h3" 
+                sx={{ mb: 4, textAlign: 'center', color: '#111111', fontWeight: 'bold' }}
+            >
                 Dashboard
             </Typography>
-
+    
             <Grid container spacing={4} sx={{ mt: 3 }}>
                 {users.filter((user) => user.role === 'user').map((user) => (
-                    <Grid item xs={12} sm={6} md={6} key={user.id}>
+                    <Grid item xs={12} sm={6} md={4} key={user.id}>
                         <Link to={`/users/${user.id}`} style={{ textDecoration: 'none' }}>
-                            <Card sx={{ backgroundColor: '#E4FFC2', transition: 'background-color 0.3s ease', '&:hover': { backgroundColor: '#c8e6a3' } }}>
+                            <Card 
+                                sx={{ 
+                                    backgroundColor: '#E4FFC2',
+                                    padding: '20px', 
+                                    transition: 'background-color 0.3s ease', 
+                                    '&:hover': { backgroundColor: '#c8e6a3' },
+                                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', 
+                                    borderRadius: '8px' 
+                                }}
+                            >
                                 <CardActionArea>
                                     <CardContent>
-                                        <Typography variant="h6" component="div">
+                                        <Typography 
+                                            variant="h6" 
+                                            component="div" 
+                                            sx={{ fontWeight: 'bold', marginBottom: '10px' }}
+                                        >
                                             {user.email}
                                         </Typography>
-                                        <Typography variant="h6" component="div">
+                                        <Typography variant="body1" component="div" sx={{ marginBottom: '8px' }}>
                                             Account created: {formatDistanceToNow(new Date(user.created_at), { addSuffix: true })}
                                         </Typography>
-                                        <Typography variant="h6" component="div">
+                                        <Typography variant="body1" component="div" sx={{ marginBottom: '8px' }}>
+                                            Time Spent: {user.time_spent ? formatTimeSpent(user.time_spent) : 'N/A'}
+                                        </Typography>
+                                        <Typography variant="body1" component="div">
                                             Task Completion: {getUserTaskCompletion(user.id)}
                                         </Typography>
                                     </CardContent>
@@ -78,6 +104,7 @@ function DashboardList() {
             </Grid>
         </Box>
     );
+    
 }
 
 export default DashboardList;
