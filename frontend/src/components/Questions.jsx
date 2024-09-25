@@ -29,11 +29,17 @@ function QuestionsList() {
     const storedUser = localStorage.getItem('currentUser');
     const currentUser = storedUser ? JSON.parse(storedUser) : null;
     const [inputValue, setInputValue] = useState('');
+    const [inputValue1, setInputValue1] = useState('');
+    const [inputValue2, setInputValue2] = useState('');
+    const [result0, setResult0] = useState(1);
+    const [result1, setResult1] = useState(1);
+    const [result2, setResult2] = useState(1);
     const [r1, setR1] = useState(0);
     const [r2, setR2] = useState(0);
     const [r3, setR3] = useState(0);
     const [taskDifficulty, setTaskDifficulty] = useState(0);
     const [randomDir, setRandomDir] = useState('');
+    const directions = ['right', 'left'];
 
     useEffect(() => {
         axiosInstance.get(`/tasks/${taskId}/questions`)
@@ -58,7 +64,6 @@ function QuestionsList() {
     }, [currentIndex, questions]);
 
     useEffect(() => {
-        const directions = ['right', 'left'];
         const randomDir = directions[getRandomValues([2])[0] - 1];
         const [r1, r2, r3] = getRandomValues([10, 10, 10])
 
@@ -71,15 +76,15 @@ function QuestionsList() {
 
     function DLCComponent( {DLCType} ) {
 
-        console.log(r1)
-        console.log(randomDir)
+        console.log(r1*10);
+        console.log(r2*10);
 
         if (DLCType === 'Simple') { 
             return (
                 <>
                     <Dcl 
                         type={'Simple'}
-                        keys={['horizontal-plane', 'body', 'body-center', randomDir]} 
+                        keys={['horizontal-plane', 'body', 'body-center', randomDir, directions.filter(dir => dir !== randomDir)[0]]} 
                         modifications={[
                             {id: 'value', newText: r1*10},
                             {id: 'sub', newText: ''},
@@ -94,7 +99,7 @@ function QuestionsList() {
                 <>
                     <Dcl 
                         type={'Complex'}
-                        keys={['inclined-plane', 'body', 'body-center', 'blue', 'pink', 'blue-pink-arch']} 
+                        keys={['inclined-plane', 'body', 'body-center', 'blue', 'pink', 'blue-pink-arch']}
                         modifications={[
                             {id: 'blue-value', newText: r1*10},
                             {id: 'pink-value', newText: r2*10},
@@ -309,7 +314,63 @@ function QuestionsList() {
             });
             
         } else {
+            setResult0(0);
+        }
+    }
+
+    const handleInputSumbit2 = () => {
+        // cambiar logica
+        if ((Number(inputValue1) === (r1*10)) && (Number(inputValue2) === (r2*10))) {
+            axiosInstance.get(`/user_tasks`)
+            .then((res) => {
+                const userTasks = res.data;
+                const existingTask = userTasks.find(userTask => {
+                    return userTask.task_id === task.id && userTask.user_id === currentUser.id;
+                });
+
+                if (existingTask) {
+                    axiosInstance.put(`/user_tasks/${existingTask.id}`, {
+                        task_id: taskId,
+                        user_id: currentUser.id,
+                        completion: 100
+                    })
+                    .then((response) => {
+                        console.log('Task updated:', response.data);
+                        navigate(`/topics/${task.topic_id}/tasks`);
+                    })
+                    .catch((error) => {
+                        console.error('Error updating task:', error);
+                    });
+                } else {
+                    axiosInstance.post(`/user_tasks`, {
+                        task_id: taskId,
+                        user_id: currentUser.id,
+                        completion: 100
+                    })
+                    .then((response) => {
+                        console.log('Task created:', response.data);
+                        navigate(`/topics/${task.topic_id}/tasks`);
+                    })
+                    .catch((error) => {
+                        console.error('Error creating task:', error);
+                    });
+                }
+            })
+            .catch((error) => {
+                console.error('Error fetching user tasks:', error);
+            });
+        } else if (Number(inputValue1) === (r1*10)) {
+            console.log('Incorrect Answer 2');
+            setResult1(2);
+            setResult2(0);
+        } else if (Number(inputValue2) === (r2*10)) {
+            console.log('Incorrect Answer 1');
+            setResult1(0);
+            setResult2(2);
+        } else {
             console.log('Incorrect Answer');
+            setResult1(0);
+            setResult2(0);
         }
     }
 
@@ -370,7 +431,7 @@ function QuestionsList() {
                     {isCompleted || score / Allquestions.length === 1 ? (
                         <div>
                             <Typography variant="h5" color='#111111'>Quiz Terminado!</Typography>
-                            <Typography variant="h6" color='#111111'>Tu puntuaciÃ³n: {score} de {Allquestions.length}</Typography>
+                            <Typography variant="h6" color='#111111'>Tu puntuación: {score} de {Allquestions.length}</Typography>
                             <Typography variant="h6" color='#111111'>Porcentaje de acierto: {scorePercentage.toFixed(2)}%</Typography>
                             <Button variant="contained" onClick={() => handleReturn(scorePercentage)} color="secondary" sx={{ marginTop: '20px', backgroundColor: '#8AB573', '&:hover': { backgroundColor: '#79a362' } }}>
                                 Return to Tasks
@@ -462,42 +523,100 @@ function QuestionsList() {
                             {task.difficulty == 1 ? (
                                 <>
                                     <Typography variant="h3" gutterBottom color='#111111'>
-                                        Cual debe ser el valor de F1 para compensar los {r1*10}N
+                                        {Allquestions[0].question_text}
                                     </Typography>
                                     <DLCComponent DLCType={'Simple'}/>
+                                    <Box mt={3}>
+                                        <FormControl>
+                                            <input
+                                                type="text"
+                                                value={inputValue}
+                                                onChange={(e) => setInputValue(e.target.value)}
+                                                style={{ padding: '10px', width: '100%', borderRadius: '10px', border: '1px solid #ccc' }}
+                                            />
+                                        </FormControl>
+                                        <br />
+                                        {result0 === 0 ? (
+                                            <Typography variant="h6" color='red'>Incorrect Answer</Typography>
+                                            ) : (
+                                                result0 === 2 ? (
+                                                    <Typography variant="h6" color='green'>Correct Answer!</Typography>
+                                                ) : null
+                                            )}
+                                    </Box>
+                                    <Box mt={3}>
+                                        <Button
+                                            variant="contained"
+                                            onClick={handleInputSumbit}
+                                            color="primary"
+                                            style={{ width: '100%', borderRadius: '10px' }}
+                                            sx={{
+                                            backgroundColor: '#8AB573',
+                                            '&:hover': { backgroundColor: '#79a362' }
+                                            }}
+                                        >
+                                            Check
+                                        </Button>
+                                    </Box>
                                 </>
                             ) : (
                                 <>
                                     <Typography variant="h3" gutterBottom color='#111111'>
-                                        Cual debe ser el valor de F1 para compensar los {r2*10}N
+                                        {Allquestions[0].question_text}
                                     </Typography>
                                     <DLCComponent DLCType={'Complex'}/>
+                                    <Box mt={3}>
+                                        <FormControl>
+                                            <input
+                                                type="text"
+                                                value={inputValue1}
+                                                onChange={(e) => setInputValue1(e.target.value)}
+                                                style={{ padding: '10px', width: '100%', borderRadius: '10px', border: '1px solid #ccc' }}
+                                            />
+                                        </FormControl>
+                                        <br />
+                                        {result1 === 0 ? (
+                                            <Typography variant="h6" color='red'>Incorrect Answer</Typography>
+                                            ) : (
+                                                result1 === 2 ? (
+                                                    <Typography variant="h6" color='red'>Incorrect Answer</Typography>
+                                                ) : null
+                                            )}
+                                        <br />
+                                        <FormControl>
+                                            <input
+                                                type="text"
+                                                value={inputValue2}
+                                                onChange={(e) => setInputValue2(e.target.value)}
+                                                style={{ padding: '10px', width: '100%', borderRadius: '10px', border: '1px solid #ccc' }}
+                                            />
+                                        </FormControl>
+                                        <br />
+                                        {result2 === 0 ? (
+                                            <Typography variant="h6" color='red'>Incorrect Answer</Typography>
+                                            ) : (
+                                                result2 === 2 ? (
+                                                    <Typography variant="h6" color='green'>Correct Answer!</Typography>
+                                                ) : null
+                                            )}
+                                    </Box>
+                                    <Box mt={3}>
+                                        <Button
+                                            variant="contained"
+                                            onClick={handleInputSumbit2}
+                                            color="primary"
+                                            style={{ width: '100%', borderRadius: '10px' }}
+                                            sx={{
+                                            backgroundColor: '#8AB573',
+                                            '&:hover': { backgroundColor: '#79a362' }
+                                            }}
+                                        >
+                                            Check
+                                        </Button>
+                                    </Box>
                                 </>
                             )}
-                            <Box mt={3}>
-                                <FormControl>
-                                    <input
-                                        type="text"
-                                        value={inputValue}
-                                        onChange={(e) => setInputValue(e.target.value)}
-                                        style={{ padding: '10px', width: '100%', borderRadius: '10px', border: '1px solid #ccc' }}
-                                    />
-                                </FormControl>
-                            </Box>
-                            <Box mt={3}>
-                                <Button
-                                    variant="contained"
-                                    onClick={handleInputSumbit}
-                                    color="primary"
-                                    style={{ width: '100%', borderRadius: '10px' }}
-                                    sx={{
-                                    backgroundColor: '#8AB573',
-                                    '&:hover': { backgroundColor: '#79a362' }
-                                    }}
-                                >
-                                    Check
-                                </Button>
-                            </Box>
+                            
                         </>    
                     )}
                 </>
