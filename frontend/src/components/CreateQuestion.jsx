@@ -28,17 +28,24 @@ function QuestionForm() {
   const [render, setRender] = useState(false);
   const [topics, setTopics] = useState([]);
   const [tasks, setTasks] = useState([]);
+  const [questions, setQuestions] = useState([]);
+  const [userTasks, setUserTasks] = useState([]);
+  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
   useEffect(() => {
     const fetchData = async () => {
         try {
-            const [top, tas] = await Promise.all([
+            const [top, tas, ques, utas] = await Promise.all([
                 axiosInstance.get(`/topics`),
                 axiosInstance.get('/tasks'),
+                axiosInstance.get('/questions'),
+                axiosInstance.get('/user_tasks')
             ]);
 
             setTopics(top.data);
             setTasks(tas.data);
+            setQuestions(ques.data);
+            setUserTasks(utas.data);
         } catch (error) {
             console.error(error);
         } finally {
@@ -46,13 +53,14 @@ function QuestionForm() {
         }
     };
     fetchData();
+    console.log(currentUser)
 }, []);
 
   if (!render) {
     return <Typography variant="h6">Loading...</Typography>;
   }
 
-  if (!currentUser || currentUser.role !== 'professor') {
+  if (!currentUser || currentUser.role !== "professor") {
     return (
         <Box sx={{ maxWidth: '1200px', margin: '0 auto', padding: '40px' }}>
             <Typography 
@@ -106,10 +114,20 @@ function QuestionForm() {
                 });
               });
 
-              // Wait for all answers to be created
               await Promise.all(answerPromises);
 
-              // Navigate to the questions list or another page
+              const Utasks = userTasks.find((userTask) => userTask.task_id === values.task);
+              const NumQ = questions.filter((question) => question.task_id === values.task).length + 1; 
+
+              if (Utasks) {
+
+                const updatedCompletion = (Utasks.completion * (NumQ - 1) + 1) / NumQ; 
+
+                await axiosInstance.put(`/user_tasks/${Utasks.id}`, {
+                  completion: updatedCompletion
+                });
+              }
+              
               navigate('/dashboards');
             } catch (error) {
               console.error('There was an error submitting the question or answers!', error);
@@ -131,7 +149,7 @@ function QuestionForm() {
                       value={values.topic}
                       onChange={(e) => {
                         handleChange(e);
-                        setFieldValue('task', ''); // Reset task when topic changes
+                        setFieldValue('task', ''); 
                       }}
                     >
                       {topics.map((topic) => (
