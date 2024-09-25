@@ -5,6 +5,7 @@ import HomePage from './components/Home';
 import { Routes, Route, Link } from 'react-router-dom';
 import Login from './components/Login';
 import Signup from './components/Signup';
+import QuestionForm from './components/CreateQuestion';
 import './App.css';
 import { AppBar, IconButton, Button, Typography } from '@mui/material'; // Imported Button
 import { Toolbar } from '@mui/material';
@@ -14,6 +15,7 @@ import DashboardList from './components/Dashboards';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
+import axiosInstance from './api/axiosInstance';
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -26,10 +28,31 @@ function App() {
     }
   }, []);
 
+  const GetTime = (logTime) => {
+    const currentTime = new Date().getTime();
+    const loginTime = new Date(logTime).getTime();
+    const differenceInMilliseconds = currentTime - loginTime;
+    return Math.floor(differenceInMilliseconds / 1000);
+  };
+
   const handleLogout = () => {
-    localStorage.removeItem('currentUser');
-    setCurrentUser(null);
-    navigate('/login');
+    const storedLoginTime = localStorage.getItem('LoginTime');
+
+    if (currentUser && storedLoginTime) {
+      const timeDifferenceInSeconds = GetTime(storedLoginTime);
+
+      const updatedTimeSpent = (currentUser.time_spent || 0) + timeDifferenceInSeconds;
+
+      axiosInstance.put(`/users/${currentUser.id}`, { time_spent: updatedTimeSpent })
+      .then(() => {
+        localStorage.removeItem('currentUser');
+        localStorage.removeItem('LoginTime');
+        setCurrentUser(null);
+        navigate('/login');
+      });
+    } else {
+      console.error('Login time not found or user is not logged in.');
+    }
   };
 
   return (
@@ -53,6 +76,7 @@ function App() {
                     </Button>
                   </Link>
                 ) : currentUser.role === "professor" ? (
+                  <>
                   <Link to='/dashboards' style={{ marginRight: '10px', color: '#111111' }}>
                     <Button color='#111111'>
                       <Typography variant="body1" component="div" sx={{ color: '#111111' }}>
@@ -60,6 +84,15 @@ function App() {
                       </Typography>
                     </Button>
                   </Link>
+                  <Link to='/question_create' style={{ marginRight: '10px', color: '#111111' }}>
+                    <Button color='#111111'>
+                      <Typography variant="body1" component="div" sx={{ color: '#111111' }}>
+                        Crear Pregunta
+                      </Typography>
+                    </Button>
+                  </Link>
+                  </>
+                  
                 ) : null}
               </>
             )}
@@ -96,6 +129,7 @@ function App() {
         <Route path="/dashboards" element={<DashboardList />} />
         <Route path="/login" element={<Login setCurrentUser={setCurrentUser} />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/question_create" element={<QuestionForm />} />
       </Routes>
     </>
   );

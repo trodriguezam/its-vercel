@@ -26,7 +26,7 @@ Rails.application.routes.draw do
     resources :topics, only: [:index, :show] do
       resources :tasks, only: [:index, :show], action: 'indexTopics' 
     end
-    resources :questions, only: [:index, :show] do
+    resources :questions, only: [:index, :show, :create] do
       resources :answers, only: [:index, :show], action: 'indexAnswers'
     end
     resources :tasks, only: [:index, :show] do 
@@ -34,7 +34,7 @@ Rails.application.routes.draw do
     end
     resources :user_questions, only: [:index, :show, :create, :update]
     resources :user_tasks, only: [:index, :show, :create, :update]
-    resources :answers, only: [:index, :show]
-    resources :users, only: [:index, :show]
+    resources :answers, only: [:index, :show, :create]
+    resources :users, only: [:index, :show, :update]
   end
 end
