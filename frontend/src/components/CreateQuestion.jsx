@@ -52,6 +52,25 @@ function QuestionForm() {
     return <Typography variant="h6">Loading...</Typography>;
   }
 
+  if (!currentUser || currentUser.role !== 'professor') {
+    return (
+        <Box sx={{ maxWidth: '1200px', margin: '0 auto', padding: '40px' }}>
+            <Typography 
+                variant="h3" 
+                sx={{ mb: 4, textAlign: 'center', color: '#111111', fontWeight: 'bold' }}
+            >
+                Create Question
+            </Typography>
+            <Typography 
+                variant="body1" 
+                sx={{ textAlign: 'center', color: '#111111', fontWeight: 'bold' }}
+            >
+                You are not authorized to view this page. Please log in as a professor.
+            </Typography>
+        </Box>
+    );
+}
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />

@@ -68,6 +68,25 @@ function TasksList() {
         return '#f44336'; 
     };
 
+    if (!currentUser || currentUser.role !== 'user') {
+        return (
+            <Box sx={{ maxWidth: '1200px', margin: '0 auto', padding: '40px' }}>
+                <Typography 
+                    variant="h3" 
+                    sx={{ mb: 4, textAlign: 'center', color: '#111111', fontWeight: 'bold' }}
+                >
+                    Tasks
+                </Typography>
+                <Typography 
+                    variant="body1" 
+                    sx={{ textAlign: 'center', color: '#111111', fontWeight: 'bold' }}
+                >
+                    You are not authorized to view this page. Please log in as a user.
+                </Typography>
+            </Box>
+        );
+    }
+
     return (
         <div>
             <Typography variant="h2" color="#111111">Tasks</Typography>

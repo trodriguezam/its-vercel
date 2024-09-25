@@ -413,6 +413,25 @@ function QuestionsList() {
         }
     }
 
+    if (!currentUser || currentUser.role !== 'user') {
+        return (
+            <Box sx={{ maxWidth: '1200px', margin: '0 auto', padding: '40px' }}>
+                <Typography 
+                    variant="h3" 
+                    sx={{ mb: 4, textAlign: 'center', color: '#111111', fontWeight: 'bold' }}
+                >
+                    Questions
+                </Typography>
+                <Typography 
+                    variant="body1" 
+                    sx={{ textAlign: 'center', color: '#111111', fontWeight: 'bold' }}
+                >
+                    You are not authorized to view this page. Please log in as a user.
+                </Typography>
+            </Box>
+        );
+    }
+
     return (
         <div style={{ padding: '20px', textAlign: 'center' }}>
             {!quizStarted && !isCompleted ? (

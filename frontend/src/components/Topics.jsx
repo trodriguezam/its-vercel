@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axiosInstance from '../api/axiosInstance';
-import { Card, CardContent, CardActions, Button, Typography } from '@mui/material';
+import { Card, CardContent, CardActions, Button, Typography, Box } from '@mui/material';
 
 function TopicList() {
     const [topics, setTopics] = useState([]);
@@ -17,6 +17,25 @@ function TopicList() {
                 console.error(error);
             });
     }, []);
+
+    if (!currentUser || currentUser.role !== 'user') {
+      return (
+          <Box sx={{ maxWidth: '1200px', margin: '0 auto', padding: '40px' }}>
+              <Typography 
+                  variant="h3" 
+                  sx={{ mb: 4, textAlign: 'center', color: '#111111', fontWeight: 'bold' }}
+              >
+                  Topics
+              </Typography>
+              <Typography 
+                  variant="body1" 
+                  sx={{ textAlign: 'center', color: '#111111', fontWeight: 'bold' }}
+              >
+                  You are not authorized to view this page. Please log in as a user.
+              </Typography>
+          </Box>
+      );
+  }
 
     return (
         <div>
