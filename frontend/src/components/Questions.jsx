@@ -26,6 +26,9 @@ function QuestionsList() {
     const [isCompleted, setIsCompleted] = useState(false);
     const [quizStarted, setQuizStarted] = useState(false);
     const [hint, setHint] = useState(0);
+    const [hint1, setHint1] = useState(-1);
+    const [hint2, setHint2] = useState(-1);
+    const [hintsArray, setHintsArray] = useState([]);
     const storedUser = localStorage.getItem('currentUser');
     const currentUser = storedUser ? JSON.parse(storedUser) : null;
     const [inputValue, setInputValue] = useState('');
@@ -45,6 +48,16 @@ function QuestionsList() {
         axiosInstance.get(`/tasks/${taskId}/questions`)
             .then((res) => {
                 setAllquestions(res.data);
+                if (res.data.length > 0) {
+                    if (res.data[0].hint.includes('|')) {
+                        const var2hints = res.data[0].hint.split('|');
+                        setHintsArray(var2hints.map(hint => hint.split(';')));
+                    } else {
+                        const aux = res.data[0].hint.split(';');
+                        console.log(res.data)
+                        setHintsArray(aux);
+                    }
+                }
             })
             .catch((error) => console.error(error));
     }, [taskId]);
@@ -363,16 +376,22 @@ function QuestionsList() {
             console.log('Incorrect Answer 2');
             setResult1(2);
             setResult2(0);
+            setHint2(hint2 + 1);
         } else if (Number(inputValue2) === (r2*10)) {
             console.log('Incorrect Answer 1');
             setResult1(0);
             setResult2(2);
+            setHint1(hint1 + 1);
         } else {
             console.log('Incorrect Answer');
             setResult1(0);
             setResult2(0);
+            setHint2(hint2 + 1);
+            setHint1(hint1 + 1);
         }
     }
+
+    
 
     function QuestionType({ question, task }) {
         if (task.task_type === 'Option') {
@@ -583,6 +602,14 @@ function QuestionsList() {
                                     <Typography variant="h3" gutterBottom color='#111111'>
                                         {Allquestions[0].question_text}
                                     </Typography>
+                                    <Typography>
+                                        {(result1 === 0) ? (
+                                            hintsArray[0][(hint1 < hintsArray.length) ? hint1 : hintsArray[0].length - 1]
+                                        ) : null}
+                                        {(result2 === 0) ? (
+                                            hintsArray[1][(hint2 < hintsArray.length) ? hint2 : hintsArray[1].length - 1]
+                                        ) : null}
+                                    </Typography>
                                     <DLCComponent DLCType={'Complex'}/>
                                     <Box mt={3}>
                                         <FormControl>
@@ -598,7 +625,7 @@ function QuestionsList() {
                                             <Typography variant="h6" color='red'>Incorrect Answer</Typography>
                                             ) : (
                                                 result1 === 2 ? (
-                                                    <Typography variant="h6" color='red'>Incorrect Answer</Typography>
+                                                    <Typography variant="h6" color='green'>Correct Answer!</Typography>
                                                 ) : null
                                             )}
                                         <br />

@@ -25,7 +25,9 @@ Answer.create(question_id: question2.id, answer_text: "Fuerza normal", correct: 
 Answer.create(question_id: question2.id, answer_text: "Fuerza de roce", correct: false)
 Answer.create(question_id: question2.id, answer_text: "Fuerza de tensión", correct: false)
 
-question4 = Question.create(task_id: task2.id, question_text: 'Cual debe ser el valor de Fx para que el sistema esté en equilibrio?')
-question3 = Question.create(task_id: task3.id, question_text: 'Cual debe ser el valor de Fx e Fy para que el sistema esté en equilibrio?')
+question4 = Question.create(task_id: task2.id, question_text: 'Cual debe ser el valor de Fx para que el sistema esté en equilibrio?',
+    hint: 'hint11;hint12;hint13')
+question3 = Question.create(task_id: task3.id, question_text: 'Cual debe ser el valor de Fx e Fy para que el sistema esté en equilibrio?',
+    hint: 'hint211;hint212;hint213|hint221;hint222;hint223')
 
 puts "Seed finished"
