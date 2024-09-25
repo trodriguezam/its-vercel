@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_25_154830) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_25_211814) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -91,6 +91,16 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_25_154830) do
     t.index ["user_id"], name: "index_user_questions_on_user_id"
   end
 
+  create_table "user_task_skips", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "task_id", null: false
+    t.integer "skip_count", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["task_id"], name: "index_user_task_skips_on_task_id"
+    t.index ["user_id"], name: "index_user_task_skips_on_user_id"
+  end
+
   create_table "user_tasks", force: :cascade do |t|
     t.integer "user_id"
     t.integer "task_id"
@@ -129,4 +139,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_25_154830) do
   add_foreign_key "topics", "topics", column: "prerequisite_id"
   add_foreign_key "user_questions", "questions"
   add_foreign_key "user_questions", "users"
+  add_foreign_key "user_task_skips", "tasks"
+  add_foreign_key "user_task_skips", "users"
 end
