@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axiosInstance from '../api/axiosInstance';
-import { Card, CardContent, CardActionArea, Typography, Box, Grid } from '@mui/material';
+import { Card, CardContent, CardActionArea, Typography, Box, Grid, FormControl, InputLabel, Select, MenuItem, FormHelperText } from '@mui/material';
 import { formatDistanceToNow } from 'date-fns';
 
 function DashboardList() {
@@ -13,6 +13,7 @@ function DashboardList() {
     const [userTopics, setUserTopics] = useState([]);
     const [allTasks, setAllTasks] = useState([]);
     const [render, setRender] = useState(false);
+    const [highlight, setHighlight] = useState(0);
 
     const storedUser = localStorage.getItem('currentUser');
     const currentUser = storedUser ? JSON.parse(storedUser) : null;
@@ -64,6 +65,10 @@ function DashboardList() {
         return users.filter((user) => user.role === 'user').length;
     }
 
+    const handleChange = (event) => {
+        setHighlight(event.target.value);
+    };
+
     const mostDifficultTopics = () => {
         const topicsGroupedByTopicId = userTopics.reduce((acc, userTopic) => {
             if (!acc[userTopic.topic_id]) {
@@ -85,11 +90,7 @@ function DashboardList() {
 
         const sortedTopics = topicsWithAvgCompletion.sort((a, b) => a.avgCompletion - b.avgCompletion);
 
-        console.log("Sorted Topics:", sortedTopics);
-
-        const worstThreeTopics = sortedTopics.slice(0, 3);
-
-        return worstThreeTopics;
+        return sortedTopics;
     };
 
     const MostTriedQuestions = () => {
@@ -118,6 +119,21 @@ function DashboardList() {
 
         return mostTriedThreeQuestions;
     }
+
+    let largestQuestion = { question_text: "" };
+
+    if (render) {
+        // Assign the value to largestQuestion if render is true and questions is not empty
+        largestQuestion = questions.reduce((max, question) => 
+            question.question_text.length > max.question_text.length ? question : max,
+            { question_text: "" }
+        );
+    }
+    
+
+    const DifTops = mostDifficultTopics().slice(0,2)
+    const EasTops = mostDifficultTopics().slice(-2)
+
 
     if (!currentUser || currentUser.role !== 'professor') {
         return (
@@ -190,7 +206,7 @@ function DashboardList() {
                             <Typography variant="h5" sx={{color: '#111111', fontWeight: 'bold', marginBottom: '20px' }}>
                                 Topics with Most Difficulty
                             </Typography>
-                            {mostDifficultTopics().map((topic) => {
+                            {DifTops.map((topic) => {
                                 const topicName = topics.find(t => t.id === parseInt(topic.topic_id))?.name || 'Unknown Topic'; 
                                 return (
                                     <Typography key={topic.topic_id} sx={{color: '#111111'}}>
@@ -202,16 +218,60 @@ function DashboardList() {
 
                         <Grid item xs={12}>
                             <Typography variant="h5" sx={{color: '#111111', fontWeight: 'bold', marginBottom: '20px' }}>
-                                Questions with Most Tries
+                                Topics with Least Difficulty
                             </Typography>
-                            {MostTriedQuestions().map((question) => {
-                                const questionName = questions.find(q => q.id === parseInt(question.question_id))?.question_text || 'Unknown Topic'; 
+                            {EasTops.map((topic) => {
+                                const topicName = topics.find(t => t.id === parseInt(topic.topic_id))?.name || 'Unknown Topic'; 
                                 return (
-                                    <Typography key={question.question_id} sx={{color: '#111111'}}>
-                                        {questionName}, Amount of Tries: {question.totalTries}
+                                    <Typography key={topic.topic_id} sx={{color: '#111111'}}>
+                                        {topicName}, Avg Completion: {topic.avgCompletion.toFixed(2)}%
                                     </Typography>
                                 );
                             })}
+                        </Grid>
+
+                        <Grid item xs={12}>
+                        <Typography variant="h5" sx={{color: '#111111', fontWeight: 'bold', marginBottom: '20px' }}>
+                                Highlighted Question
+                        </Typography>
+                        <FormControl sx={{ m: 1, minWidth: 220 }}>
+                            <InputLabel id="demo-simple-select-helper-label">Highlight</InputLabel>
+                            <Select
+                            labelId="demo-simple-select-helper-label"
+                            id="demo-simple-select-helper"
+                            value={highlight}
+                            label="Highlight"
+                            onChange={handleChange}
+                            >
+                            <MenuItem value="">
+                                <em>None</em>
+                            </MenuItem>
+                            <MenuItem value={1}>Most Tried</MenuItem>
+                            <MenuItem value={2}>Easiest</MenuItem>
+                            <MenuItem value={3}>Largest</MenuItem>
+                            </Select>
+                        </FormControl>
+
+                        {highlight === 1 && (
+                            <Grid item xs={12}>
+                                {MostTriedQuestions().map((question) => {
+                                    const questionName = questions.find(q => q.id === parseInt(question.question_id))?.question_text || 'Unknown Question';
+                                    return (
+                                        <Typography key={question.question_id} sx={{color: '#111111'}}>
+                                            {questionName}, Total Tries: {question.totalTries}
+                                        </Typography>
+                                    );
+                                })}
+                            </Grid>
+                        )}
+
+                        {highlight === 3 && (
+                            <Grid item xs={12}>
+                                <Typography  sx={{color: '#111111'}}>
+                                    {largestQuestion.question_text}
+                                </Typography>
+                            </Grid>
+                        )}
 
                             
                         </Grid>
