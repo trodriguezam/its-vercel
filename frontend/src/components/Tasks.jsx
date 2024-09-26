@@ -277,65 +277,61 @@ function TasksList() {
                 </Typography>
             )}
 
-            <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 2 }}>
                 <div>
                     {filteredTasks.length > 1 && taskIndex > 0 && (
-                        <Box sx={{ textAlign: 'center', marginTop: '20px' }}>
-                            <Button 
-                                variant="contained" 
-                                onClick={() => setTaskIndex(taskIndex - 1)}
-                                sx={{ backgroundColor: '#8AB573', '&:hover': { backgroundColor: '#79a362' }}}
-                            >
-                                Previous Task
-                            </Button>
-                        </Box>
+                    <Box sx={{ textAlign: 'center', mx: 1 }}>
+                        <Button
+                        variant="contained"
+                        onClick={() => setTaskIndex(taskIndex - 1)}
+                        sx={{ backgroundColor: '#8AB573', '&:hover': { backgroundColor: '#79a362' } }}
+                        >
+                        Previous Task
+                        </Button>
+                    </Box>
                     )}
-                </div>
-                <div>
-                    {filteredTasks.length > 1 && taskIndex < filteredTasks.length - 1 && (
-                        <Box sx={{ textAlign: 'center', marginTop: '20px' }}>
-                            <Button 
-                                variant="contained" 
-                                onClick={handleSkipTask}
-                                sx={{ backgroundColor: '#8AB573', '&:hover': { backgroundColor: '#79a362' } }}
-                            >
-                                Skip Task
-                            </Button>
-                        </Box>
-                    )}
-                </div>
-            </div>
-            
 
-            <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                    {filteredTasks.length > 1 && taskIndex < filteredTasks.length - 1 && (
+                    <Box sx={{ textAlign: 'center', mx: 1 }}>
+                        <Button
+                        variant="contained"
+                        onClick={handleSkipTask}
+                        sx={{ backgroundColor: '#8AB573', '&:hover': { backgroundColor: '#79a362' } }}
+                        >
+                        Skip Task
+                        </Button>
+                    </Box>
+                    )}
+                </div>
+
                 <div>
                     {currentDifficulty > 1 && (
-                        <Box sx={{ textAlign: 'center', marginTop: '20px' }}>
-                            <Button
-                                variant="contained"
-                                onClick={() => setCurrentDifficulty(currentDifficulty - 1)}
-                                sx={{ backgroundColor: '#8AB573', '&:hover': { backgroundColor: '#79a362' }}}
-                            >
-                                Previous level
-                            </Button>
-                        </Box>
+                    <Box sx={{ textAlign: 'center', mx: 1 }}>
+                        <Button
+                        variant="contained"
+                        onClick={() => setCurrentDifficulty(currentDifficulty - 1)}
+                        sx={{ backgroundColor: '#8AB573', '&:hover': { backgroundColor: '#79a362' } }}
+                        >
+                        Previous level
+                        </Button>
+                    </Box>
                     )}
                 </div>
+
                 <div>
                     {currentDifficulty < 3 && (
-                        <Box sx={{ textAlign: 'center', marginTop: '20px' }}>
-                            <Button 
-                                variant="contained" 
-                                onClick={handleSkipDifficulty}
-                                sx={{ backgroundColor: '#8AB573', '&:hover': { backgroundColor: '#79a362' } }}
-                            >
-                                Skip level
-                            </Button>
-                        </Box>
+                    <Box sx={{ textAlign: 'center', mx: 1 }}>
+                        <Button
+                        variant="contained"
+                        onClick={handleSkipDifficulty}
+                        sx={{ backgroundColor: '#8AB573', '&:hover': { backgroundColor: '#79a362' } }}
+                        >
+                        Skip level
+                        </Button>
+                    </Box>
                     )}
                 </div>
-            </div>
-
+                </Box>
             <Box sx={{ textAlign: 'center', marginTop: '20px' }}>
                 <Link to="/topics">
                     <Button 
