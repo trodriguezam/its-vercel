@@ -42,7 +42,12 @@ function QuestionsList() {
     const [result2, setResult2] = useState(1);
     const [r1, setR1] = useState(0);
     const [r2, setR2] = useState(0);
-    const [r3, setR3] = useState(0);
+    const [l1, setL1] = useState(0);
+    const [l2, setL2] = useState(0);
+    const [l3, setL3] = useState(0);
+    const [l4, setL4] = useState(0);
+    const [l5, setL5] = useState(0);
+    const [l6, setL6] = useState(0);
     const [taskDifficulty, setTaskDifficulty] = useState(0);
     const [randomDir, setRandomDir] = useState('');
     const directions = ['right', 'left'];
@@ -81,12 +86,17 @@ function QuestionsList() {
 
     useEffect(() => {
         const randomDir = directions[getRandomValues([2])[0] - 1];
-        const [r1, r2, r3] = getRandomValues([10, 10, 10])
+        const [r1, r2, l1, l2, l3, l4, l5, l6] = getRandomValues([10, 10, 4, 4, 4, 4, 4, 4])
 
         setRandomDir(randomDir);
         setR1(r1);
         setR2(r2);
-        setR3(r3);
+        setL1(l1);
+        setL2(l2);
+        setL3(l3);
+        setL4(l4);
+        setL5(l5);
+        setL6(l6);
 
     }, []);
 
@@ -444,8 +454,8 @@ function QuestionsList() {
     }
 
     const handleInputSumbit = () => {
-        if (topicName === 'Centro de Gravedad') {
-            if(Number(inputValue) === (24)) {
+        if (SVGname === 'SimpleGravedad') {
+            if(Number(inputValue) === ((r1*r3 + r2*r4) / (r1 + r2))) {
                 sendInputResult();
             }
         }
@@ -687,10 +697,9 @@ function QuestionsList() {
                         <>
                             <br />
                             <br />
-                            {task.difficulty == 1 ? (
                                 <>
                                     <Typography variant="h3" gutterBottom color='#111111'>
-                                        {Allquestions[0].question_text}
+                                        {Allquestions[0].question_text.replace('{valor1}', r1*10).replace('{valor2}', r2*10).replace('{distancia1}', l1).replace('{distancia2}', l2).replace('{distancia3}', l3).replace('{distancia4}', l4).replace('{distancia5}', l5).replace('{distancia6}', l6)}
                                     </Typography>
                                     {SVGname}
                                     <DLCComponent DLCType={SVGname}/>
@@ -727,47 +736,6 @@ function QuestionsList() {
                                         </Button>
                                     </Box>
                                 </>
-                            ) : (
-                                <>
-                                    <Typography variant="h3" gutterBottom color='#111111'>
-                                        {Allquestions[0].question_text}
-                                    </Typography>
-                                    <br />
-                                    <DLCComponent DLCType={SVGname}/>
-                                    <Box mt={3}>
-                                        <FormControl>
-                                            <input
-                                                type="text"
-                                                value={inputValue}
-                                                onChange={(e) => setInputValue(e.target.value)}
-                                                style={{ padding: '10px', width: '100%', borderRadius: '10px', border: '1px solid #ccc' }}
-                                            />
-                                        </FormControl>
-                                        <br />
-                                        {result0 === 0 ? (
-                                            <Typography variant="h6" color='red'>Incorrect Answer</Typography>
-                                            ) : (
-                                                result0 === 2 ? (
-                                                    <Typography variant="h6" color='green'>Correct Answer!</Typography>
-                                                ) : null
-                                            )}
-                                    </Box>
-                                    <Box mt={3}>
-                                        <Button
-                                            variant="contained"
-                                            onClick={handleInputSumbit}
-                                            color="primary"
-                                            style={{ width: '100%', borderRadius: '10px' }}
-                                            sx={{
-                                            backgroundColor: '#8AB573',
-                                            '&:hover': { backgroundColor: '#79a362' }
-                                            }}
-                                        >
-                                            Check
-                                        </Button>
-                                    </Box>
-                                </>
-                            )}
                         </>    
                     )}
                 </>
