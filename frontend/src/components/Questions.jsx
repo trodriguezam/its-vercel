@@ -17,6 +17,9 @@ function QuestionsList() {
     const questions = location.state?.questions;
     const navigate = useNavigate();
 
+    const [topicId, setTopicId] = useState(0);
+    const [topicName, setTopicName] = useState('');
+    const [SVGname, setSVGname] = useState('');
     const [answers, setAnswers] = useState([]);
     const [userQuestions, setUserQuestions] = useState([]);
     const [Allquestions, setAllquestions] = useState([]);
@@ -86,6 +89,55 @@ function QuestionsList() {
         setR3(r3);
 
     }, []);
+
+    useEffect(() => {
+        axiosInstance.get(`/tasks/${taskId}`)
+            .then((res) => {
+                setTopicId(res.data.topic_id)
+                console.log(res.data.topic_id)
+                setTaskDifficulty(res.data.difficulty)
+                console.log(res.data.difficulty)
+            }) 
+            .catch((error) => console.error(error));
+    }, [taskId]);
+
+    useEffect(() => {
+        axiosInstance.get(`/topics/${topicId}`)
+            .then((res) => {
+                setTopicName(res.data.name)
+                console.log(res.data.name)
+            })
+            .catch((error) => console.error(error));
+    }, [topicId]);
+
+    useEffect(() => {
+        if(taskDifficulty === 1) {
+            if (topicName === 'Centro de Gravedad') {
+                setSVGname('SimpleGravedad');
+            } else if (topicName === 'Tipos de Fuerzas más Comunes') {
+                setSVGname('SimpleTiposFuerza');
+            } else if (topicName === 'Diagrama de Cuerpo Libre') {
+                setSVGname('SimpleDCL');
+            } else if (topicName === 'Rozamiento y Poleas') {
+                setSVGname('SimplePoleas');
+            } else if (topicName === 'Condiciones de Equilibrio y Gravedad') {
+                setSVGname('SimpleEquilibrio');
+            }
+        } else if (taskDifficulty > 1) {
+            if (topicName === 'Centro de Gravedad') {
+                setSVGname('ComplexGravedad');
+            } else if (topicName === 'Tipos de Fuerzas más Comunes') {
+                setSVGname('ComplexTiposFuerza');
+            } else if (topicName === 'Diagrama de Cuerpo Libre') {
+                setSVGname('ComplexDCL');
+            } else if (topicName === 'Rozamiento y Poleas') {
+                setSVGname('ComplexPoleas');
+            } else if (topicName === 'Condiciones de Equilibrio y Gravedad') {
+                setSVGname('ComplexEquilibrio');
+            }
+        }
+
+    }, [topicName, taskDifficulty]);
 
     function DLCComponent( {DLCType} ) {
         if (DLCType === 'Simple') { 
@@ -161,6 +213,18 @@ function QuestionsList() {
                 
                 </>
             )
+        } else if (DLCType === 'SimpleEquilibrio') {
+            return (
+                <>
+                
+                </>
+            )
+        } else if (DLCType === 'ComplexEquilibrio') {
+            return (
+                <>
+                
+                </>
+            )
         } else if (DLCType === 'SimplePoleas') {
             return (
                 <>
@@ -170,7 +234,7 @@ function QuestionsList() {
         } else if (DLCType === 'ComplexPoleas') {
             return (
                 <>
-                
+                hhola
                 </>
             )
         }
@@ -380,6 +444,11 @@ function QuestionsList() {
     }
 
     const handleInputSumbit = () => {
+        if (topicName === 'Centro de Gravedad') {
+            if(Number(inputValue) === (24)) {
+                sendInputResult();
+            }
+        }
         if (((Number(inputValue) === (r1*10)) && task.difficulty === 1) || (task.difficulty > 1 && (Number(inputValue) === (r2*10)))) {
             sendInputResult();
         } else {
@@ -507,6 +576,8 @@ function QuestionsList() {
         );
     }
 
+    console.log(SVGname)
+
     return (
         <div style={{ padding: '20px', textAlign: 'center' }}>
             {!quizStarted && !isCompleted ? (
@@ -621,7 +692,8 @@ function QuestionsList() {
                                     <Typography variant="h3" gutterBottom color='#111111'>
                                         {Allquestions[0].question_text}
                                     </Typography>
-                                    <DLCComponent DLCType={'Simple'}/>
+                                    {SVGname}
+                                    <DLCComponent DLCType={SVGname}/>
                                     <Box mt={3}>
                                         <FormControl>
                                             <input
@@ -661,7 +733,7 @@ function QuestionsList() {
                                         {Allquestions[0].question_text}
                                     </Typography>
                                     <br />
-                                    <DLCComponent DLCType={'Mid'}/>
+                                    <DLCComponent DLCType={SVGname}/>
                                     <Box mt={3}>
                                         <FormControl>
                                             <input
