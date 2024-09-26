@@ -186,7 +186,7 @@ function DashboardList() {
                     }}>
                         {users.filter((user) => user.role === 'user').map((user) => (
                             <Link to={`/users/${user.id}`} style={{ textDecoration: 'none' }} key={user.id}>
-                                <Card sx={{ backgroundColor: '#e3fae3', padding: '20px', marginBottom: '10px' }}>
+                                <Card sx={{  padding: '20px', marginBottom: '10px' }}>
                                     <CardActionArea>
                                         <CardContent>
                                             <Typography variant="h6" sx={{ fontWeight: 'bold', marginBottom: '10px' }}>
@@ -219,7 +219,7 @@ function DashboardList() {
                             {DifTops.map((topic) => {
                                 const topicName = topics.find(t => t.id === parseInt(topic.topic_id))?.name || 'Unknown Topic'; 
                                 return (
-                                    <Card key={topic.topic_id} sx={{ backgroundColor: '#e3fae3', marginBottom: '10px' }}>
+                                    <Card key={topic.topic_id} sx={{  marginBottom: '10px' }}>
                                         <CardContent>
                                         <Typography variant="body1" sx={{ color: '#111111' }}>
                                             {topicName}, Progreso Promedio: {topic.avgCompletion.toFixed(2)}%
@@ -237,7 +237,7 @@ function DashboardList() {
                             {EasTops.map((topic) => {
                                 const topicName = topics.find(t => t.id === parseInt(topic.topic_id))?.name || 'Unknown Topic'; 
                                 return (
-                                    <Card key={topic.topic_id} sx={{ backgroundColor: '#e3fae3', marginBottom: '10px' }}>
+                                    <Card key={topic.topic_id} sx={{  marginBottom: '10px' }}>
                                         <CardContent>
                                         <Typography variant="body1" sx={{ color: '#111111' }}>
                                             {topicName}, Progreso Promedio: {topic.avgCompletion.toFixed(2)}%
@@ -281,7 +281,7 @@ function DashboardList() {
                                 {MostTried.map((question) => {
                                     const questionName = questions.find(q => q.id === parseInt(question.question_id))?.question_text || 'Unknown Question';
                                     return (
-                                    <Card key={question.question_id} sx={{ backgroundColor: '#e3fae3', marginBottom: '5px' }}>
+                                    <Card key={question.question_id} sx={{  marginBottom: '5px' }}>
                                         <CardContent>
                                         <Typography variant="body1" sx={{ color: '#111111' }}>
                                             {questionName}, Intentos Totales: {question.totalTries}
@@ -301,7 +301,7 @@ function DashboardList() {
                                 {LeastTried.map((question) => {
                                     const questionName = questions.find(q => q.id === parseInt(question.question_id))?.question_text || 'Unknown Question';
                                     return (
-                                        <Card key={question.question_id} sx={{ backgroundColor: '#e3fae3', marginBottom: '5px' }}>
+                                        <Card key={question.question_id} sx={{  marginBottom: '5px' }}>
                                         <CardContent>
                                         <Typography variant="body1" sx={{ color: '#111111' }}>
                                             {questionName}, Intentos Totales: {question.totalTries}
@@ -318,7 +318,7 @@ function DashboardList() {
                                 <Typography variant="h6" sx={{ color: '#111111', fontWeight: 'bold', marginRight: '20px' }}>
                                     Pregunta Mas Larga:
                                 </Typography>
-                                <Card sx={{ backgroundColor: '#e3fae3', marginBottom: '10px' }}>
+                                <Card sx={{  marginBottom: '10px' }}>
                                     <CardContent>
                                     <Typography variant="body1" sx={{ color: '#111111' }}>
                                         {largestQuestion.question_text}
@@ -333,7 +333,7 @@ function DashboardList() {
                                 <Typography variant="h6" sx={{ color: '#111111', fontWeight: 'bold', marginRight: '20px' }}>
                                     Pregunta Mas Pequeña:
                                 </Typography>
-                                <Card sx={{ backgroundColor: '#e3fae3', marginBottom: '10px' }}>
+                                <Card sx={{  marginBottom: '10px' }}>
                                     <CardContent>
                                     <Typography variant="body1" sx={{ color: '#111111' }}>
                                         {smallestQuestion.question_text}
