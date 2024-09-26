@@ -38,7 +38,8 @@ function QuestionsList() {
     const [selectedAnswer, setSelectedAnswer] = useState(null);
     const [isCompleted, setIsCompleted] = useState(false);
     const [quizStarted, setQuizStarted] = useState(false);
-    const [hint, setHint] = useState(-1);
+    const [hint, setHint] = useState(0);
+    const [hintDev, setHintDev] = useState(-1);
     const [hint1, setHint1] = useState(-1);
     const [hint2, setHint2] = useState(-1);
     const [hintsArray, setHintsArray] = useState([]);
@@ -432,7 +433,7 @@ function QuestionsList() {
             const expected = (r1*2 + r2*4) / (r1 + r2);
             if(Math.abs(Number(inputValue) - expected) <= 1) {
                 sendInputResult();
-            } else setResult0(0);setHint(hint + 1);
+            } else setResult0(0);setHintDev(hintDev + 1);
         } else if (SVGname === 'ComplexGravedad') {
             const values = inputValue.replace(/[()]/g, '').split(',').map(Number);
             const expected1 = (l1 * 2 + l3 * 3 + l5 * 1) / (6);
@@ -440,26 +441,26 @@ function QuestionsList() {
             console.log(values, expected1, expected2);
             if (Math.abs(values[0] - expected1) <= 1 && Math.abs(values[1] - expected2) <= 1) {
                 sendInputResult();
-            } else setResult0(0);setHint(hint + 1);
+            } else setResult0(0);setHintDev(hintDev + 1);
         } else if (SVGname === 'SimpleTiposFuerza') {
             const expected = r1*10*0.3*10;
             console.log(expected, inputValue);
             if(Math.abs(Number(inputValue) - expected) <= 1) {
                 sendInputResult();
-            } else setResult0(0);setHint(hint + 1);
+            } else setResult0(0);setHintDev(hintDev + 1);
         } else if (SVGname === 'ComplexTiposFuerza') {
             const expcted = Math.abs(r1 - r2)*10;
             console.log(expcted, inputValue);
             if(Math.abs(Number(inputValue) - expcted) <= 1) {
                 sendInputResult();
-            } else setResult0(0);setHint(hint + 1);
+            } else setResult0(0);setHintDev(hintDev + 1);
 
         } else if (SVGname === 'SimpleDCL') {
             const expected = Math.abs(r1*10*10);
             console.log(expected, inputValue);
             if(Math.abs(Number(inputValue) - expected) <= 1) {
                 sendInputResult();
-            } else setResult0(0);setHint(hint + 1);
+            } else setResult0(0);setHintDev(hintDev + 1);
 
         } else if (SVGname === 'ComplexDCL') {
 
@@ -467,33 +468,33 @@ function QuestionsList() {
             console.log(expected, inputValue);
             if(Math.abs(Number(inputValue) - expected) <= 1) {
                 sendInputResult();
-            } else setResult0(0);setHint(hint + 1);
+            } else setResult0(0);setHintDev(hintDev + 1);
 
         } else if (SVGname === 'SimpleEquilibrio') {
             const expected = 100/l1;
             console.log(expected, inputValue);
             if(Math.abs(Number(inputValue) - expected) <= 1) {
                 sendInputResult();
-            } else setResult0(0);setHint(hint + 1);
+            } else setResult0(0);setHintDev(hintDev + 1);
         
         } else if (SVGname === 'ComplexEquilibrio') {
             const expected = r1*20;
             console.log(expected, inputValue);
             if(Math.abs(Number(inputValue) - expected) <= 1) {
                 sendInputResult();
-            } else setResult0(0);setHint(hint + 1);
+            } else setResult0(0);setHintDev(hintDev + 1);
         } else if (SVGname === 'SimplePoleas') {
             const expected = r1*10*0.2;
             console.log(expected, inputValue);
             if(Math.abs(Number(inputValue) - expected) <= 1) {
                 sendInputResult();
-            } else setResult0(0);setHint(hint + 1);
+            } else setResult0(0);setHintDev(hintDev + 1);
         } else if (SVGname === 'ComplexPoleas') {
             const expected = r1*100;
             console.log(expected, inputValue);
             if(Math.abs(Number(inputValue) - expected) <= 1) {
                 sendInputResult();
-            } else setResult0(0); setHint(hint + 1);
+            } else setResult0(0); setHintDev(hintDev + 1);
         } else {
             console.log('Invalid SVG name');
         }
@@ -674,7 +675,7 @@ function QuestionsList() {
                                     </Typography>
                                     <Typography>
                                         {(result0 === 0) ? (
-                                            hintsArray[(hint < hintsArray.length) ? hint : hintsArray.length - 1]
+                                            hintsArray[(hintDev < hintsArray.length) ? hintDev : hintsArray.length - 1]
                                         ) : null}
                                     </Typography>
                                     <DLCComponent DLCType={SVGname}/>
