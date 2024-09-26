@@ -144,26 +144,27 @@ function TopicList() {
   }
 
     return (
-        <div>
-          <Typography variant="h2" color="#111111">Temas</Typography>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
-            {topics.map((topic) => (
-              <Card key={topic.id} sx={{ width: 500, height: 130, backgroundColor: '#E4FFC2', color: '#111111' }}>
-                <CardContent>
-                  <Typography variant="h6" component="div">
-                    {topic.name}
-                  </Typography>
-                  <LinearProgressWithLabel value={getTopicCompletion(topic.id, currentUser.id) / 100}></LinearProgressWithLabel>
-                </CardContent>
-                <CardActions sx={{ display: 'flex', justifyContent: 'center' }}>
-                  <Link to={`/topics/${topic.id}/tasks`} style={{ textDecoration: 'none' }}>
-                    <Button variant="contained" sx={{ backgroundColor: '#8AB573', '&:hover': { backgroundColor: '#79a362' } }}>Ver Tareas</Button>
-                  </Link>
-                </CardActions>
-              </Card>
-            ))}
-          </div>
+      <div>
+        <Typography variant="h2" color="#111111" sx={{ textAlign: 'center', mb: 4 }}>Temas</Typography>
+        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '20px' }}>
+          {topics.map((topic) => (
+            <Card key={topic.id} sx={{ width: 500, height: 130, backgroundColor: '#d9fcd9', color: '#111111' }}>
+              <CardContent>
+                <Typography variant="h6" component="div">
+                  {topic.name}
+                </Typography>
+                <LinearProgressWithLabel value={getTopicCompletion(topic.id, currentUser.id) / 100}></LinearProgressWithLabel>
+              </CardContent>
+              <CardActions sx={{ display: 'flex', justifyContent: 'center' }}>
+                <Link to={`/topics/${topic.id}/tasks`} style={{ textDecoration: 'none' }}>
+                  <Button variant="contained" sx={{ backgroundColor: '#8AB573', '&:hover': { backgroundColor: '#79a362' } }}>Ver Tareas</Button>
+                </Link>
+              </CardActions>
+            </Card>
+          ))}
         </div>
+      </div>
+      
       );
 }
 

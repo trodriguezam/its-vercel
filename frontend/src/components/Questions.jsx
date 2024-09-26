@@ -641,8 +641,8 @@ function QuestionsList() {
                                 )}
                                 <Typography variant="body1" mt={2} color='#333'>
                                 {hint === 1 ? "Buen Trabajo!" : 
-                                hint === 2 && getTries(questions[currentIndex]) < 2 ? <Typography>Hint: {questions[currentIndex].hint}</Typography> : 
-                                hint === 2 && getTries(questions[currentIndex]) >= 2 ? <Typography>La respuesta correcta es: {getCorrectAnswer(questions[currentIndex])}</Typography> : null
+                                hint === 2 && getTries(questions[currentIndex]) === 1 ? <Typography>Intenta Denuevo!</Typography> : 
+                                hint === 2 && getTries(questions[currentIndex]) > 1 ? <Typography>La respuesta correcta es: {getCorrectAnswer(questions[currentIndex])}</Typography> : null
                                 }
                                 </Typography>
                                 <Box mt={3}>
