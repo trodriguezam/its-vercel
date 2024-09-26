@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axiosInstance from '../api/axiosInstance';
+import LinearProgress from '@mui/material/LinearProgress';
 import { Card, CardContent, CardActions, Button, Typography, Box } from '@mui/material';
 import { set } from "date-fns";
 
@@ -13,6 +14,26 @@ function TopicList() {
     const storedUser = localStorage.getItem('currentUser');
     const currentUser = storedUser ? JSON.parse(storedUser) : null;
 
+    function LinearProgressWithLabel({ value }) {
+      return (
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Box sx={{ width: '100%', mr: 1 }}>
+            <LinearProgress variant="determinate" value={value * 100} sx={{ 
+            bgcolor: '#a0e8a0',
+            '& .MuiLinearProgress-bar': {
+              bgcolor: '#58c458', 
+            },
+          }}  />
+          </Box>
+          <Box sx={{ minWidth: 50 }}>
+            <Typography
+              variant="body2"
+              sx={{ color: 'text.secondary' }}
+            >{`${(value*10).toFixed(1)} / 10`}</Typography>
+          </Box>
+        </Box>
+      );
+    }
 
     const getTopicCompletion = (topicId, userId) => {
       if (!tasks || !userTasks) return 0; // Add a guard clause to ensure `tasks` and `userTasks` are available
@@ -46,10 +67,9 @@ function TopicList() {
               setTasks(tasksRes.data);
               setUserTasks(userTasksRes.data);
               setUserTopics(userTopicsRes.data);
-  
-              // Check if the necessary data has been loaded
-              if (currentUser && tasksRes.data.length > 0 && userTasksRes.data.length > 0) {
-                  setDataReady(true); // Set dataReady to true once everything is loaded
+
+              if (currentUser && tasksRes.data.length > 0 ) {
+                  setDataReady(true);
               }
           } catch (error) {
               console.error(error);
@@ -111,13 +131,13 @@ function TopicList() {
                   variant="h3" 
                   sx={{ mb: 4, textAlign: 'center', color: '#111111', fontWeight: 'bold' }}
               >
-                  Topics
+                  Temas
               </Typography>
               <Typography 
                   variant="body1" 
                   sx={{ textAlign: 'center', color: '#111111', fontWeight: 'bold' }}
               >
-                  You are not authorized to view this page. Please log in as a user.
+                  No estas Autorizado a ver esta Pagina, Porfavor Logea como Usuario
               </Typography>
           </Box>
       );
@@ -125,7 +145,7 @@ function TopicList() {
 
     return (
         <div>
-          <Typography variant="h2" color="#111111">Topics</Typography>
+          <Typography variant="h2" color="#111111">Temas</Typography>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
             {topics.map((topic) => (
               <Card key={topic.id} sx={{ width: 500, height: 130, backgroundColor: '#E4FFC2', color: '#111111' }}>
@@ -133,13 +153,11 @@ function TopicList() {
                   <Typography variant="h6" component="div">
                     {topic.name}
                   </Typography>
-                  <Typography variant="h6" component="div">
-                    {getTopicCompletion(topic.id, currentUser.id)}%
-                  </Typography>
+                  <LinearProgressWithLabel value={getTopicCompletion(topic.id, currentUser.id) / 100}></LinearProgressWithLabel>
                 </CardContent>
                 <CardActions sx={{ display: 'flex', justifyContent: 'center' }}>
                   <Link to={`/topics/${topic.id}/tasks`} style={{ textDecoration: 'none' }}>
-                    <Button variant="contained" sx={{ backgroundColor: '#8AB573', '&:hover': { backgroundColor: '#79a362' } }}>View Tasks</Button>
+                    <Button variant="contained" sx={{ backgroundColor: '#8AB573', '&:hover': { backgroundColor: '#79a362' } }}>Ver Tareas</Button>
                   </Link>
                 </CardActions>
               </Card>

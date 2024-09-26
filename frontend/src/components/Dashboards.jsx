@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axiosInstance from '../api/axiosInstance';
-import { Card, CardContent, CardActionArea, Typography, Box, Grid, FormControl, InputLabel, Select, MenuItem, FormHelperText } from '@mui/material';
+import { Card, CardContent, CardActionArea, Typography, Box, Grid, FormControl, InputLabel, Select, MenuItem, FormHelperText, CircularProgress } from '@mui/material';
 import { formatDistanceToNow } from 'date-fns';
 
 function DashboardList() {
@@ -51,7 +51,7 @@ function DashboardList() {
     const getUserTaskCompletion = (userId) => {
         const userTasksForUser = userTasks.filter((userTask) => userTask.user_id === userId);
         const userTasksCompleted = userTasksForUser.filter((userTask) => userTask.completion === 100);
-        return `${userTasksCompleted.length} / ${allTasks.length}`;
+        return `${(userTasksCompleted.length / allTasks.length).toFixed(2)}`;
     };
 
     const formatTimeSpent = (seconds) => {
@@ -113,27 +113,36 @@ function DashboardList() {
 
         const sortedQuestions = questionsWithTries.sort((a, b) => a.totalTries - b.totalTries);
 
-        console.log("Sorted Questions:", sortedQuestions);
-
-        const mostTriedThreeQuestions = sortedQuestions.slice(0, 3);
-
-        return mostTriedThreeQuestions;
+        return sortedQuestions;
     }
 
     let largestQuestion = { question_text: "" };
+    let smallestQuestion = { question_text: "" };
 
     if (render) {
-        // Assign the value to largestQuestion if render is true and questions is not empty
         largestQuestion = questions.reduce((max, question) => 
             question.question_text.length > max.question_text.length ? question : max,
             { question_text: "" }
         );
+
+        smallestQuestion = questions.reduce((min, question) => 
+            question.question_text.length < min.question_text.length ? question : min,
+            { question_text: questions[0].question_text }
+        );
     }
-    
+ 
 
     const DifTops = mostDifficultTopics().slice(0,2)
     const EasTops = mostDifficultTopics().slice(-2)
-
+    const MostTried = MostTriedQuestions().slice(-3)
+    const LeastTried = MostTriedQuestions().slice(0,3)
+    if (!render){
+        return (
+            <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh'}}>
+                <CircularProgress />
+            </Box>
+        );
+    }
 
     if (!currentUser || currentUser.role !== 'professor') {
         return (
@@ -148,20 +157,21 @@ function DashboardList() {
                     variant="body1" 
                     sx={{ textAlign: 'center', color: '#111111', fontWeight: 'bold' }}
                 >
-                    You are not authorized to view this page. Please log in as a professor.
+                    No estas Autorizado a ver esta Pagina, Porfavor Logea como Profesor
                 </Typography>
             </Box>
         );
     }
 
     return (
-        <Box sx={{ maxWidth: '1200px', margin: '0 auto', padding: '40px' }}>
+        <Box sx={{ maxWidth: '1400px', margin: '0 auto', padding: '50px' }}>
+            <Typography variant='h4' sx={{ color: '#111111', mb: 2, fontWeight: 'bold' }}>Dashboard General</Typography>
 
             <Grid container spacing={4}>
                 {/* Static Box with Scrollable Users List */}
                 <Grid item xs={12} md={6}>
                     <Typography variant="h5" sx={{ color: '#111111', mb: 2, fontWeight: 'bold' }}>
-                        User Stats
+                        Estadisticas de Usuario
                     </Typography>
                     <Box sx={{
                         height: '400px', // Adjust height as necessary
@@ -176,20 +186,20 @@ function DashboardList() {
                     }}>
                         {users.filter((user) => user.role === 'user').map((user) => (
                             <Link to={`/users/${user.id}`} style={{ textDecoration: 'none' }} key={user.id}>
-                                <Card sx={{ backgroundColor: '#E4FFC2', padding: '20px', marginBottom: '10px' }}>
+                                <Card sx={{ backgroundColor: '#e3fae3', padding: '20px', marginBottom: '10px' }}>
                                     <CardActionArea>
                                         <CardContent>
                                             <Typography variant="h6" sx={{ fontWeight: 'bold', marginBottom: '10px' }}>
                                                 {user.email}
                                             </Typography>
                                             <Typography variant="body1">
-                                                Account created: {formatDistanceToNow(new Date(user.created_at), { addSuffix: true })}
+                                                Cuenta Creada: {formatDistanceToNow(new Date(user.created_at), { addSuffix: true })}
                                             </Typography>
                                             <Typography variant="body1">
-                                                Time Spent: {user.time_spent ? formatTimeSpent(user.time_spent) : 'N/A'}
+                                                Tiempo en Uso: {user.time_spent ? formatTimeSpent(user.time_spent) : 'N/A'}
                                             </Typography>
                                             <Typography variant="body1">
-                                                Task Completion: {getUserTaskCompletion(user.id)}
+                                                Progreso Total: {getUserTaskCompletion(user.id)} %
                                             </Typography>
                                         </CardContent>
                                     </CardActionArea>
@@ -204,62 +214,100 @@ function DashboardList() {
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <Typography variant="h5" sx={{color: '#111111', fontWeight: 'bold', marginBottom: '20px' }}>
-                                Topics with Most Difficulty
+                                Temas con Mayor Dificultad
                             </Typography>
                             {DifTops.map((topic) => {
                                 const topicName = topics.find(t => t.id === parseInt(topic.topic_id))?.name || 'Unknown Topic'; 
                                 return (
-                                    <Typography key={topic.topic_id} sx={{color: '#111111'}}>
-                                        {topicName}, Avg Completion: {topic.avgCompletion.toFixed(2)}%
-                                    </Typography>
+                                    <Card key={topic.topic_id} sx={{ backgroundColor: '#e3fae3', marginBottom: '10px' }}>
+                                        <CardContent>
+                                        <Typography variant="body1" sx={{ color: '#111111' }}>
+                                            {topicName}, Progreso Promedio: {topic.avgCompletion.toFixed(2)}%
+                                        </Typography>
+                                        </CardContent>
+                                    </Card>
                                 );
                             })}
                         </Grid>
 
                         <Grid item xs={12}>
                             <Typography variant="h5" sx={{color: '#111111', fontWeight: 'bold', marginBottom: '20px' }}>
-                                Topics with Least Difficulty
+                                Temas con Menor Dificultad
                             </Typography>
                             {EasTops.map((topic) => {
                                 const topicName = topics.find(t => t.id === parseInt(topic.topic_id))?.name || 'Unknown Topic'; 
                                 return (
-                                    <Typography key={topic.topic_id} sx={{color: '#111111'}}>
-                                        {topicName}, Avg Completion: {topic.avgCompletion.toFixed(2)}%
-                                    </Typography>
+                                    <Card key={topic.topic_id} sx={{ backgroundColor: '#e3fae3', marginBottom: '10px' }}>
+                                        <CardContent>
+                                        <Typography variant="body1" sx={{ color: '#111111' }}>
+                                            {topicName}, Progreso Promedio: {topic.avgCompletion.toFixed(2)}%
+                                        </Typography>
+                                        </CardContent>
+                                    </Card>
                                 );
                             })}
                         </Grid>
 
                         <Grid item xs={12}>
-                        <Typography variant="h5" sx={{color: '#111111', fontWeight: 'bold', marginBottom: '20px' }}>
-                                Highlighted Question
-                        </Typography>
-                        <FormControl sx={{ m: 1, minWidth: 220 }}>
-                            <InputLabel id="demo-simple-select-helper-label">Highlight</InputLabel>
-                            <Select
+                        <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: '20px', marginLeft: '50px' }}>
+                    <Typography variant="h5" sx={{ color: '#111111', fontWeight: 'bold', marginRight: '20px' }}>
+                        Pregunta Destacada
+                    </Typography>
+                    <FormControl sx={{ m: 1, minWidth: 220 }}>
+                        <InputLabel id="demo-simple-select-helper-label">Highlight</InputLabel>
+                        <Select
                             labelId="demo-simple-select-helper-label"
                             id="demo-simple-select-helper"
                             value={highlight}
                             label="Highlight"
                             onChange={handleChange}
-                            >
+                        >
                             <MenuItem value="">
-                                <em>None</em>
+                                <em>Ninguna</em>
                             </MenuItem>
-                            <MenuItem value={1}>Most Tried</MenuItem>
-                            <MenuItem value={2}>Easiest</MenuItem>
-                            <MenuItem value={3}>Largest</MenuItem>
-                            </Select>
-                        </FormControl>
+                            <MenuItem value={1}>Mas Intentada</MenuItem>
+                            <MenuItem value={2}>Menos Intentada</MenuItem>
+                            <MenuItem value={3}>Mas Larga</MenuItem>
+                            <MenuItem value={4}>Mas Pequeña</MenuItem>
+                        </Select>
+                    </FormControl>
+                </Box>
 
                         {highlight === 1 && (
                             <Grid item xs={12}>
-                                {MostTriedQuestions().map((question) => {
+                                <Typography variant="h6" sx={{ color: '#111111', fontWeight: 'bold', marginRight: '20px' }}>
+                                    3 Preguntas Mas Intentadas:
+                                </Typography>
+                                {MostTried.map((question) => {
                                     const questionName = questions.find(q => q.id === parseInt(question.question_id))?.question_text || 'Unknown Question';
                                     return (
-                                        <Typography key={question.question_id} sx={{color: '#111111'}}>
-                                            {questionName}, Total Tries: {question.totalTries}
+                                    <Card key={question.question_id} sx={{ backgroundColor: '#e3fae3', marginBottom: '5px' }}>
+                                        <CardContent>
+                                        <Typography variant="body1" sx={{ color: '#111111' }}>
+                                            {questionName}, Intentos Totales: {question.totalTries}
                                         </Typography>
+                                        </CardContent>
+                                    </Card>
+                                    );
+                                })}
+                            </Grid>
+                        )}
+
+                        {highlight === 2 && (
+                            <Grid item xs={12}>
+                                <Typography variant="h6" sx={{ color: '#111111', fontWeight: 'bold', marginRight: '20px' }}>
+                                    3 preguntas Menos Intentadas:
+                                </Typography>
+                                {LeastTried.map((question) => {
+                                    const questionName = questions.find(q => q.id === parseInt(question.question_id))?.question_text || 'Unknown Question';
+                                    return (
+                                        <Card key={question.question_id} sx={{ backgroundColor: '#e3fae3', marginBottom: '5px' }}>
+                                        <CardContent>
+                                        <Typography variant="body1" sx={{ color: '#111111' }}>
+                                            {questionName}, Intentos Totales: {question.totalTries}
+                                        </Typography>
+                                        </CardContent>
+                                    </Card>
                                     );
                                 })}
                             </Grid>
@@ -267,9 +315,31 @@ function DashboardList() {
 
                         {highlight === 3 && (
                             <Grid item xs={12}>
-                                <Typography  sx={{color: '#111111'}}>
-                                    {largestQuestion.question_text}
+                                <Typography variant="h6" sx={{ color: '#111111', fontWeight: 'bold', marginRight: '20px' }}>
+                                    Pregunta Mas Larga:
                                 </Typography>
+                                <Card sx={{ backgroundColor: '#e3fae3', marginBottom: '10px' }}>
+                                    <CardContent>
+                                    <Typography variant="body1" sx={{ color: '#111111' }}>
+                                        {largestQuestion.question_text}
+                                    </Typography>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                        )}
+
+                        {highlight === 4 && (
+                            <Grid item xs={12}>
+                                <Typography variant="h6" sx={{ color: '#111111', fontWeight: 'bold', marginRight: '20px' }}>
+                                    Pregunta Mas Pequeña:
+                                </Typography>
+                                <Card sx={{ backgroundColor: '#e3fae3', marginBottom: '10px' }}>
+                                    <CardContent>
+                                    <Typography variant="body1" sx={{ color: '#111111' }}>
+                                        {smallestQuestion.question_text}
+                                    </Typography>
+                                    </CardContent>
+                                </Card>
                             </Grid>
                         )}
 
