@@ -1,0 +1,18 @@
+<svg width="1092" height="571" viewBox="0 0 1092 571" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Section 7">
+<path d="M40 42C40 40.8954 40.8954 40 42 40H1050C1051.1 40 1052 40.8954 1052 42V529C1052 530.105 1051.1 531 1050 531H42C40.8955 531 40 530.105 40 529V42Z" fill="white"/>
+<g id="FA">
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Inter" font-size="36" font-style="italic" letter-spacing="0em"><tspan x="793" y="344.091">F₁</tspan></text>
+</g>
+<path id="Line 49" d="M845 296L835 290.226L835 301.774L845 296ZM802 297L836 297L836 295L802 295L802 297Z" fill="black"/>
+<path id="Line 50" d="M845 296L835 290.226L835 301.774L845 296ZM802 297L836 297L836 295L802 295L802 297Z" fill="black"/>
+<path id="Line 51" d="M769 231L760.34 246H777.66L769 231ZM767.5 244.5V431H770.5V244.5H767.5Z" fill="black"/>
+<text id="2m" fill="black" xml:space="preserve" style="white-space: pre" font-family="Inter" font-size="32" font-style="italic" letter-spacing="0em"><tspan x="633" y="178.636">2m</tspan></text>
+<line id="Line 52" x1="546.5" y1="140" x2="546.5" y2="194" stroke="black"/>
+<line id="Line 53" x1="769.5" y1="140" x2="769.5" y2="194" stroke="black"/>
+<line id="Line 54" x1="546" y1="166.5" x2="621" y2="166.5" stroke="black"/>
+<line id="Line 55" x1="694" y1="166.5" x2="769" y2="166.5" stroke="black"/>
+<rect id="Rectangle 5" x="140.5" y="201.5" width="811" height="29" fill="#D9D9D9" stroke="black"/>
+<circle id="Ellipse 1" cx="546" cy="216" r="22" fill="black"/>
+</g>
+</svg>

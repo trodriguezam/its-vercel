@@ -1,0 +1,26 @@
+<svg width="1205" height="913" viewBox="0 0 1205 913" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Section 9">
+<path d="M40 42C40 40.8954 40.8954 40 42 40H1163C1164.1 40 1165 40.8954 1165 42V871C1165 872.105 1164.1 873 1163 873H42C40.8954 873 40 872.105 40 871V42Z" fill="white"/>
+<rect id="Rectangle 8" x="931.5" y="514.5" width="133" height="117" fill="#D9D9D9" stroke="black"/>
+<rect id="Rectangle 7" x="312.5" y="140.5" width="259" height="220" fill="#D9D9D9" stroke="black"/>
+<path id="Line 90" d="M140 262L150 267.774V256.226L140 262ZM149 263H312V261H149V263Z" fill="black"/>
+<g id="FA">
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Inter" font-size="36" font-style="italic" letter-spacing="0em"><tspan x="209" y="237.091">F₁</tspan></text>
+<!-- <text fill="black" xml:space="preserve" style="white-space: pre" font-family="Inter" font-size="36" font-style="italic" letter-spacing="0em"><tspan x="230.129" y="237.091">A</tspan></text> -->
+</g>
+<path id="Line 91" d="M246 199L236 193.226L236 204.774L246 199ZM216 200L237 200L237 198L216 198L216 200Z" fill="black"/>
+<path id="Line 92" d="M246 199L236 193.226L236 204.774L246 199ZM216 200L237 200L237 198L216 198L216 200Z" fill="black"/>
+<text id="m1" fill="black" xml:space="preserve" style="white-space: pre" font-family="Inter" font-size="48" font-style="italic" letter-spacing="0em"><tspan x="416" y="261.955">m₁</tspan></text>
+<text id="m2" fill="black" xml:space="preserve" style="white-space: pre" font-family="Inter" font-size="48" font-style="italic" letter-spacing="0em"><tspan x="973" y="572.955">m₂</tspan></text>
+<line id="Line 86" x1="245.002" y1="360.4" x2="907.002" y2="362.4" stroke="black" stroke-width="1.2"/>
+<line id="Line 87" x1="907.6" y1="363" x2="907.6" y2="773" stroke="black" stroke-width="1.2"/>
+<line id="Line 89" x1="999" y1="321" x2="999" y2="514" stroke="black" stroke-width="2"/>
+<circle id="Ellipse 2" cx="940.5" cy="320.5" r="58" fill="#D9D9D9" stroke="black"/>
+<line id="Line 88" x1="941" y1="263" x2="572" y2="263" stroke="black" stroke-width="2"/>
+</g>
+<!-- <g id="Rectangle">
+<rect x="40" y="4" width="61.125" height="30" rx="3" fill="white"/>
+<rect x="40.5" y="4.5" width="60.125" height="29" rx="2.5" stroke="black" stroke-opacity="0.2"/>
+</g>
+<text id="Section 9_2" fill="black" xml:space="preserve" style="white-space: pre" font-family="Inter" font-size="11" letter-spacing="0em"><tspan x="46" y="21.5">Section 9</tspan></text> -->
+</svg>

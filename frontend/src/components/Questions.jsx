@@ -5,10 +5,20 @@ import { Button, Typography, FormControl, Card, CardContent } from '@mui/materia
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { Box } from '@mui/system';
-import  Dcl from '../utils/SvgEditor'
 import { set } from 'date-fns';
 import { setIn } from 'formik';
 import axios from 'axios';
+
+import SimpleGravedad from '../assets/gravedad/SimpleGravedad.svg?react';
+import ComplexGravedad from '../assets/gravedad/ComplexGravedad.svg?react';
+import SimpleTiposFuerza from '../assets/tiposFuerza/SimpleTiposFuerza.svg?react';
+import ComplexTiposFuerza from '../assets/tiposFuerza/ComplexTiposFuerza.svg?react';
+import SimpleDCL from '../assets/dcl/SimpleDCL.svg?react';
+import ComplexDCL from '../assets/dcl/ComplexDCL.svg?react';
+import SimpleEquilibrio from '../assets/equilibrio/SimpleEquilibrio.svg?react';
+import ComplexEquilibrio from '../assets/equilibrio/ComplexEquilibrio.svg?react';
+import SimplePoleas from '../assets/poleas/SimplePoleas.svg?react';
+import ComplexPoleas from '../assets/poleas/ComplexPoleas.svg?react';
 
 function QuestionsList() {
     const { taskId } = useParams();
@@ -88,89 +98,102 @@ function QuestionsList() {
     }, []);
 
     function DLCComponent( {DLCType} ) {
-        if (DLCType === 'Simple') { 
+        // if (DLCType === 'Simple') { 
+        //     return (
+        //         <>
+        //             <Dcl 
+        //                 type={'Simple'}
+        //                 keys={['horizontal-plane', 'body', 'body-center', randomDir, directions.filter(dir => dir !== randomDir)[0]]} 
+        //                 modifications={[
+        //                     {id: 'value', newText: r1*10},
+        //                     {id: 'sub', newText: ''},
+        //                     {id: 'name-vector', newText: ''},
+        //                 ]}
+        //             />
+        //         </>
+        //     )
+        // } else if (DLCType === 'Mid' ){
+        //     return (
+        //         <>
+        //             <Dcl 
+        //                 type={'Mid'}
+        //                 keys={['horizontal-plane', 'body', 'body-center', 'left']}
+        //             />
+        //         </>
+        //     )
+        // } else if (DLCType === 'Complex') {
+        //     return (
+        //         <>
+        //             <Dcl 
+        //                 type={'Complex'}
+        //                 keys={['inclined-plane', 'body', 'body-center', 'blue', 'pink', 'blue-pink-arch']}
+        //                 modifications={[
+        //                     {id: 'blue-value', newText: r1*10},
+        //                     {id: 'pink-value', newText: r2*10},
+        //                     {id: 'blue-pink-arch-value', newText: r3*10},
+        //                 ]}
+        //             />
+        //         </>
+        //     )
+        // } 
+        if (DLCType === 'SimpleGravedad') {
             return (
                 <>
-                    <Dcl 
-                        type={'Simple'}
-                        keys={['horizontal-plane', 'body', 'body-center', randomDir, directions.filter(dir => dir !== randomDir)[0]]} 
-                        modifications={[
-                            {id: 'value', newText: r1*10},
-                            {id: 'sub', newText: ''},
-                            {id: 'name-vector', newText: ''},
-                        ]}
-                    />
-                </>
-            )
-        } else if (DLCType === 'Mid' ){
-            return (
-                <>
-                    <Dcl 
-                        type={'Mid'}
-                        keys={['horizontal-plane', 'body', 'body-center', 'left']}
-                    />
-                </>
-            )
-        } else if (DLCType === 'Complex') {
-            return (
-                <>
-                    <Dcl 
-                        type={'Complex'}
-                        keys={['inclined-plane', 'body', 'body-center', 'blue', 'pink', 'blue-pink-arch']}
-                        modifications={[
-                            {id: 'blue-value', newText: r1*10},
-                            {id: 'pink-value', newText: r2*10},
-                            {id: 'blue-pink-arch-value', newText: r3*10},
-                        ]}
-                    />
-                </>
-            )
-        } else if (DLCType === 'SimpleGravedad') {
-            return (
-                <>
-                
+                    <SimpleGravedad />
                 </>
             )
         } else if (DLCType === 'ComplexGravedad') {
             return (
                 <>
-                
+                    <ComplexGravedad />
                 </>
             )
         } else if (DLCType === 'SimpleTiposFuerza') {
             return (
                 <>
-                
+                    <SimpleTiposFuerza />
                 </>
             )
         } else if (DLCType === 'ComplexTiposFuerza') {
             return (
                 <>
-                
+                    <ComplexTiposFuerza />
                 </>
             )
         } else if (DLCType === 'SimpleDCL') {
             return (
                 <>
-                
+                    <SimpleDCL />
                 </>
             )
         } else if (DLCType === 'ComplexDCL') {
             return (
                 <>
-                
+                    <ComplexDCL />
+                </>
+            )
+        } else if (DLCType === 'SimpleEquilibrio') {
+            return (
+                <>
+                    <SimpleEquilibrio />
+                </>
+            )
+        } else if (DLCType === 'ComplexEquilibrio') {
+            return (
+                <>
+                    <ComplexEquilibrio />
                 </>
             )
         } else if (DLCType === 'SimplePoleas') {
             return (
                 <>
-                
+                    <SimplePoleas />
                 </>
             )
         } else if (DLCType === 'ComplexPoleas') {
             return (
                 <>
-                
+                    <ComplexPoleas />
                 </>
             )
         }

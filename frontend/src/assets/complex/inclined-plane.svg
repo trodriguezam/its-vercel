@@ -1,6 +1,0 @@
-<svg class='plane' id='inclined-plane' width="800" height="600" viewBox="0 0 800 600" xml:space="preserve">
-  <g transform="matrix(5.61 0 0 3.17 284.12 321.67)">
-    <polygon style="stroke: rgb(0,0,0); stroke-width: 0.1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(197,238,180); fill-rule: nonzero; opacity: 1;" points="-50,-50 50,50 -50,50 "/>
-  </g>
-</svg>
-	

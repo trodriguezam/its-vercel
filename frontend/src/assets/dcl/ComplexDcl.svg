@@ -1,0 +1,11 @@
+<svg width="1017" height="711" viewBox="0 0 1017 711" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Section 5">
+<path d="M40 42C40 40.8954 40.8954 40 42 40H975C976.105 40 977 40.8954 977 42V669C977 670.105 976.105 671 975 671H42C40.8954 671 40 670.105 40 669V42Z" fill="white"/>
+<rect id="Rectangle 10" x="453.183" y="140.683" width="155" height="161" transform="rotate(30 453.183 140.683)" fill="#D9D9D9" stroke="black"/>
+<text id="m1" transform="translate(454 215)" fill="black" xml:space="preserve" style="white-space: pre" font-family="Inter" font-size="48" font-style="italic" letter-spacing="0em"><tspan x="0" y="38.9545">m₁</tspan></text>
+<line id="Line 95" x1="224" y1="570.5" x2="877" y2="570.5" stroke="black"/>
+<line id="Line 96" x1="140.25" y1="145.567" x2="875.506" y2="570.067" stroke="black"/>
+<path id="Vector 1" d="M664 571C655 547.167 647.9 492.6 691.5 465" stroke="black"/>
+<text id="30&#194;&#176;" fill="black" xml:space="preserve" style="white-space: pre" font-family="Inter" font-size="36" font-style="italic" letter-spacing="0em"><tspan x="682" y="544.091">30°</tspan></text>
+</g>
+</svg>

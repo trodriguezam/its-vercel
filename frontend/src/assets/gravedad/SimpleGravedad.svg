@@ -1,0 +1,16 @@
+<svg width="1247" height="544" viewBox="0 0 1247 544" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Section 1">
+<path d="M40 42C40 40.8954 40.8954 40 42 40H1205C1206.1 40 1207 40.8954 1207 42V502C1207 503.105 1206.1 504 1205 504H42C40.8954 504 40 503.105 40 502V42Z" fill="white"/>
+<rect id="Rectangle 2" x="420.5" y="140.5" width="126" height="197" fill="#D9D9D9" stroke="black"/>
+<rect id="Rectangle 3" x="693.5" y="140.5" width="292" height="197" fill="#D9D9D9" stroke="black"/>
+<line id="Line 30" x1="148" y1="337.5" x2="1107" y2="337.5" stroke="black"/>
+<text id="m1" fill="black" xml:space="preserve" style="white-space: pre" font-family="Inter" font-size="48" font-style="italic" letter-spacing="0em"><tspan x="458" y="242.955">m₁</tspan></text>
+<text id="m1_2" fill="black" xml:space="preserve" style="white-space: pre" font-family="Inter" font-size="48" font-style="italic" letter-spacing="0em"><tspan x="814" y="246.955">m₂</tspan></text>
+<line id="Line 31" x1="840.5" y1="338" x2="840.5" y2="368" stroke="black"/>
+<line id="Line 33" x1="148.5" y1="338" x2="148.5" y2="368" stroke="black"/>
+<line id="Line 32" x1="484.5" y1="338" x2="484.5" y2="368" stroke="black"/>
+<text id="0" fill="black" xml:space="preserve" style="white-space: pre" font-family="Inter" font-size="32" letter-spacing="0em"><tspan x="140" y="396.136">0</tspan></text>
+<text id="2 m" fill="black" xml:space="preserve" style="white-space: pre" font-family="Inter" font-size="32" letter-spacing="0em"><tspan x="458" y="396.136">2m</tspan></text>
+<text id="4 m" fill="black" xml:space="preserve" style="white-space: pre" font-family="Inter" font-size="32" letter-spacing="0em"><tspan x="818" y="396.136">4m</tspan></text>
+</g>
+</svg>

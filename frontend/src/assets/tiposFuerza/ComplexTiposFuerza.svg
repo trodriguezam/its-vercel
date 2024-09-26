@@ -1,0 +1,19 @@
+<svg width="1165" height="503" viewBox="0 0 1165 503" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Section 3">
+<path d="M40 42C40 40.8954 40.8954 40 42 40H1123C1124.1 40 1125 40.8954 1125 42V461C1125 462.105 1124.1 463 1123 463H42C40.8954 463 40 462.105 40 461V42Z" fill="white"/>
+<rect id="Rectangle 4" x="359.5" y="140.5" width="438" height="222" fill="#D9D9D9" stroke="black"/>
+<line id="Line 34" x1="140" y1="362.5" x2="1025" y2="362.5" stroke="black"/>
+<path id="Line 35" d="M359 258L349 252.226V263.774L359 258ZM187 259H350V257H187V259Z" fill="black"/>
+<g id="FA">
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Inter" font-size="36" font-style="italic" letter-spacing="0em"><tspan x="256" y="233.091">F₁</tspan></text>
+</g>
+<path id="Line 36" d="M293 195L283 189.226L283 200.774L293 195ZM263 196L284 196L284 194L263 194L263 196Z" fill="black"/>
+<path id="Line 42" d="M293 195L283 189.226L283 200.774L293 195ZM263 196L284 196L284 194L263 194L263 196Z" fill="black"/>
+<path id="Line 37" d="M798 258L808 263.774V252.226L798 258ZM807 259H970V257H807V259Z" fill="black"/>
+<g id="FB">
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Inter" font-size="36" font-style="italic" letter-spacing="0em"><tspan x="867" y="233.091">F₂</tspan></text>
+</g>
+<path id="Line 38" d="M904 195L894 189.226L894 200.774L904 195ZM874 196L895 196L895 194L874 194L874 196Z" fill="black"/>
+<text id="m1" fill="black" xml:space="preserve" style="white-space: pre" font-family="Inter" font-size="48" font-style="italic" letter-spacing="0em"><tspan x="553" y="253.955">m₁</tspan></text>
+</g>
+</svg>
