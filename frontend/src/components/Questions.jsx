@@ -353,9 +353,10 @@ function QuestionsList() {
         });
     };
 
-    const score = userQuestions.filter(
-        userQuestion => userQuestion.user_id === currentUser?.id && userQuestion.correct
-    ).length;
+    const score = userQuestions.filter(userQuestion => {
+        const question = questions.find(q => q.id === userQuestion.question_id && q.task_id === parseInt(taskId));
+        return userQuestion.user_id === currentUser?.id && userQuestion.correct && question;
+    }).length;
 
     const scorePercentage = (score / Allquestions.length) * 100;
 
