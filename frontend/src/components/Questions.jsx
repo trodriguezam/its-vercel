@@ -13,8 +13,8 @@ import SimpleGravedad from '../assets/gravedad/SimpleGravedad.svg?react';
 import ComplexGravedad from '../assets/gravedad/ComplexGravedad.svg?react';
 import SimpleTiposFuerza from '../assets/tiposFuerza/SimpleTiposFuerza.svg?react';
 import ComplexTiposFuerza from '../assets/tiposFuerza/ComplexTiposFuerza.svg?react';
-import SimpleDCL from '../assets/dcl/SimpleDCL.svg?react';
-import ComplexDCL from '../assets/dcl/ComplexDCL.svg?react';
+import SimpleDCL from '../assets/dcl/SimpleDcl.svg?react';
+import ComplexDCL from '../assets/dcl/ComplexDcl.svg?react';
 import SimpleEquilibrio from '../assets/equilibrio/SimpleEquilibrio.svg?react';
 import ComplexEquilibrio from '../assets/equilibrio/ComplexEquilibrio.svg?react';
 import SimplePoleas from '../assets/poleas/SimplePoleas.svg?react';
@@ -403,9 +403,10 @@ function QuestionsList() {
         });
     };
 
-    const score = userQuestions.filter(
-        userQuestion => userQuestion.user_id === currentUser?.id && userQuestion.correct
-    ).length;
+    const score = userQuestions.filter(userQuestion => {
+        const question = questions.find(q => q.id === userQuestion.question_id && q.task_id === parseInt(taskId));
+        return userQuestion.user_id === currentUser?.id && userQuestion.correct && question;
+    }).length;
 
     const scorePercentage = (score / Allquestions.length) * 100;
 
