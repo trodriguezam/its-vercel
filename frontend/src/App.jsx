@@ -1,4 +1,3 @@
-// src/App.js
 import TopicList from './components/Topics';
 import TasksList from './components/Tasks';
 import HomePage from './components/Home';
@@ -13,7 +12,7 @@ import { Toolbar } from '@mui/material';
 import {  Menu, Search } from '@mui/icons-material';
 import QuestionsList from './components/Questions';
 import DashboardList from './components/Dashboards';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom'; // Import useLocation
 import { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import axiosInstance from './api/axiosInstance';
@@ -21,6 +20,7 @@ import axiosInstance from './api/axiosInstance';
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
   const navigate = useNavigate();
+  const location = useLocation(); // Get the current location
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('currentUser'));
@@ -99,14 +99,23 @@ function App() {
             )}
           </Box>
           
-          <Box sx={{ marginLeft: 'auto' }}>
+          <Box sx={{ marginLeft: 'auto', display: 'flex', alignItems: 'center' }}>
             {currentUser ? (
               <>
-                <Button color='#111111' onClick={handleLogout}>
-                  <Typography variant="body1" component="div" sx={{ color: '#111111' }}>
-                    Logout
-                  </Typography>
-                </Button>
+                {(currentUser.role === "professor" || (currentUser.role === "user" && location.pathname === '/topics')) ? (
+                  <Button color='#111111' onClick={handleLogout}>
+                    <Typography variant="body1" component="div" sx={{ color: '#111111' }}>
+                      Logout
+                    </Typography>
+                  </Button>
+                ) : (
+                  // Show message when user is not on the topics page
+                  currentUser.role === "user" && location.pathname !== '/topics' && (
+                    <Typography variant="body1" component="div" sx={{ color: '#111111', marginLeft: '10px' }}>
+                      Finaliza sesión en Temas
+                    </Typography>
+                  )
+                )}
               </>
             ) : (
               <>
