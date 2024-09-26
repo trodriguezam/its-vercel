@@ -1,0 +1,20 @@
+<svg width="1155" height="534" viewBox="0 0 1155 534" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Section 6">
+<path d="M40 42C40 40.8954 40.8954 40 42 40H1113C1114.1 40 1115 40.8954 1115 42V492C1115 493.105 1114.1 494 1113 494H42C40.8954 494 40 493.105 40 492V42Z" fill="white"/>
+<g id="FA">
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Inter" font-size="36" font-style="italic" letter-spacing="0em"><tspan x="853" y="307.091">F₁</tspan></text>
+</g>
+<path id="Line 43" d="M905 259L895 253.226L895 264.774L905 259ZM862 260L896 260L896 258L862 258L862 260Z" fill="black"/>
+<path id="Line 44" d="M905 259L895 253.226L895 264.774L905 259ZM862 260L896 260L896 258L862 258L862 260Z" fill="black"/>
+<path id="Polygon 1" d="M331.573 279L380.5 194.993L429.427 279H331.573Z" fill="#D9D9D9" stroke="black"/>
+<line id="Line 39" x1="140" y1="192" x2="1015" y2="192" stroke="black" stroke-width="4"/>
+<path id="Line 40" d="M829 194L820.34 209H837.66L829 194ZM827.5 207.5V394H830.5V207.5H827.5Z" fill="black"/>
+<path id="Line 41" d="M577 394L585.66 379H568.34L577 394ZM575.5 194V380.5H578.5V194H575.5Z" fill="black"/>
+<text id="100N" fill="black" xml:space="preserve" style="white-space: pre" font-family="Inter" font-size="32" font-style="italic" letter-spacing="0em"><tspan x="589" y="305.636">100N</tspan></text>
+<text id="X" fill="black" xml:space="preserve" style="white-space: pre" font-family="Inter" font-size="32" font-style="italic" letter-spacing="0em"><tspan x="590" y="178.636">X</tspan></text>
+<line id="Line 45" x1="381.5" y1="140" x2="381.5" y2="194" stroke="black"/>
+<line id="Line 46" x1="829.5" y1="140" x2="829.5" y2="194" stroke="black"/>
+<line id="Line 47" x1="381" y1="166.5" x2="578" y2="166.5" stroke="black"/>
+<line id="Line 48" x1="630" y1="166.5" x2="829" y2="166.5" stroke="black"/>
+</g>
+</svg>
