@@ -228,14 +228,14 @@ Answer.create(question_id: question10.id, answer_text: "Fuerza normal", correct:
 task4 = Task.create(name: "DCL de un objeto en reposo", topic_id: topic3.id, task_type: "Development", difficulty: 1)
 task5 = Task.create(name: "DCL de un objeto en movimiento en una pendiente", topic_id: topic3.id, task_type: "Development", difficulty: 2)
 
-Question.create(task_id: task4.id, question_text: "Dibuja el diagrama de cuerpo libre de un bloque en reposo sobre una superficie horizontal. Identifica las fuerzas que actúan sobre él.", hint:
-    "Considera fuerzas de peso, normal y fricción si es necesario.;
-    Asegúrate de incluir todas las fuerzas que afectan al bloque, incluyendo el peso, la fuerza normal, y la fricción si está presente.;
-    Recuerda que las fuerzas deben ser representadas como vectores con magnitud y dirección.")
-Question.create(task_id: task5.id, question_text: "Determina las fuerzas en el DCL de un objeto que se mueve sobre una pendiente con fricción. Descompón las fuerzas en componentes perpendiculares y paralelas a la pendiente.", hint:
-    "Descompón las fuerzas en los ejes X y Y respecto a la pendiente.;
-    Identifica las fuerzas que actúan sobre el objeto, incluyendo el peso y la fricción, y dibuja un diagrama para visualizarlas.;
-    Asegúrate de usar ángulos correctos al descomponer las fuerzas en componentes.")
+Question.create(task_id: task4.id, question_text: "Un bloque de 6 kg está en reposo suspendido por una cuerda vertical. Calcula la tensión en la cuerda.", hint:
+    "Considera que la tensión en la cuerda está equilibrada con la fuerza de gravedad  m ⋅ g.;
+    Recuerda que la tensión se calcula como T = m ⋅ g.;
+    En este caso la magnitud de la tensión será igual a la del peso porque no hay movimiento.")
+Question.create(task_id: task5.id, question_text: "Un objeto de 10 kg está sobre una pendiente inclinada 30° respecto a la horizontal. Calcula la magnitud de la fuerza normal que actúa sobre el objeto. Asume g = 10 m/s²", hint:
+    "Dibuja el DCL del objeto y descompón las fuerzas en los ejes X y Y respecto a la pendiente.;
+    Enfócate en descomponer la fuerza de gravedad m ⋅ g en sus componentes x e y.;
+    Usa la fórmula para la componente perpendicular al plano: F⊥ = m ⋅ g ⋅ cos(θ).")
 
 
 # ========================================================================================================
@@ -391,8 +391,8 @@ Question.create(task_id: task4.id, question_text: "Calcula la fuerza necesaria p
     Considera cómo la inclinación de la superficie afectaría la fuerza normal si el bloque no está en una superficie horizontal.;
     Compara los valores de la fuerza de rozamiento con otras fuerzas que actúan sobre el bloque.")
 Question.create(task_id: task5.id, question_text: "Cuánto debiese valer la fuerza que actúa sobre m1 para que el sistema esté en equilibrio", hint:
-    "La eficiencia es igual a la relación entre la fuerza útil y la fuerza aplicada, multiplicada por 100.;
-    Analiza cómo el rozamiento afecta la fuerza útil y la fuerza aplicada en el sistema.;
-    Recuerda que la eficiencia se expresa como un porcentaje; asegúrate de multiplicar por 100 al final del cálculo.")
+    "Usa el principio de conservación de la energía: la fuerza aplicada en una polea se transmite a la otra.;
+    Considera cómo la fuerza aplicada en una polea afecta a las fuerzas en el otro lado del sistema.;
+    Recuerda que la fuerza aplicada en una polea se divide entre las dos masas del sistema.")
 
 puts "Seed finished"
