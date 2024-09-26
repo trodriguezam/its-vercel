@@ -6,12 +6,11 @@
 # Read more: https://github.com/cyu/rack-cors
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
-    allow do
-      origins '*'  # O el origen de tu aplicación React
-  
-      resource '*',
-        headers: :any,
-        methods: [:get, :post, :put, :patch, :delete, :options, :head],
-        credentials: false
-    end
+  allow do
+    origins 'https://its-vercel.vercel.app'  # Allow your Vercel frontend
+    resource '*',
+      headers: :any,
+      methods: [:get, :post, :put, :patch, :delete, :options, :head],
+      credentials: true
+  end
 end
