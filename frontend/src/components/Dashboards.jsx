@@ -49,9 +49,9 @@ function DashboardList() {
     }, []);
 
     const getUserTaskCompletion = (userId) => {
-        const userTasksForUser = userTasks.filter((userTask) => userTask.user_id === userId);
-        const userTasksCompleted = userTasksForUser.filter((userTask) => userTask.completion === 100);
-        return `${(userTasksCompleted.length / allTasks.length).toFixed(2)}`;
+        const userTopicsForUser = userTopics.filter((ut) => ut.user_id === userId);
+        const sumCompletion = userTopicsForUser.reduce((sum, ut) => sum + ut.completion, 0);
+        return `${(sumCompletion / topics.length).toFixed(2)}`;
     };
 
     const formatTimeSpent = (seconds) => {
