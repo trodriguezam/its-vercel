@@ -354,8 +354,8 @@ function QuestionsList() {
     };
 
     const score = userQuestions.filter(userQuestion => {
-        const question = questions.find(q => q.id === userQuestion.question_id && q.task_id === parseInt(taskId));
-        return userQuestion.user_id === currentUser?.id && userQuestion.correct && question;
+        const QS = Allquestions.find(q => q.id === userQuestion.question_id && q.task_id === parseInt(taskId));
+        return userQuestion.user_id === currentUser?.id && userQuestion.correct && QS;
     }).length;
 
     const scorePercentage = (score / Allquestions.length) * 100;
