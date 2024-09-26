@@ -74,7 +74,7 @@ Question.create(task_id: task4.id, question_text: "Calcula el centro de gravedad
     "Usa la fórmula: (m1*x1 + m2*x2) / (m1 + m2);
     Recuerda que el centro de gravedad se encuentra en la posición donde la masa total del sistema actúa.;
     Si necesitas, puedes dibujar un gráfico con las posiciones de las masas para visualizar mejor el problema.")
-Question.create(task_id: task5.id, question_text: "Determina el centro de gravedad de un sistema de 3 masas en un plano cartesiano", hint:
+Question.create(task_id: task5.id, question_text: "Determina el centro de gravedad de un sistema de 3 masas en un plano cartesiano, con m1=M1 en (x1, y1), m2=M2 en (x2, y2), y m3=M3 en (x3, y3)", hint:
     "Descompón en componentes X y Y y calcula por separado;
     Asegúrate de que las posiciones de las masas estén correctamente representadas en el plano cartesiano.;
     Utiliza las fórmulas X_cg = (m1*x1 + m2*x2 + m3*x3) / (m1 + m2 + m3) y Y_cg = (m1*y1 + m2*y2 + m3*y3) / (m1 + m2 + m3)")
@@ -153,7 +153,7 @@ Question.create(task_id: task4.id, question_text: "Calcula la fuerza de fricció
     "Usa la fórmula: F_roz = μ * N, donde N es el peso del objeto;
     Recuerda que la fuerza normal en una superficie horizontal es igual al peso del objeto.;
     Comprueba la dirección de la fuerza de fricción; siempre actúa en dirección opuesta al movimiento.")
-Question.create(task_id: task5.id, question_text: "Determina la fuerza neta que actúa sobre un objeto de 5 kg si se le aplica una fuerza de 20 N hacia la derecha y una de 10 N hacia la izquierda", hint:
+Question.create(task_id: task5.id, question_text: "Determina la fuerza neta que actúa sobre un objeto de 5 kg si se le aplica una fuerza de 10 N hacia la derecha y una de 10 N hacia la izquierda", hint:
     "Resta las fuerzas opuestas para encontrar la fuerza neta;
     Asegúrate de considerar el signo de las fuerzas, ya que una fuerza hacia la derecha es positiva y una hacia la izquierda es negativa.;
     Puedes representar las fuerzas en un diagrama para facilitar el cálculo.")
@@ -307,7 +307,7 @@ Answer.create(question_id: question10.id, answer_text: "Que la suma de las fuerz
 task4 = Task.create(name: "Cálculo de Equilibrio Traslacional", topic_id: topic4.id, task_type: "Development", difficulty: 1)
 task5 = Task.create(name: "Cálculo de Equilibrio Rotacional", topic_id: topic4.id, task_type: "Development", difficulty: 2)
 
-Question.create(task_id: task4.id, question_text: "Calcula la fuerza necesaria para equilibrar una barra uniforme de 4 m y 100 N, apoyada en un punto a 1 m de un extremo", hint:
+Question.create(task_id: task4.id, question_text: "Si hay una fuerza a X metros del pivote, cuánto tendría que valer esta para que la barra de 4 metros, con un peso de 100 N, esté en equilibrio.", hint:
     "Usa el principio de momentos: la suma de los momentos respecto a cualquier punto debe ser cero.;
      Identifica el punto de aplicación de la fuerza que deseas calcular para equilibrar la barra.;
      Recuerda que la suma de los momentos en equilibrio debe ser cero, así que establece una ecuación basada en eso.")
@@ -386,11 +386,11 @@ Answer.create(question_id: question10.id, answer_text: "El peso de la cuerda", c
 task4 = Task.create(name: "Cálculo de Fuerza de Rozamiento", topic_id: topic5.id, task_type: "Development", difficulty: 1)
 task5 = Task.create(name: "Cálculo de Eficiencia en Sistema de Poleas", topic_id: topic5.id, task_type: "Development", difficulty: 2)
 
-Question.create(task_id: task4.id, question_text: "Calcula la fuerza de rozamiento de un bloque de 5 kg en una superficie horizontal con un coeficiente de rozamiento de 0.2", hint:
+Question.create(task_id: task4.id, question_text: "Calcula la fuerza necesaria para que un bloque de 5 kg entre en movimiento en una superficie con un coeficiente de roce de 0.2", hint:
     "Usa la fórmula: F_roz = μ * N, donde N es la fuerza normal (igual al peso del objeto en este caso).;
     Considera cómo la inclinación de la superficie afectaría la fuerza normal si el bloque no está en una superficie horizontal.;
     Compara los valores de la fuerza de rozamiento con otras fuerzas que actúan sobre el bloque.")
-Question.create(task_id: task5.id, question_text: "Determina la eficiencia de un sistema de poleas donde se requiere una fuerza de 200 N para levantar un peso de 400 N. Considera que el rozamiento reduce la eficiencia del sistema.", hint:
+Question.create(task_id: task5.id, question_text: "Cuánto debiese valer la fuerza que actúa sobre m1 para que el sistema esté en equilibrio", hint:
     "La eficiencia es igual a la relación entre la fuerza útil y la fuerza aplicada, multiplicada por 100.;
     Analiza cómo el rozamiento afecta la fuerza útil y la fuerza aplicada en el sistema.;
     Recuerda que la eficiencia se expresa como un porcentaje; asegúrate de multiplicar por 100 al final del cálculo.")
