@@ -39,6 +39,7 @@ function QuestionsList() {
     const [isCompleted, setIsCompleted] = useState(false);
     const [quizStarted, setQuizStarted] = useState(false);
     const [hint, setHint] = useState(0);
+    const [hintDev, setHintDev] = useState(-1);
     const [hint1, setHint1] = useState(-1);
     const [hint2, setHint2] = useState(-1);
     const [hintsArray, setHintsArray] = useState([]);
@@ -160,44 +161,6 @@ function QuestionsList() {
     }, [topicName, taskDifficulty]);
 
     function DLCComponent( {DLCType} ) {
-        // if (DLCType === 'Simple') { 
-        //     return (
-        //         <>
-        //             <Dcl 
-        //                 type={'Simple'}
-        //                 keys={['horizontal-plane', 'body', 'body-center', randomDir, directions.filter(dir => dir !== randomDir)[0]]} 
-        //                 modifications={[
-        //                     {id: 'value', newText: r1*10},
-        //                     {id: 'sub', newText: ''},
-        //                     {id: 'name-vector', newText: ''},
-        //                 ]}
-        //             />
-        //         </>
-        //     )
-        // } else if (DLCType === 'Mid' ){
-        //     return (
-        //         <>
-        //             <Dcl 
-        //                 type={'Mid'}
-        //                 keys={['horizontal-plane', 'body', 'body-center', 'left']}
-        //             />
-        //         </>
-        //     )
-        // } else if (DLCType === 'Complex') {
-        //     return (
-        //         <>
-        //             <Dcl 
-        //                 type={'Complex'}
-        //                 keys={['inclined-plane', 'body', 'body-center', 'blue', 'pink', 'blue-pink-arch']}
-        //                 modifications={[
-        //                     {id: 'blue-value', newText: r1*10},
-        //                     {id: 'pink-value', newText: r2*10},
-        //                     {id: 'blue-pink-arch-value', newText: r3*10},
-        //                 ]}
-        //             />
-        //         </>
-        //     )
-        // } 
         if (DLCType === 'SimpleGravedad') {
             return (
                 <>
@@ -244,18 +207,6 @@ function QuestionsList() {
             return (
                 <>
                     <ComplexEquilibrio />
-                </>
-            )
-        } else if (DLCType === 'SimpleEquilibrio') {
-            return (
-                <>
-                
-                </>
-            )
-        } else if (DLCType === 'ComplexEquilibrio') {
-            return (
-                <>
-                
                 </>
             )
         } else if (DLCType === 'SimplePoleas') {
@@ -404,8 +355,8 @@ function QuestionsList() {
     };
 
     const score = userQuestions.filter(userQuestion => {
-        const question = questions.find(q => q.id === userQuestion.question_id && q.task_id === parseInt(taskId));
-        return userQuestion.user_id === currentUser?.id && userQuestion.correct && question;
+        const QS = Allquestions.find(q => q.id === userQuestion.question_id && q.task_id === parseInt(taskId));
+        return userQuestion.user_id === currentUser?.id && userQuestion.correct && QS;
     }).length;
 
     const scorePercentage = (score / Allquestions.length) * 100;
@@ -479,78 +430,75 @@ function QuestionsList() {
 
     const handleInputSumbit = () => {
         if (SVGname === 'SimpleGravedad') {
-            if(Number(inputValue) === ((r1*l1 + r2*l2) / (r1 + r2))) {
+            const expected = (r1*2 + r2*4) / (r1 + r2);
+            if(Math.abs(Number(inputValue) - expected) <= 1) {
                 sendInputResult();
-            }
-        }
-        if (((Number(inputValue) === (r1*10)) && task.difficulty === 1) || (task.difficulty > 1 && (Number(inputValue) === (r2*10)))) {
-            sendInputResult();
+            } else setResult0(0);setHintDev(hintDev + 1);
+        } else if (SVGname === 'ComplexGravedad') {
+            const values = inputValue.replace(/[()]/g, '').split(',').map(Number);
+            const expected1 = (l1 * 2 + l3 * 3 + l5 * 1) / (6);
+            const expected2 = (l2 * 2 + l4 * 3 + l6 * 1) / (6);
+            console.log(values, expected1, expected2);
+            if (Math.abs(values[0] - expected1) <= 1 && Math.abs(values[1] - expected2) <= 1) {
+                sendInputResult();
+            } else setResult0(0);setHintDev(hintDev + 1);
+        } else if (SVGname === 'SimpleTiposFuerza') {
+            const expected = r1*10*0.3*10;
+            console.log(expected, inputValue);
+            if(Math.abs(Number(inputValue) - expected) <= 1) {
+                sendInputResult();
+            } else setResult0(0);setHintDev(hintDev + 1);
+        } else if (SVGname === 'ComplexTiposFuerza') {
+            const expcted = Math.abs(r1 - r2)*10;
+            console.log(expcted, inputValue);
+            if(Math.abs(Number(inputValue) - expcted) <= 1) {
+                sendInputResult();
+            } else setResult0(0);setHintDev(hintDev + 1);
+
+        } else if (SVGname === 'SimpleDCL') {
+            const expected = Math.abs(r1*10*10);
+            console.log(expected, inputValue);
+            if(Math.abs(Number(inputValue) - expected) <= 1) {
+                sendInputResult();
+            } else setResult0(0);setHintDev(hintDev + 1);
+
+        } else if (SVGname === 'ComplexDCL') {
+
+            const expected = Math.abs(r1*10*10*Math.cos(30*Math.PI/180));
+            console.log(expected, inputValue);
+            if(Math.abs(Number(inputValue) - expected) <= 1) {
+                sendInputResult();
+            } else setResult0(0);setHintDev(hintDev + 1);
+
+        } else if (SVGname === 'SimpleEquilibrio') {
+            const expected = 100/l1;
+            console.log(expected, inputValue);
+            if(Math.abs(Number(inputValue) - expected) <= 1) {
+                sendInputResult();
+            } else setResult0(0);setHintDev(hintDev + 1);
+        
+        } else if (SVGname === 'ComplexEquilibrio') {
+            const expected = r1*20;
+            console.log(expected, inputValue);
+            if(Math.abs(Number(inputValue) - expected) <= 1) {
+                sendInputResult();
+            } else setResult0(0);setHintDev(hintDev + 1);
+        } else if (SVGname === 'SimplePoleas') {
+            const expected = r1*10*0.2;
+            console.log(expected, inputValue);
+            if(Math.abs(Number(inputValue) - expected) <= 1) {
+                sendInputResult();
+            } else setResult0(0);setHintDev(hintDev + 1);
+        } else if (SVGname === 'ComplexPoleas') {
+            const expected = r1*100;
+            console.log(expected, inputValue);
+            if(Math.abs(Number(inputValue) - expected) <= 1) {
+                sendInputResult();
+            } else setResult0(0); setHintDev(hintDev + 1);
         } else {
-            setResult0(0);
+            console.log('Invalid SVG name');
         }
     }
-
-    const handleInputSumbit2 = () => {
-        // cambiar logica
-        if ((Number(inputValue1) === (r1*10)) && (Number(inputValue2) === (r2*10))) {
-            axiosInstance.get(`/user_tasks`)
-            .then((res) => {
-                const userTasks = res.data;
-                const existingTask = userTasks.find(userTask => {
-                    return userTask.task_id === task.id && userTask.user_id === currentUser.id;
-                });
-
-                if (existingTask) {
-                    axiosInstance.put(`/user_tasks/${existingTask.id}`, {
-                        task_id: taskId,
-                        user_id: currentUser.id,
-                        completion: 100
-                    })
-                    .then((response) => {
-                        console.log('Task updated:', response.data);
-                        navigate(`/topics/${task.topic_id}/tasks`);
-                    })
-                    .catch((error) => {
-                        console.error('Error updating task:', error);
-                    });
-                } else {
-                    axiosInstance.post(`/user_tasks`, {
-                        task_id: taskId,
-                        user_id: currentUser.id,
-                        completion: 100
-                    })
-                    .then((response) => {
-                        console.log('Task created:', response.data);
-                        navigate(`/topics/${task.topic_id}/tasks`);
-                    })
-                    .catch((error) => {
-                        console.error('Error creating task:', error);
-                    });
-                }
-            })
-            .catch((error) => {
-                console.error('Error fetching user tasks:', error);
-            });
-        } else if (Number(inputValue1) === (r1*10)) {
-            console.log('Incorrect Answer 2');
-            setResult1(2);
-            setResult2(0);
-            setHint2(hint2 + 1);
-        } else if (Number(inputValue2) === (r2*10)) {
-            console.log('Incorrect Answer 1');
-            setResult1(0);
-            setResult2(2);
-            setHint1(hint1 + 1);
-        } else {
-            console.log('Incorrect Answer');
-            setResult1(0);
-            setResult2(0);
-            setHint2(hint2 + 1);
-            setHint1(hint1 + 1);
-        }
-    }
-
-    
 
     function QuestionType({ question, task }) {
         if (task.task_type === 'Option') {
@@ -722,10 +670,14 @@ function QuestionsList() {
                             <br />
                             <br />
                                 <>
-                                    <Typography variant="h3" gutterBottom color='#111111'>
+                                    <Typography variant="h4" gutterBottom color='#111111'>
                                         {Allquestions[0].question_text.replace('{valor1}', r1*10).replace('{valor2}', r2*10).replace('{distancia1}', l1).replace('{distancia2}', l2).replace('{distancia3}', l3).replace('{distancia4}', l4).replace('{distancia5}', l5).replace('{distancia6}', l6)}
                                     </Typography>
-                                    {SVGname}
+                                    <Typography>
+                                        {(result0 === 0) ? (
+                                            hintsArray[(hintDev < hintsArray.length) ? hintDev : hintsArray.length - 1]
+                                        ) : null}
+                                    </Typography>
                                     <DLCComponent DLCType={SVGname}/>
                                     <Box mt={3}>
                                         <FormControl>

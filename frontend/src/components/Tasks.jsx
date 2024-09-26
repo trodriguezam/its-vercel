@@ -194,10 +194,10 @@ function TasksList() {
                             sx={{ display: 'flex', justifyContent: 'space-between' }}
                         >
                             <Box display="flex" alignItems="center">
-                                <Typography sx={{ fontWeight: 'bold', marginRight: '15px' }}>{`Task ${currentTask.id}: ${currentTask.name}`}</Typography>
+                                <Typography sx={{ fontWeight: 'bold', marginRight: '15px' }}>{`${currentTask.name}`}</Typography>
                                 <Button
                                     variant="contained"
-                                    sx={{ backgroundColor: '#C1E1A6', color: '#fff', textTransform: 'none', fontSize: '12px', padding: '4px 12px', borderRadius: '20px', marginRight: '10px' }}
+                                    sx={{ backgroundColor: currentDifficulty === 1 ? '#8AB573' : (currentDifficulty === 2 ? 'orange' : 'red'), color: '#fff', textTransform: 'none', fontSize: '12px', padding: '4px 12px', borderRadius: '20px', marginRight: '10px' }}
                                 >
                                     {difficulties[currentDifficulty - 1]}
                                 </Button>
