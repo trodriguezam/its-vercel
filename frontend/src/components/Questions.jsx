@@ -455,7 +455,7 @@ function QuestionsList() {
 
     const handleInputSumbit = () => {
         if (SVGname === 'SimpleGravedad') {
-            if(Number(inputValue) === ((r1*r3 + r2*r4) / (r1 + r2))) {
+            if(Number(inputValue) === ((r1*l1 + r2*l2) / (r1 + r2))) {
                 sendInputResult();
             }
         }
