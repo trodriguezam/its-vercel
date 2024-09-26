@@ -6,6 +6,7 @@ import { Routes, Route, Link } from 'react-router-dom';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import QuestionForm from './components/CreateQuestion';
+import UserData from './components/UserModel';
 import './App.css';
 import { AppBar, IconButton, Button, Typography } from '@mui/material'; // Imported Button
 import { Toolbar } from '@mui/material';
@@ -71,7 +72,7 @@ function App() {
                   <Link to='/topics' style={{ marginRight: '10px', color: '#111111' }}>
                     <Button color='#111111'>
                       <Typography variant="body1" component="div" sx={{ color: '#111111' }}>
-                        Topics
+                        Temas
                       </Typography>
                     </Button>
                   </Link>
@@ -129,6 +130,7 @@ function App() {
         <Route path="/dashboards" element={<DashboardList />} />
         <Route path="/login" element={<Login setCurrentUser={setCurrentUser} />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/users/:userId" element={<UserData />} />
         <Route path="/question_create" element={<QuestionForm />} />
       </Routes>
     </>

@@ -52,7 +52,7 @@ function LoginForm({ setCurrentUser }) {
           {/* Student Login Form */}
           <Grid item xs={12} sm={5}>
             <Typography variant="h5" gutterBottom>
-              Student Login
+              Login Estudiante
             </Typography>
             <Formik
               initialValues={{ email: '', password: '' }}
@@ -95,7 +95,7 @@ function LoginForm({ setCurrentUser }) {
                   as={TextField}
                   name="email"
                   type="text"
-                  label="Enter your email"
+                  label="Ingresa tu mail"
                   fullWidth
                   margin="normal"
                 />
@@ -105,7 +105,7 @@ function LoginForm({ setCurrentUser }) {
                   as={TextField}
                   name="password"
                   type="password"
-                  label="Enter Password"
+                  label="Ingresa tu contraseña"
                   fullWidth
                   margin="normal"
                 />
@@ -117,7 +117,7 @@ function LoginForm({ setCurrentUser }) {
                   variant="contained"
                   fullWidth
                 >
-                  Login as Student
+                  Login
                 </Button>
               </Form>
             </Formik>
@@ -139,7 +139,7 @@ function LoginForm({ setCurrentUser }) {
           {/* Professor Login Form */}
           <Grid item xs={12} sm={5}>
             <Typography variant="h5" gutterBottom>
-              Professor Login
+              Login Profesor
             </Typography>
             <Formik
               initialValues={{ email: '', password: '' }}
@@ -182,7 +182,7 @@ function LoginForm({ setCurrentUser }) {
                   as={TextField}
                   name="email"
                   type="text"
-                  label="Enter your email"
+                  label="Ingresa tu mail"
                   fullWidth
                   margin="normal"
                 />
@@ -192,7 +192,7 @@ function LoginForm({ setCurrentUser }) {
                   as={TextField}
                   name="password"
                   type="password"
-                  label="Enter Password"
+                  label="Ingresa tu contraseña"
                   fullWidth
                   margin="normal"
                 />
@@ -204,7 +204,7 @@ function LoginForm({ setCurrentUser }) {
                   variant="contained"
                   fullWidth
                 >
-                  Login as Professor
+                  Login
                 </Button>
               </Form>
             </Formik>

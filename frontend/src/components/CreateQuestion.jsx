@@ -73,7 +73,7 @@ function QuestionForm() {
                 variant="body1" 
                 sx={{ textAlign: 'center', color: '#111111', fontWeight: 'bold' }}
             >
-                You are not authorized to view this page. Please log in as a professor.
+                No estas Autorizado a ver esta Pagina, Porfavor Logea como Profesor
             </Typography>
         </Box>
     );

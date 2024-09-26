@@ -31,7 +31,7 @@ function SignupForm() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Typography variant="h4" gutterBottom>
-        Sign up
+        Registrate
       </Typography>
       <div style={{ maxWidth: '500px', margin: '0 auto' }}>
         <Formik
@@ -57,7 +57,7 @@ function SignupForm() {
                 type="email"
                 name="email"
                 as={TextField}
-                label="Email"
+                label="Correo Electrónico"
                 fullWidth
                 margin="normal"
                 sx={{ boxSizing: 'border-box' }}
@@ -68,7 +68,7 @@ function SignupForm() {
                 type="password"
                 name="password"
                 as={TextField}
-                label="Password"
+                label="Contraseña"
                 fullWidth
                 margin="normal"
                 sx={{ boxSizing: 'border-box' }}
@@ -79,7 +79,7 @@ function SignupForm() {
                 type="password"
                 name="password_confirmation"
                 as={TextField}
-                label="Confirm Password"
+                label="Confirmar Contraseña"
                 fullWidth
                 margin="normal"
                 sx={{ boxSizing: 'border-box' }}
@@ -108,7 +108,7 @@ function SignupForm() {
                 variant="contained"
                 sx={{ backgroundColor: '#8AB573', '&:hover': { backgroundColor: '#79a362' } }}
               >
-                Sign Up
+                Registrate
               </Button>
             </Form>
           )}
